@@ -1,3 +1,231 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.carousel-container {
+    width: 100%;
+    height: 500px;
+    overflow: hidden;
+    position: relative;
+}
+
+.carousel {
+    width: 500%;
+    height: 100%;
+    display: flex;
+}
+
+.item-one {
+    background-image: image-set(
+        url("/public/images/hero_image_one.avif") type("image/avif"),
+        url("/public/images/hero_image_one.webp") type("image/webp"),
+        url("/public/images/hero_image_one.jpg") type("image/jpeg")
+    );
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
+
+.item-one::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(62, 80, 171, 0.6);
+}
+
+.item-two {
+    background-image: image-set(
+        url("/public/images/hero_image_two.avif") type("image/avif"),
+        url("/public/images/hero_image_two.webp") type("image/webp"),
+        url("/public/images/hero_image_two.jpg") type("image/jpeg")
+    );
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
+
+.item-two::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(62, 80, 171, 0.6);
+}
+
+.item-three {
+    background-image: image-set(
+        url("/public/images/hero_image_three.avif") type("image/avif"),
+        url("/public/images/hero_image_three.webp") type("image/webp"),
+        url("/public/images/hero_image_three.jpg") type("image/jpeg")
+    );
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
+
+.item-three::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(62, 80, 171, 0.6);
+}
+
+.item-four {
+    background-image: image-set(
+        url("/public/images/hero_image_four.avif") type("image/avif"),
+        url("/public/images/hero_image_four.webp") type("image/webp"),
+        url("/public/images/hero_image_four.jpg") type("image/jpeg")
+    );
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
+
+.item-four::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(62, 80, 171, 0.6);
+}
+
+.item-five {
+    background-image: image-set(
+        url("/public/images/hero_image_five.avif") type("image/avif"),
+        url("/public/images/hero_image_five.webp") type("image/webp"),
+        url("/public/images/hero_image_five.jpg") type("image/jpeg")
+    );
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
+
+.item-five::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(62, 80, 171, 0.6);
+}
+
+.carousel-item {
+    width: calc(100% / 5);
+    height: 100%;
+}
+
+.carousel-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.arrow-prev,
+.arrow-next {
+    color: white;
+    font-size: 3rem;
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%);
+    cursor: pointer;
+}
+
+.arrow-prev {
+    left: 40px;
+}
+
+.arrow-next {
+    right: 40px;
+}
+
+.list-carousel-container {
+    overflow: hidden;
+}
+
+@media screen and (min-width: 1347px) {
+    .list-carousel-container {
+        width: 35%;
+        overflow: hidden;
+    }
+}
+
+.list-carousel {
+    width: 200%;
+    height: 100%;
+    display: flex;
+}
+
+.list-carousel-item {
+    width: calc(100% / 2);
+    height: 100%;
+}
+
+.list-arrow-prev,
+.list-arrow-next {
+    font-size: 2.5rem;
+    color: #0a125e;
+    cursor: pointer;
+    position: absolute;
+    bottom: 0;
+}
+
+.list-arrow-prev {
+    left: 0;
+}
+
+.list-arrow-next {
+    right: 0;
+}
+
+@media screen and (min-width: 769px) {
+    .list-arrow-prev,
+    .list-arrow-next {
+        left: unset;
+        right: unset;
+        transform: translateY(0, 10%);
+    }
+
+    .list-arrow-prev {
+        margin-right: 150px;
+    }
+}
+
+.last-carousel-container {
+    width: 100%;
+    overflow: hidden;
+}
+
+.last-carousel {
+    width: 200%;
+    height: 100%;
+    display: flex;
+}
+
+.last-carousel-item {
+    width: calc(100% / 2);
+}
+
+.mb-last-carousel-container {
+    width: 100%;
+    overflow: hidden;
+}
+
+.mb-last-carousel {
+    width: 400%;
+    display: flex;
+}
+
+.mb-last-carousel-item {
+    width: calc(100% / 4);
+}

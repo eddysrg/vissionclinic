@@ -46,7 +46,7 @@
         </div>
     </div>
 
-    <nav class="bg-[#0A125E] lg:mt-3 flex justify-between items-center  py-3 lg:py-8 px-5 lg:px-12 relative">
+    <nav class="bg-[#0A125E] lg:mt-3 flex justify-between items-center  py-3 lg:py-5 px-5 lg:px-8 relative">
 
         <i class="lg:hidden text-4xl text-white fa-solid fa-bars"></i>
 
@@ -127,8 +127,12 @@
                 </ul>
             </li>
 
-            <li class="text-xs py-3 px-5 bg-[#0144E8] rounded-lg">
+            {{-- <li class="text-xs py-3 px-5 bg-[#0144E8] rounded-lg">
                 <a href="">Iniciar Sesión</a>
+            </li> --}}
+
+            <li class="link hover:text-[#0144E8] duration-300">
+                <a href="#">Contacto</a>
             </li>
         </ul>
 
@@ -216,7 +220,11 @@
             </li>
         </ul>
 
-        <a class="hidden lg:block text-white uppercase bg-[#0144E8] p-3 rounded-lg">Contacto</a>
+        <li class="hidden lg:block text-white uppercase bg-[#0144E8] p-3 lg:px-7 rounded-lg">
+            <a href="{{route('login')}}">Iniciar Sesión</a>
+        </li>
+
+        {{-- <a class="hidden lg:block text-white uppercase bg-[#0144E8] p-3 rounded-lg">Contacto</a> --}}
     </nav>
 
     @if(!request()->routeIs('home'))

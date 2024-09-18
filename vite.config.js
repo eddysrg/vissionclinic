@@ -9,6 +9,7 @@ export default defineConfig({
                 "resources/js/app.js",
                 "resources/js/components/navbarMenu.js",
                 "resources/js/components/responsiveMenu.js",
+                "resources/js/carousel/mainCarousel.js",
             ],
             refresh: true,
         }),
