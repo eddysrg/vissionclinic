@@ -23,7 +23,7 @@
         <h2 class="text-xl uppercase mb-5 mt-4">¿A quién está orientado?</h2>
         <p>
             Esta dirigido a clínicas, centro de salud, hospitales y a todo el sector salud con las especialidades y
-            servicios que cuenta HealthCare.
+            servicios que cuenta Vission Clinic.
         </p>
     </div>
 </div>
@@ -90,7 +90,7 @@
         <h2 class="text-xl uppercase mb-5 mt-4">¿A quién está orientado?</h2>
         <p>
             Esta dirigido a clínicas, centro de salud, hospitales y a todo el sector salud con las especialidades y
-            servicios que cuenta HealthCare.
+            servicios que cuenta Vission Clinic.
         </p>
     </div>
 </div>

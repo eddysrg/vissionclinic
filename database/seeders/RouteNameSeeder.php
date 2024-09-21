@@ -18,12 +18,12 @@ class RouteNameSeeder extends Seeder
         DB::table('route_names')->insert([
             [
                 'route_name' => 'nivel-uno',
-                'title' => 'HealthCare System',
+                'title' => 'Vission Clinic ECE',
                 'subtitle' => 'Nivel 1'
             ],
             [
                 'route_name' => 'nivel-dos',
-                'title' => 'HealthCare System',
+                'title' => 'Vission Clinic ECE',
                 'subtitle' => 'Nivel 2'
             ],
             [

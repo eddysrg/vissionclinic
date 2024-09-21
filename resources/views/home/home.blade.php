@@ -17,7 +17,7 @@ $carouselClasses = 'w-full flex flex-nowrap overflow-x-scroll'
                         El mejor expediente Clínico Electrónico
                     </span>
                     <h2 class="text-4xl lg:text-7xl drop-shadow-lg">
-                        Health Care
+                        Vission Clinic ECE
                     </h2>
                     <p class="block text-5xl lg:text-8xl uppercase drop-shadow-lg mt-4 md:mt-0">NIVEL 1</p>
                 </div>
@@ -36,7 +36,7 @@ $carouselClasses = 'w-full flex flex-nowrap overflow-x-scroll'
                         Sistema de Telemedicina y Telemonitorización
                     </span>
                     <h2 class="text-4xl lg:text-7xl drop-shadow-lg">
-                        HealthCare System
+                        Vission Clinic ECE
                     </h2>
                     <p class="block text-5xl lg:text-8xl uppercase drop-shadow-lg mt-4 md:mt-0">NIVEL 2</p>
                 </div>
@@ -112,8 +112,9 @@ $carouselClasses = 'w-full flex flex-nowrap overflow-x-scroll'
 </div>
 
 <div class="bg-[#0144E8]">
-    <p class="text-white uppercase text-center py-11 text-xl lg:text-4xl px-8">
-        Healthcare System tiene por objetivo optimizar la atención que se brinda en unidades médicas y centros de salud.
+    <p
+        class="text-white uppercase text-center py-11 text-xl leading-normal lg:text-2xl lg:leading-relaxed px-8 md:px-28">
+        Vission Clinic tiene por objetivo optimizar la atención que se brinda en unidades médicas y centros de salud.
     </p>
 </div>
 
@@ -135,7 +136,7 @@ $carouselClasses = 'w-full flex flex-nowrap overflow-x-scroll'
                     before:inline-block 
                     before:mr-1 
                     before:rounded-full">
-                        Expediente Clínico Electrónico HEALTH CARE
+                        Expediente Clínico Electrónico Vission Clinic ECE
                     </li>
 
                     <li class="
@@ -369,7 +370,8 @@ $carouselClasses = 'w-full flex flex-nowrap overflow-x-scroll'
                     before:inline-block 
                     before:ml-8
                     before:mr-4">
-                        El HealthCare&reg; es una herramienta práctica para el manejo del Expediente Clínico de forma
+                        Vission Clinic ECE&reg; es una herramienta práctica para el manejo del Expediente Clínico de
+                        forma
                         digital,
                         sabiéndolo utilizar correctamente. Los beneficios: rapidez, disminuye consumo de papel, tiene
                         mayores
@@ -394,7 +396,7 @@ $carouselClasses = 'w-full flex flex-nowrap overflow-x-scroll'
                     before:inline-block 
                     before:ml-8
                     before:mr-4">
-                        El Expediente Clínico de HealthCare® es una herramienta muy completa, fácil de manejar y
+                        Vission Clinic® es una herramienta muy completa, fácil de manejar y
                         sumamente útil para una mejor atención de los pacientes. Te permite agilizar la consulta, llevar
                         una agenda actualizada, mejor control y registros de pacientes. Es una maravilla porque aligera
                         la carga de trabajo, y ayuda a resguardar mejor la información, pero sobre todo, mejora la
@@ -468,7 +470,7 @@ $carouselClasses = 'w-full flex flex-nowrap overflow-x-scroll'
                     before:inline-block 
                     before:ml-8
                     before:mr-4">
-                    El HealthCare&reg; es una herramienta práctica para el manejo del Expediente Clínico de forma
+                    Vission Clinic ECE&reg; es una herramienta práctica para el manejo del Expediente Clínico de forma
                     digital,
                     sabiéndolo utilizar correctamente. Los beneficios: rapidez, disminuye consumo de papel, tiene
                     mayores
@@ -491,7 +493,7 @@ $carouselClasses = 'w-full flex flex-nowrap overflow-x-scroll'
                     before:inline-block 
                     before:ml-8
                     before:mr-4">
-                    El Expediente Clínico de HealthCare® es una herramienta muy completa, fácil de manejar y
+                    Vission Clinic ECE® es una herramienta muy completa, fácil de manejar y
                     sumamente útil para una mejor atención de los pacientes. Te permite agilizar la consulta, llevar
                     una agenda actualizada, mejor control y registros de pacientes. Es una maravilla porque aligera
                     la carga de trabajo, y ayuda a resguardar mejor la información, pero sobre todo, mejora la

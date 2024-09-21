@@ -5,7 +5,7 @@
 
 
         <a href="{{route('home')}}" class="w-32 xl:w-40">
-            <img src="{{asset('images/bluecare_logo_white.png')}}" alt="Blue Care Logo">
+            <x-white-logo />
         </a>
 
         <div class="hidden lg:flex lg:items-center lg:gap-10 xl:gap-32">
@@ -39,7 +39,7 @@
 
                 <div class="text-white lg:text-xs 2xl:text-base">
                     <p class="font-thin text-slate-200">Escríbenos</p>
-                    <p>ventas.helthcare@gdc-cala.com.mx</p>
+                    <p>vissionclinic.ece@gdc-cala.com.mx</p>
                 </div>
             </div>
 

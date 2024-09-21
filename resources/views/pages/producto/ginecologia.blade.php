@@ -17,12 +17,12 @@
 
         <div class="space-y-5 mb-10">
             <p>
-                Con nuestro software de salud Health Care para ginecólogos tendrás la versatilidad que requiere para
+                Con nuestro software de salud Vission Clinic ECE para ginecólogos tendrás la versatilidad que requiere
+                para
                 consultar la información de tu consultorio desde cualquier lugar y en cualquier dispositivo electrónico,
                 ya sea una computadora, un celular o una tableta. Sólo necesitará estar conectado a internet para
                 acceder a la información de su consultorio y cualquier información que modifique será guardada
-                automáticamente. Padecimientos que podrás registrar dentro del Expediente Clínico Electrónico Health
-                Care:
+                automáticamente. Padecimientos que podrás registrar dentro del Vission Clinic ECE:
             </p>
         </div>
 

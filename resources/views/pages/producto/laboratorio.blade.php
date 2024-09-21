@@ -17,7 +17,7 @@
 
         <div class="space-y-5 mb-10">
             <p>
-                Nuestro sistema de salud Health Care brinda la posibilidad de almacenar fotografías, estudios de
+                Nuestro sistema de salud Vission Clinic ECE brinda la posibilidad de almacenar fotografías, estudios de
                 laboratorio, radiografías, entre otros documentos dentro del expediente electrónico sin que estos puedan
                 dañarse, como suele suceder en los expedientes físicos, facilitando así el control y seguimiento de los
                 mismos.

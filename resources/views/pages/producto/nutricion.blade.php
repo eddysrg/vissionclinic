@@ -22,7 +22,8 @@
             </p>
 
             <p>
-                Con nuestro Software de salud Health Care, tendrás el control de los datos importantes para conocer
+                Con nuestro Software de salud Vission Clinic ECE, tendrás el control de los datos importantes para
+                conocer
                 información relevante de tu paciente y así ofrecerle una dieta adecuada. Gracias al registro digital,
                 los datos que se recolecten de tus pacientes pueden ser más y más completos. Puedes conectar tablets,
                 ordenadores, ebooks a la red y actualizar el contenido directamente sin mayor esfuerzo.

@@ -17,7 +17,8 @@
 
         <div class="space-y-5 mb-10">
             <p>
-                Con nuestro software de salud Health Care podrás brindar un mejor servicio de agendamiento dental y
+                Con nuestro software de salud Vission Clinic ECE podrás brindar un mejor servicio de agendamiento dental
+                y
                 administración, tanto para clínicas, centros dentales y dentistas independientes
                 Llevarás el control de las atenciones y evoluciones de tus pacientes
             </p>
@@ -28,7 +29,8 @@
             </p>
 
             <p>
-                El odontograma digital de Health Care es sumamente sencillo de utilizar, con unos cuantos clicks tendrás
+                El odontograma digital de Vission Clinic ECE es sumamente sencillo de utilizar, con unos cuantos clicks
+                tendrás
                 a la vista toda la información dental de tu paciente.
             </p>
         </div>
