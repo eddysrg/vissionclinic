@@ -1,6 +1,5 @@
 const navBar = document.querySelector(".navBar");
 const links = navBar.querySelectorAll(".link");
-
 const submenuExpediente = document.querySelector(".submenu-exp");
 const submenuProductos = document.querySelector(".submenu-pro");
 

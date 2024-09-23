@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Vission Clinic - ECE') }}</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -14,7 +14,7 @@
     <script src="https://kit.fontawesome.com/7c072a50bb.js" crossorigin="anonymous"></script>
 
     <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/ece.js'])
 </head>
 
 <body class="font-sans antialiased h-screen flex">
@@ -38,7 +38,7 @@
 
     <aside class="w-72 h-5/6 bg-[#174075] flex flex-col items-center justify-evenly">
         <div class="w-28">
-            <img src="{{asset('images/logo_bluecare_blanco.svg')}}" alt="Logo bluecare blanco">
+            <img src="{{asset('images/vcl_logo_white.svg')}}" alt="Logo vcl blanco">
         </div>
 
         <div class="w-28">

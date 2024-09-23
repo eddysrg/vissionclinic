@@ -42,6 +42,11 @@ class RouteNameSeeder extends Seeder
                 'subtitle' => ''
             ],
             [
+                'route_name' => 'contacto',
+                'title' => 'Contacto',
+                'subtitle' => ''
+            ],
+            [
                 'route_name' => 'laboratorio',
                 'title' => 'Laboratorio',
                 'subtitle' => ''

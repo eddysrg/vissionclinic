@@ -46,7 +46,7 @@
 
                     <li class="uppercase flex items-center gap-2 hover:text-[#0144E8] duration-300">
                         <i class="fa-solid fa-chevron-right mr-1"></i>
-                        <a href="{{route('healthcare', ['nivel' => 'nivel-uno'])}}">Exp. Clínico</a>
+                        <a href="{{route('ece', ['nivel' => 'nivel-uno'])}}">Exp. Clínico</a>
                     </li>
 
                     <li class="uppercase flex items-center gap-2 hover:text-[#0144E8] duration-300">
@@ -66,7 +66,7 @@
 
                     <li class="uppercase flex items-center gap-2 hover:text-[#0144E8] duration-300">
                         <i class="fa-solid fa-chevron-right mr-1"></i>
-                        <a href="#">Contacto</a>
+                        <a href="{{route('contacto')}}">Contacto</a>
                     </li>
                 </ul>
             </nav>

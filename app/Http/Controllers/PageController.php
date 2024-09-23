@@ -19,7 +19,7 @@ class PageController extends Controller
         return view('pages.lyrium');
     }
 
-    public function healthcare($nivel)
+    public function ece($nivel)
     {
         $linkRegister = RouteName::where('route_name', $nivel)->first();
 
@@ -27,7 +27,7 @@ class PageController extends Controller
             session($linkRegister->toArray());
         }
 
-        return view('pages.healthcare', ['nivel' => $nivel]);
+        return view('pages.ece', ['nivel' => $nivel]);
     }
 
     public function mvs()
@@ -66,5 +66,17 @@ class PageController extends Controller
         }
 
         return view('pages.producto.' . $producto);
+    }
+
+    public function contacto()
+    {
+        $routeName = request()->route()->getName();
+        $linkRegister = RouteName::where('route_name', $routeName)->first();
+
+        if ($linkRegister) {
+            session($linkRegister->toArray());
+        }
+
+        return view('pages.contacto');
     }
 }

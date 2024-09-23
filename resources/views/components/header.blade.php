@@ -64,12 +64,12 @@
                 <ul class="space-y-6 text-sm pl-5">
                     <li class="hover:text-[#0144E8] duration-300">
                         <i class="fa-solid fa-chevron-right mr-2"></i>
-                        <a href="{{route('healthcare', ['nivel' => 'nivel-uno'])}}">Nivel 1</a>
+                        <a href="{{route('ece', ['nivel' => 'nivel-uno'])}}">Nivel 1</a>
                     </li>
 
                     <li class="hover:text-[#0144E8] duration-300">
                         <i class="fa-solid fa-chevron-right mr-2"></i>
-                        <a href="{{route('healthcare', ['nivel' => 'nivel-dos'])}}">Nivel 2</a>
+                        <a href="{{route('ece', ['nivel' => 'nivel-dos'])}}">Nivel 2</a>
                     </li>
                 </ul>
             </li>
@@ -132,7 +132,7 @@
             </li> --}}
 
             <li class="link hover:text-[#0144E8] duration-300">
-                <a href="#">Contacto</a>
+                <a href="{{route('contacto')}}">Contacto</a>
             </li>
         </ul>
 
@@ -154,12 +154,12 @@
                 <ul class="space-y-6 text-sm pl-5">
                     <li>
                         <i class="fa-solid fa-chevron-right mr-2"></i>
-                        <a href="{{route('healthcare', ['nivel' => 'nivel-uno'])}}">Nivel 1</a>
+                        <a href="{{route('ece', ['nivel' => 'nivel-uno'])}}">Nivel 1</a>
                     </li>
 
                     <li>
                         <i class="fa-solid fa-chevron-right mr-2"></i>
-                        <a href="{{route('healthcare', ['nivel' => 'nivel-dos'])}}">Nivel 2</a>
+                        <a href="{{route('ece', ['nivel' => 'nivel-dos'])}}">Nivel 2</a>
                     </li>
                 </ul>
             </li>

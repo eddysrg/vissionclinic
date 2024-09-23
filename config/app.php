@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Bluecare'),
+    'name' => env('APP_NAME', 'Vission Clinic'),
 
     /*
     |--------------------------------------------------------------------------

@@ -6,14 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Vission Clinic - ECE') }}</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
     <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/ece.js'])
 </head>
 
 <body class="font-sans text-gray-900 antialiased">
@@ -25,14 +25,14 @@
         <div
             class="grid w-full sm:max-w-md mt-6 px-6 py-4 bg-gradient-to-b from-[#0D418F] to-[#041329] shadow-md overflow-hidden sm:rounded-lg">
             <div class="flex justify-center items-center gap-3 pt-8">
-                <img src="{{asset('images/login_icono.svg')}}" alt="Login Bluecare icono">
+                <img src="{{asset('images/login_icono.svg')}}" alt="Login VCL icono">
                 <h2 class="text-3xl text-white font-normal">Bienvenido</h2>
             </div>
 
             {{ $slot }}
 
             <div class="w-20 py-5 justify-self-end">
-                <img src="{{asset('images/logo_bluecare_blanco.svg')}}" alt="Logo bluecare blanco">
+                <img src="{{asset('images/vcl_logo_white.svg')}}" alt="Logo VCL blanco">
             </div>
         </div>
 

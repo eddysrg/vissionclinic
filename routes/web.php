@@ -19,10 +19,11 @@ use App\Http\Controllers\ProfileController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/lyrium', [PageController::class, 'lyrium'])->name('lyrium');
-Route::get('/healthcare/{nivel}', [PageController::class, 'healthcare'])->name('healthcare');
+Route::get('/ece/{nivel}', [PageController::class, 'ece'])->name('ece');
 Route::get('/mvs', [PageController::class, 'mvs'])->name('mvs');
 Route::get('/productos', [PageController::class, 'productos'])->name('productos');
 Route::get('/productos/{producto}', [PageController::class, 'producto'])->name('producto');
+Route::get('/contacto', [PageController::class, 'contacto'])->name('contacto');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

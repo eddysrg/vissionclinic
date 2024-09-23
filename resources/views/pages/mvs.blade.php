@@ -160,7 +160,8 @@
             </div>
         </div>
 
-        <a class="text-white uppercase bg-[#0144E8] p-5 rounded-lg self-center md:self-end">Más información</a>
+        <a href="{{route('producto', ['producto' => 'medical-view-system'])}}"
+            class="text-white uppercase bg-[#0144E8] p-5 rounded-lg self-center md:self-end">Más información</a>
     </div>
 </div>
 @endsection
