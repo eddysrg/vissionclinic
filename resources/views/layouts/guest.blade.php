@@ -33,8 +33,8 @@
 
             {{ $slot }}
 
-            <div class="py-5">
-                <x-ecewhitelogo />
+            <div class="w-32 py-5 flex justify-self-end">
+                <img src="{{asset('images/ece_white_logo.png')}}" alt="ECE logo">
             </div>
         </div>
 

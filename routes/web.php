@@ -28,6 +28,10 @@ Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
+Route::view('dashboard/expedientes', 'record.records')
+    ->middleware('auth')
+    ->name('dashboard.expedientes');
+
 Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');

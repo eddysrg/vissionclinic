@@ -48,8 +48,8 @@ new #[Layout('layouts.guest')] class extends Component
             <x-input-error :messages="$errors->get('form.password')" class="mt-2" />
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <x-login-button class="ms-3">
+        <div class="flex items-center justify-end mt-10">
+            <x-login-button>
                 {{ __('Log in') }}
             </x-login-button>
         </div>
