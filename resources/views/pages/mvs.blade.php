@@ -1,7 +1,8 @@
-<?php 
-    $cardMvsClasses = 'bg-[#0A125E] text-white px-3 py-5 md:p-5 rounded-lg text-center flex justify-center items-center shadow-xl';
-    $arrowStyle = 'fa-solid fa-arrow-right text-3xl md:text-5xl text-[#0A125E]';
-?>
+@php
+$cardMvsClasses = 'bg-[#0A125E] text-white px-3 py-5 md:p-5 rounded-lg text-center flex justify-center items-center
+shadow-xl';
+$arrowStyle = 'fa-solid fa-arrow-right text-3xl md:text-5xl text-[#0A125E]';
+@endphp
 
 @extends('home.index')
 
