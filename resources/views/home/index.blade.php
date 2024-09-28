@@ -26,6 +26,38 @@
     <x-footer />
 
     @stack('scripts-carousel')
+
+    <script type="text/javascript">
+        function translateToEnglish() {
+          // Cargar el script de Google Translate si no se ha cargado aún
+          if (!window.googleTranslateLoaded) {
+            var script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+            document.head.appendChild(script);
+            window.googleTranslateLoaded = true; // Para evitar cargarlo varias veces
+          }
+      
+          // Simular la selección de inglés después de que se cargue Google Translate
+          setTimeout(function() {
+            var selectElement = document.querySelector('.goog-te-combo');
+            if (selectElement) {
+              selectElement.value = 'en'; // Selecciona inglés
+              selectElement.dispatchEvent(new Event('change')); // Dispara el evento de cambio para iniciar la traducción
+            }
+          }, 1000); // Tiempo de espera para asegurar que el widget esté listo
+        }
+      
+        function googleTranslateElementInit() {
+          new google.translate.TranslateElement({
+            pageLanguage: 'es', // Idioma original de la página
+            includedLanguages: 'en', // Solo inglés como opción
+            autoDisplay: false // No mostrar automáticamente el widget
+          }, 'google_translate_element');
+        }
+    </script>
+
+
 </body>
 
 </html>

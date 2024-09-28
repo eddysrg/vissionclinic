@@ -11,10 +11,7 @@ $fechaHoy = Carbon::now()->isoFormat('D [de] MMMM YYYY');
                 <p>¿Qué quieres hacer hoy?</p>
 
                 <div class="mt-8 w-full flex justify-evenly">
-                    <button class="text-xs text-white bg-[#41759D] p-3 rounded-md">
-                        Registro Paciente Nuevo
-                        <i class="fa-solid fa-plus ml-2"></i>
-                    </button>
+                    <livewire:patient />
 
                     <button class="text-xs text-white bg-[#41759D] p-3 rounded-md">
                         Agendar Cita

@@ -134,6 +134,11 @@
             <li class="link hover:text-[#0144E8] duration-300">
                 <a href="{{route('contacto')}}">Contacto</a>
             </li>
+
+            <li class="link hover:text-[#0144E8] duration-300">
+                <button id="translate-button" onclick="translateToEnglish()">Traducir</button>
+                <div id="google_translate_element" style="display: none;"></div>
+            </li>
         </ul>
 
         {{-- Responsive navbar --}}

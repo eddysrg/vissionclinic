@@ -19,8 +19,8 @@
 
 <body class="font-sans antialiased h-screen flex">
     <aside class="w-72 h-5/6 bg-[#174075] flex flex-col items-center justify-evenly">
-        <div class="w-28">
-            <img src="{{asset('images/vcl_logo_white.svg')}}" alt="Logo vcl blanco">
+        <div class="w-52">
+            <img src="{{asset('images/ece_white_logo.png')}}" alt="Logo ece blanco">
         </div>
 
         <div class="w-28">
