@@ -13,10 +13,10 @@ $fechaHoy = Carbon::now()->isoFormat('D [de] MMMM YYYY');
                 <div class="mt-8 w-full flex justify-evenly">
                     <livewire:patient />
 
-                    <button class="text-xs text-white bg-[#41759D] p-3 rounded-md">
+                    <a href="{{route('dashboard.cita')}}" class="text-xs text-white bg-[#41759D] p-3 rounded-md">
                         Agendar Cita
                         <i class="fa-solid fa-plus ml-2"></i>
-                    </button>
+                    </a>
 
                     <button class="text-xs text-white bg-[#41759D] p-3 rounded-md">
                         Revisar Agenda

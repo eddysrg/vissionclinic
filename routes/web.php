@@ -14,8 +14,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::view('/', 'pages.home')->name('home');
+
 Route::controller(PageController::class)->group(function () {
-    Route::get('/', 'index')->name('home');
     Route::get('/lyrium', 'lyrium')->name('lyrium');
     Route::get('/ece/{nivel}', 'ece')->name('ece');
     Route::get('/mvs', 'mvs')->name('mvs');
@@ -31,6 +32,10 @@ Route::view('dashboard', 'dashboard')
 Route::view('dashboard/expedientes', 'record.records')
     ->middleware('auth')
     ->name('dashboard.expedientes');
+
+Route::view('dashboard/agendar-cita', 'record.appointment')
+    ->middleware('auth')
+    ->name('dashboard.cita');
 
 Route::view('profile', 'profile')
     ->middleware(['auth'])

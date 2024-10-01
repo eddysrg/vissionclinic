@@ -6,6 +6,8 @@ use App\Models\Patient;
 new class extends Component {
     //
 
+    public $appointmentStatus = null;
+
     public $patientData = [
         'date' => '',
         'time' => '',
@@ -15,7 +17,8 @@ new class extends Component {
         'mothers_last_name' => '',
         'gender' => '',
         'age' => '',
-        'phone_number' => ''
+        'phone_number' => '',
+        'curp' => '',
     ];  
 
     protected function rules()
@@ -30,6 +33,13 @@ new class extends Component {
             'patientData.gender' => 'required|in:M,F',
             'patientData.age' => 'required|integer|min:0|max:150',
             'patientData.phone_number' => 'required|digits:10',
+            'patientData.curp' => 'required|min:18|unique:App\Models\Patient,curp',
+        ];
+    }
+
+    public function messages() {
+        return [
+            'patientData.curp.unique' => 'El CURP introducido ya se encuentra registrado'
         ];
     }
 
@@ -44,7 +54,8 @@ new class extends Component {
             'mothers_last_name' => '',
             'gender' => '',
             'age' => '',
-            'phone_number' => ''
+            'phone_number' => '',
+            'curp' => ''
         ]; 
 
         $this->resetErrorBag();
@@ -64,6 +75,7 @@ new class extends Component {
             'gender' => $this->patientData['gender'],
             'age' => $this->patientData['age'],
             'phone_number' => $this->patientData['phone_number'],
+            'curp' => $this->patientData['curp'],
         ]);
 
         $this->dispatch('show-success');
@@ -82,13 +94,6 @@ new class extends Component {
             Registro Paciente Nuevo
             <i class="fa-solid fa-plus ml-2"></i>
         </button>
-
-        {{-- <div x-show="showSuccessMessage" x-transition:enter="transition ease-out duration-300"
-            class="fixed inset-0 z-50 flex items-center justify-center bg-gray-600 bg-opacity-60">
-            <div class="bg-green-500 text-white px-8 py-4 rounded-lg text-center">
-                <p x-text="successMessage"></p>
-            </div>
-        </div> --}}
 
         <div x-show="showSuccessMessage" x-transition:enter="transition ease-out duration-300"
             class="fixed inset-0 z-50 flex items-center justify-center bg-gray-600 bg-opacity-60">
@@ -234,6 +239,17 @@ new class extends Component {
                                     @enderror
 
                                 </div>
+
+                                <div class="flex flex-col gap-2">
+                                    <label class="uppercase text-xs" for="curp">Curp</label>
+                                    <input wire:model='patientData.curp' class="rounded" type="text" maxlength="18"
+                                        name="curp" id="curp" autocomplete="off">
+                                    @error('patientData.curp')
+                                    <span class="text-red-600 mt-2">
+                                        {{ $message }}
+                                    </span>
+                                    @enderror
+                                </div>
                             </div>
 
                             <div class="flex gap-5 justify-end mr-20">
@@ -250,6 +266,4 @@ new class extends Component {
             </div>
         </div>
     </div>
-
-
 </div>

@@ -18,43 +18,7 @@
 </head>
 
 <body class="font-sans antialiased h-screen flex">
-    <aside class="w-72 h-5/6 bg-[#174075] flex flex-col items-center justify-evenly">
-        <div class="w-52">
-            <img src="{{asset('images/ece_white_logo.png')}}" alt="Logo ece blanco">
-        </div>
-
-        <div class="w-28">
-            <img src="{{asset('images/imagen_perfil.svg')}}" alt="Profile photo">
-        </div>
-
-        <nav>
-            <ul class="space-y-5 uppercase text-sm">
-                <li class="text-white">
-                    <i class="fa-solid fa-house mr-3"></i>
-                    <a href="{{route('dashboard')}}">Inicio</a>
-                </li>
-                <li class="text-white">
-                    <i class="fa-solid fa-user-group mr-3"></i>
-                    <a href="{{route('dashboard.expedientes')}}">Expedientes</a>
-                </li>
-                <li class="text-white">
-                    <i class="fa-solid fa-calendar-days mr-3"></i>
-                    Agenda
-                </li>
-
-                <li class="text-white flex">
-                    <i class="fa-solid fa-right-from-bracket mr-3"></i>
-                    <form method="POST" action="">
-                        @csrf
-                        <a href="#">
-                            <input type="submit" value="Cerrar Sesión" class="uppercase cursor-pointer">
-                        </a>
-                    </form>
-                </li>
-
-            </ul>
-        </nav>
-    </aside>
+    <livewire:layout.navigation />
 
     <section class="w-full h-full relative">
         <header class="bg-[#41759D] px-8 py-3">
@@ -62,8 +26,22 @@
                 <div class="w-8">
                     <img src="{{asset('images/imagen_perfil.svg')}}" alt="Profile photo">
                 </div>
-                <p class="text-white">Bienvenido(a) {{Auth::user()->name}}</p>
-                <i class="fa-solid fa-caret-down text-white"></i>
+
+                <div x-data="{ open: false }">
+                    <button @click="open = !open" class="text-white">
+                        Bienvenido(a) {{Auth::user()->name}}
+                        <i class="fa-solid fa-caret-down text-white"></i>
+                    </button>
+
+                    <div x-show="open" @click.outside="open = false" x-transition
+                        class="absolute z-50 bg-[#41759D] mt-5 rounded-md shadow-lg w-40 p-5">
+                        <ul class="space-y-6 text-sm">
+                            <li class="text-white">
+                                <a href="">Mi perfil</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </header>
 

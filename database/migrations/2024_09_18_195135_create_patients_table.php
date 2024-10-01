@@ -22,6 +22,7 @@ return new class extends Migration
             $table->char('gender', 1);
             $table->integer('age');
             $table->string('phone_number', 10);
+            $table->string('curp', 18);
             $table->timestamps();
         });
     }

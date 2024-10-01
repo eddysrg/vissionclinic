@@ -19,5 +19,6 @@ class Patient extends Model
         'gender',
         'age',
         'phone_number',
+        'curp',
     ];
 }

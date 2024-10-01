@@ -13,36 +13,52 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
     <link rel="shortcut icon" href="{{asset('images/icono_vcl.png')}}" type="image/x-icon">
 
+    <script src="https://kit.fontawesome.com/7c072a50bb.js" crossorigin="anonymous"></script>
+
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="font-sans text-gray-900 antialiased">
-    <div
-        class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gradient-to-b from-[#ffffff] via-[#0e58c4] via-63% to-[#090a14] to-76%">
+<body>
+    @unless(request()->is('login'))
+    <livewire:header />
+    @endunless
 
-        <h1 class="text-5xl uppercase text-[#070C3D]">Expediente Clínico Electrónico</h1>
+    {{$slot}}
 
-        <div
-            class="grid w-full sm:max-w-md mt-6 px-6 py-4 bg-gradient-to-b from-[#0D418F] to-[#041329] shadow-md overflow-hidden sm:rounded-lg">
+    @unless(request()->is('login'))
+    <x-footer />
+    @endunless
 
-            <div class="flex justify-center items-center gap-3 pt-8">
-                <img src="{{asset('images/login_icono.svg')}}" alt="Login VCL icono">
-                <h2 class="text-3xl text-white font-normal">Bienvenido</h2>
-            </div>
+    <script>
+        function translateToEnglish() {
+    // Cargar el script de Google Translate si no se ha cargado aún
+    if (!window.googleTranslateLoaded) {
+      var script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+      document.head.appendChild(script);
+      window.googleTranslateLoaded = true; // Evita cargar el script varias veces
+    }
 
-            {{ $slot }}
+    // Simular la selección de inglés después de cargar Google Translate
+    setTimeout(function() {
+      var selectElement = document.querySelector('.goog-te-combo');
+      if (selectElement) {
+        selectElement.value = 'en'; // Selecciona inglés
+        selectElement.dispatchEvent(new Event('change')); // Dispara el evento para traducir
+      }
+    }, 1000); // Espera a que el widget esté listo
+    }
 
-            <div class="w-32 py-5 flex justify-self-end">
-                <img src="{{asset('images/ece_white_logo.png')}}" alt="ECE logo">
-            </div>
-        </div>
-
-        <div class="mt-10 text-center text-white">
-            <p>® GDC DataComm | 2024</p>
-            <p>Este sitio está diseñado para ser utilizado con el navegador Google Chrome o Mozilla Firefox</p>
-        </div>
-    </div>
+    function googleTranslateElementInit() {
+    new google.translate.TranslateElement({
+      pageLanguage: 'es', // Idioma original de la página
+      includedLanguages: 'en,es', // Solo inglés y español como opciones
+      autoDisplay: false // No mostrar automáticamente el widget
+    }, 'google_translate_element');
+    }
+    </script>
 </body>
 
 </html>
