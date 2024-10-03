@@ -21,7 +21,7 @@
     <livewire:layout.navigation />
 
     <section class="w-full h-full relative">
-        <header class="bg-[#41759D] px-8 py-3">
+        <header class="bg-[#41759D] px-8 py-3 fixed z-10 top-0 right-0 w-full">
             <div class="flex items-center justify-end gap-5">
                 <div class="w-8">
                     <img src="{{asset('images/imagen_perfil.svg')}}" alt="Profile photo">
@@ -45,7 +45,7 @@
             </div>
         </header>
 
-        <main>
+        <main class="ml-72 mt-14">
             {{$slot}}
         </main>
 

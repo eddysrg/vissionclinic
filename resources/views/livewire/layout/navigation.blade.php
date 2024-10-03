@@ -16,7 +16,7 @@ new class extends Component
     }
 }; ?>
 
-<aside class="w-72 h-5/6 bg-[#174075] flex flex-col items-center justify-evenly">
+<aside class="fixed top-0 left-0 z-20 w-72 h-5/6 bg-[#174075] flex flex-col items-center justify-evenly">
     <div class="w-52">
         <img src="{{asset('images/ece_white_logo.png')}}" alt="Logo ece blanco">
     </div>
