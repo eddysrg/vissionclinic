@@ -70,7 +70,10 @@ new #[Layout('layouts.guest')] class extends Component
         </div>
 
         <div class="w-32 py-5 flex justify-self-end">
-            <img src="{{asset('images/ece_white_logo.png')}}" alt="ECE logo">
+            <picture>
+                <source srcset="{{asset('images/ece_white_logo.webp')}}" type="image/webp">
+                <img src="{{asset('images/ece_white_logo.png')}}" alt="ECE logo">
+            </picture>
         </div>
     </div>
 

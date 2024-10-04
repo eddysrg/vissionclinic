@@ -3,7 +3,10 @@
     @if($nivel === 'nivel-uno')
     <div class="grid md:flex md:justify-center md:items-center gap-5 py-8">
         <div class="px-8">
-            <img src="{{asset('images/nivel1-main.png')}}" alt="Image nivel 1">
+            <picture>
+                <source srcset="{{asset('images/nivel1-main.webp')}}" type="image/webp">
+                <img src="{{asset('images/nivel1-main.png')}}" alt="Image nivel 1">
+            </picture>
         </div>
 
         <div class="bg-[#0144E8] text-white p-3 md:w-1/3">
@@ -31,7 +34,10 @@
     </div>
 
     <div class="md:flex md:justify-center px-8 md:px-0 py-8 md:py-10">
-        <img src="{{asset('images/nivel1-bloque2.png')}}" alt="Nivel 1 bloque 2">
+        <picture>
+            <source srcset="{{asset('images/nivel1-bloque2.webp')}}" type="image/webp">
+            <img src="{{asset('images/nivel1-bloque2.png')}}" alt="Nivel 1 bloque 2">
+        </picture>
     </div>
 
     <div class="py-8 md:pt-0">

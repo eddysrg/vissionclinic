@@ -8,7 +8,7 @@ new class extends Component {
     use WithPagination;
 
     public $queryElement = "";
-
+    
     public function with()
     {
         return [
@@ -32,8 +32,8 @@ new class extends Component {
 <div>
     <div>
         <form wire:submit="with" class="flex gap-5">
-            <input wire:model="queryElement" class="rounded-full w-5/12" type="search"
-                placeholder="No. Expediente | Nombre | Apellido P. | Apellido M.">
+            <input autocomplete="off" id="patient_search" wire:model="queryElement" class="rounded-full w-5/12"
+                type="search" placeholder="No. Expediente | Nombre | Apellido P. | Apellido M.">
             <button type="submit"
                 class="bg-[#41759D] place-self-center px-8 py-2 rounded-lg text-white flex items-center gap-2">
                 Buscar
@@ -50,29 +50,6 @@ new class extends Component {
             <h4>Acciones</h4>
         </div>
 
-        {{-- @forelse ($patients as $patient)
-        <div class="grid grid-cols-4 justify-items-center uppercase py-4 items-center bg-cyan-50">
-            <p>{{$patient->id}}</p>
-            <div class="flex gap-3 items-center justify-self-start">
-                <div class="p-2 bg-[#174075] aspect-square rounded-full text-white">DH</div>
-                <p class="text-[#03BCF6] underline ">
-                    {{$patient->fathers_last_name}}
-                </p>
-            </div>
-
-            <p>
-                {{$patient->phone_number}}
-            </p>
-            <button class="bg-[#41759D] aspect-square p-2 self-stretch">
-                <i class="fa-solid fa-plus text-white"></i>
-            </button>
-        </div>
-        @empty
-        <p class="text-center py-5 text-lg font-semibold">No hay registros</p>
-        @endforelse
-        <div class="mt-5">{{$patients->links()}}</div>
-        <p>{{$queryElement}}</p> --}}
-
         @if($queryElement)
         @forelse ($patients as $patient)
         <div class="grid grid-cols-4 justify-items-center uppercase py-4 items-center bg-cyan-50">
@@ -87,14 +64,16 @@ new class extends Component {
             <p>
                 {{$patient->phone_number}}
             </p>
-            <button class="bg-[#41759D] aspect-square p-2 self-stretch">
+
+            <button wire:click='$dispatch("patientId", {id: {{$patient->id}}})'
+                class="bg-[#41759D] aspect-square w-10 h-10 flex justify-center items-center rounded self-stretch">
                 <i class="fa-solid fa-plus text-white"></i>
             </button>
         </div>
         @empty
         <p class="text-center py-5 text-lg font-semibold">No hay registros</p>
         @endforelse
-        <div class="mt-5">{{$patients->links()}}</div>
+        <div class="p-6">{{$patients->links()}}</div>
         @endif
     </div>
 

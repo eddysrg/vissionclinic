@@ -1,9 +1,8 @@
 @php
-$carouselClasses = 'w-full flex flex-nowrap overflow-x-scroll'
+$carouselClasses = 'w-full flex flex-nowrap overflow-x-scroll';
 @endphp
 
 <x-guest-layout>
-
     <div class="carousel-container">
         <div class="carousel">
             <section class="carousel-item item-one">

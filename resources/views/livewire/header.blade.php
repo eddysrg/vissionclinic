@@ -56,9 +56,6 @@ new class extends Component {
         </div>
 
         <nav class="bg-[#0A125E] lg:mt-3 flex justify-between items-center  py-3 lg:py-5 px-5 lg:px-8 relative">
-
-            <i class="lg:hidden text-4xl text-white fa-solid fa-bars"></i>
-
             <ul class="navBar hidden text-white uppercase font-medium lg:flex lg:items-center lg:gap-8">
                 <li class="link hover:text-[#0144E8] duration-300">
                     <a href="{{route('home')}}">Inicio</a>
@@ -153,98 +150,124 @@ new class extends Component {
                     <a href="{{route('contacto')}}">Contacto</a>
                 </li>
             </ul>
-
             {{-- Responsive navbar --}}
 
-            <ul
-                class="nav hidden text-white uppercase font-medium absolute bg-[#0144E8] z-20 p-3 py-8 w-full top-full left-0 space-y-6">
-                <li class="link-mb">
-                    <i class="fa-solid fa-chevron-right mr-2"></i>
-                    <a href=" {{route('home')}}">Inicio</a>
-                </li>
+            <div x-data="{ open: false}">
+                <button @click="open = !open">
+                    <i :class="open ? 'fa-regular fa-circle-xmark' : 'fa-solid fa-bars'"
+                        class="lg:hidden text-2xl text-white"></i>
+                </button>
 
-                <li class="link-mb">
-                    <i class="fa-solid fa-chevron-right mr-2 rotate-0"></i>
-                    <p class="inline">Exp. Clínico</p class="inline">
-                </li>
-
-                <li class="hidden submenu-resp-exp">
-                    <ul class="space-y-6 text-sm pl-5">
-                        <li>
+                <div x-show="open" @click.outside="open = false" x-transition:enter="transition ease-out duration-300"
+                    x-transition:enter-start="opacity-0 transform translate-y-[-20px]"
+                    x-transition:enter-end="opacity-100 transform translate-y-0"
+                    x-transition:leave="transition ease-in duration-200"
+                    x-transition:leave-start="opacity-100 transform translate-y-0"
+                    x-transition:leave-end="opacity-0 transform translate-y-[-20px]"
+                    class="absolute bg-[#0144E8] z-20 p-3 py-8 w-full top-full left-0">
+                    <ul class="text-white text-sm uppercase font-medium space-y-6">
+                        <li class="link-mb">
                             <i class="fa-solid fa-chevron-right mr-2"></i>
-                            <a href="{{route('ece', ['nivel' => 'nivel-uno'])}}">Nivel 1</a>
+                            <a href=" {{route('home')}}">Inicio</a>
                         </li>
 
-                        <li>
+                        <div x-data="{submenu: false}">
+                            <button @click="submenu = !submenu" class="link-mb uppercase">
+                                <i class="fa-solid fa-chevron-right mr-2 rotate-0"></i>
+                                <p class="inline">Exp. Clínico</p class="inline">
+                            </button>
+
+                            <div x-show="submenu" @click.outside="submenu = false"
+                                x-transition:enter="transition ease-out duration-300"
+                                x-transition:enter-start="opacity-0 transform translate-y-[-20px]"
+                                x-transition:enter-end="opacity-100 transform translate-y-0"
+                                x-transition:leave="transition ease-in duration-200"
+                                x-transition:leave-start="opacity-100 transform translate-y-0"
+                                x-transition:leave-end="opacity-0 transform translate-y-[-20px]" class="mt-4">
+                                <ul class="space-y-6 text-xs pl-5 list-disc ml-2">
+                                    <li>
+                                        <a href="{{route('ece', ['nivel' => 'nivel-uno'])}}">Nivel 1</a>
+                                    </li>
+
+                                    <li>
+                                        <a href="{{route('ece', ['nivel' => 'nivel-dos'])}}">Nivel 2</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <li class="link-mb">
                             <i class="fa-solid fa-chevron-right mr-2"></i>
-                            <a href="{{route('ece', ['nivel' => 'nivel-dos'])}}">Nivel 2</a>
+                            <a href="{{route('mvs')}}">Medical View System</a>
                         </li>
+
+                        <li class="link-mb">
+                            <i class="fa-solid fa-chevron-right mr-2"></i>
+                            <a href="{{route('lyrium')}}">Lyrium</a>
+                        </li>
+
+                        <div x-data="{submenu: false}">
+                            <button @click="submenu = !submenu" class="link-mb uppercase">
+                                <i class="fa-solid fa-chevron-right mr-2 rotate-0"></i>
+                                <p class="inline">Productos</p>
+                            </button>
+
+                            <div x-show="submenu" @click.outside="submenu = false"
+                                x-transition:enter="transition ease-out duration-300"
+                                x-transition:enter-start="opacity-0 transform translate-y-[-20px]"
+                                x-transition:enter-end="opacity-100 transform translate-y-0"
+                                x-transition:leave="transition ease-in duration-200"
+                                x-transition:leave-start="opacity-100 transform translate-y-0"
+                                x-transition:leave-end="opacity-0 transform translate-y-[-20px]" class="mt-4">
+                                <ul class="space-y-6 text-xs pl-5 list-disc ml-2">
+
+                                    <li>
+                                        <a href="{{route('productos')}}">Todos los productos</a>
+                                    </li>
+
+                                    <li>
+                                        <a href="{{route('producto', ['producto' => 'laboratorio'])}}">Laboratorio</a>
+                                    </li>
+
+                                    <li>
+                                        <a href="{{route('producto', ['producto' => 'ingresos'])}}">Ingresos</a>
+                                    </li>
+
+                                    <li>
+                                        <a href="{{route('producto', ['producto' => 'medical-view-system'])}}">Medical
+                                            View
+                                            System</a>
+                                    </li>
+
+                                    <li>
+                                        <a href="{{route('producto', ['producto' => 'odontologia'])}}">Odontología</a>
+                                    </li>
+
+                                    <li>
+                                        <a href="{{route('producto', ['producto' => 'nutricion'])}}">Nutrición</a>
+                                    </li>
+
+                                    <li>
+                                        <a href="{{route('producto', ['producto' => 'ginecologia'])}}">Ginecología</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+
                     </ul>
-                </li>
+                </div>
+            </div>
 
-                <li class="link-mb">
-                    <i class="fa-solid fa-chevron-right mr-2"></i>
-                    <a href="{{route('mvs')}}">Medical View System</a>
-                </li>
 
-                <li class="link-mb">
-                    <i class="fa-solid fa-chevron-right mr-2"></i>
-                    <a href="{{route('lyrium')}}">Lyrium</a>
-                </li>
 
-                <li class="link-mb">
-                    <i class="fa-solid fa-chevron-right mr-2 rotate-0"></i>
-                    <p class="inline">Productos</p>
-                </li>
 
-                <li class="hidden submenu-resp-pro">
-                    <ul class="space-y-6 text-sm pl-5">
-
-                        <li>
-                            <i class="fa-solid fa-chevron-right mr-2"></i>
-                            <a href="{{route('productos')}}">Todos los productos</a>
-                        </li>
-
-                        <li>
-                            <i class="fa-solid fa-chevron-right mr-2"></i>
-                            <a href="{{route('producto', ['producto' => 'laboratorio'])}}">Laboratorio</a>
-                        </li>
-
-                        <li>
-                            <i class="fa-solid fa-chevron-right mr-2"></i>
-                            <a href="{{route('producto', ['producto' => 'ingresos'])}}">Ingresos</a>
-                        </li>
-
-                        <li>
-                            <i class="fa-solid fa-chevron-right mr-2"></i>
-                            <a href="{{route('producto', ['producto' => 'medical-view-system'])}}">Medical View
-                                System</a>
-                        </li>
-
-                        <li>
-                            <i class="fa-solid fa-chevron-right mr-2"></i>
-                            <a href="{{route('producto', ['producto' => 'odontologia'])}}">Odontología</a>
-                        </li>
-
-                        <li>
-                            <i class="fa-solid fa-chevron-right mr-2"></i>
-                            <a href="{{route('producto', ['producto' => 'nutricion'])}}">Nutrición</a>
-                        </li>
-
-                        <li>
-                            <i class="fa-solid fa-chevron-right mr-2"></i>
-                            <a href="{{route('producto', ['producto' => 'ginecologia'])}}">Ginecología</a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
 
             <div class="flex items-center gap-4">
                 <div class="flex gap-2">
                     <button onclick="translateToEnglish()"
                         class="rounded p-3 bg-[#213f8b] hover:bg-slate-300 transition-colors duration-500">
                         <picture>
-                            <source srcset="{{asset('images/usa.avif')}}" type="image/avif">
                             <source srcset="{{asset('images/usa.webp')}}" type="image/webp">
                             <img src="{{asset('images/usa.png')}}" alt="USA image">
                         </picture>
@@ -255,7 +278,6 @@ new class extends Component {
                     <button onclick="window.location.reload()"
                         class="rounded p-3 bg-[#213f8b] hover:bg-slate-300 transition-colors duration-500">
                         <picture>
-                            <source srcset="{{asset('images/mexico.avif')}}" type="image/avif">
                             <source srcset="{{asset('images/mexico.webp')}}" type="image/webp">
                             <img src="{{asset('images/mexico.png')}}" alt="México image">
                         </picture>
