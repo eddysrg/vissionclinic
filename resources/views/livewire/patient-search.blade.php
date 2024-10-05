@@ -34,7 +34,7 @@ new class extends Component {
         <form wire:submit="with" class="flex gap-5">
             <input autocomplete="off" id="patient_search" wire:model="queryElement" class="rounded-full w-5/12"
                 type="search" placeholder="No. Expediente | Nombre | Apellido P. | Apellido M.">
-            <button type="submit"
+            <button wire:click='dispatch("cleanAppointmentForm")' type="submit"
                 class="bg-[#41759D] place-self-center px-8 py-2 rounded-lg text-white flex items-center gap-2">
                 Buscar
                 <i class="fa-solid fa-magnifying-glass"></i>
@@ -65,7 +65,7 @@ new class extends Component {
                 {{$patient->phone_number}}
             </p>
 
-            <button wire:click='$dispatch("patientId", {id: {{$patient->id}}})'
+            <button wire:click='$dispatch("patientInfo", {patient: {{$patient}}})'
                 class="bg-[#41759D] aspect-square w-10 h-10 flex justify-center items-center rounded self-stretch">
                 <i class="fa-solid fa-plus text-white"></i>
             </button>

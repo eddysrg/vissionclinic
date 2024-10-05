@@ -9,8 +9,7 @@
         <livewire:patient-search />
     </div>
 
-    <div class="bg-[#d2f4fc] m-6 p-6 pb-20 rounded">
-
+    <div x-data="{showAppointment: false}">
         <livewire:schedule-appointment />
     </div>
 </x-app-layout>

@@ -81,8 +81,6 @@ new class extends Component {
         $this->dispatch('show-success');
         $this->dispatch('close-modal');
         $this->clearForm();
-
-        
     }
 }; ?>
 
