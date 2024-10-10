@@ -2,36 +2,36 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+  {{$meta ?? ''}}
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-    <link rel="shortcut icon" href="{{asset('images/icono_vcl.png')}}" type="image/x-icon">
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.bunny.net">
+  <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+  <link rel="shortcut icon" href="{{asset('images/icono_vcl.png')}}" type="image/x-icon">
 
-    <script src="https://kit.fontawesome.com/7c072a50bb.js" crossorigin="anonymous"></script>
+  <script src="https://kit.fontawesome.com/7c072a50bb.js" crossorigin="anonymous"></script>
 
-    <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+  <!-- Scripts -->
+  @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <body>
-    @unless(request()->is('login'))
-    <livewire:header />
-    @endunless
+  @unless(request()->is('login'))
+  <livewire:header />
+  @endunless
 
-    {{$slot}}
+  {{$slot}}
 
-    @unless(request()->is('login'))
-    <x-footer />
-    @endunless
+  @unless(request()->is('login'))
+  <x-footer />
+  @endunless
 
-    <script>
-        function translateToEnglish() {
+  <script>
+    function translateToEnglish() {
     // Cargar el script de Google Translate si no se ha cargado aún
     if (!window.googleTranslateLoaded) {
       var script = document.createElement('script');
@@ -58,7 +58,7 @@
       autoDisplay: false // No mostrar automáticamente el widget
     }, 'google_translate_element');
     }
-    </script>
+  </script>
 </body>
 
 </html>

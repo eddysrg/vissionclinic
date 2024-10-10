@@ -1,8 +1,17 @@
 @php
 $carouselClasses = 'w-full flex flex-nowrap overflow-x-scroll';
+$metaTitle = "Vission Clinic - Inicio"
 @endphp
 
 <x-guest-layout>
+    <x-slot name="meta">
+        <title>Vission Clinic - Inicio </title>
+        <meta name="description"
+            content="Vission Clinic es la herramienta que optimiza la atención que se brinda en unidades médicas y centros de salud.">
+        <link rel="canonical" href="{{ url()->current() }}">
+        <meta name="robots" content="index,follow">
+    </x-slot>
+
     <div class="carousel-container">
         <div class="carousel">
             <section class="carousel-item item-one">

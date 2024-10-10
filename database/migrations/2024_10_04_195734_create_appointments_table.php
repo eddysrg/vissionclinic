@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('appointment_type');
             $table->text('appointment_comments');
             $table->foreignId('patient_id')->constrained()->onDelete('cascade');
+            $table->boolean('confirmed');
             $table->timestamps();
         });
     }

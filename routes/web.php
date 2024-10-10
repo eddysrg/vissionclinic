@@ -51,11 +51,11 @@ Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
 
-Route::get('/sitemap', function () {
+/* Route::get('/sitemap', function () {
     $sitemap = Sitemap::create()
         ->add(Url::create('/'));
 
     return $sitemap->writeToFile(public_path('sitemap.xml'));
-});
+}); */
 
 require __DIR__ . '/auth.php';
