@@ -16,28 +16,31 @@ new class extends Component
     }
 }; ?>
 
-<aside class="fixed top-0 left-0 z-20 w-72 h-5/6 bg-[#174075] flex flex-col items-center justify-evenly">
-    <div class="w-52">
-        <img src="{{asset('images/ece_white_logo.png')}}" alt="Logo ece blanco">
+<aside class="fixed top-0 left-0 z-20 w-52 h-full bg-[#174075] flex flex-col items-center justify-evenly">
+    <div class="w-36">
+        <picture>
+            <source srcset="{{asset('images/ece_white_logo.webp')}}" type="image/webp">
+            <img src="{{asset('images/ece_white_logo.png')}}" alt="Logo ece blanco">
+        </picture>
     </div>
 
-    <div class="w-28">
+    <div class="w-16">
         <img src="{{asset('images/imagen_perfil.svg')}}" alt="Profile photo">
     </div>
 
     <nav>
-        <ul class="space-y-5 uppercase text-sm">
+        <ul class="space-y-5 uppercase text-xs">
             <li class="text-white">
                 <i class="fa-solid fa-house mr-3"></i>
-                <a href="{{route('dashboard')}}">Inicio</a>
+                <a href="{{route('dashboard')}}" wire:navigate>Inicio</a>
             </li>
             <li class="text-white">
                 <i class="fa-solid fa-user-group mr-3"></i>
-                <a href="{{route('dashboard.expedientes')}}">Expedientes</a>
+                <a href="{{route('dashboard.expedientes')}}" wire:navigate>Expedientes</a>
             </li>
             <li class="text-white">
                 <i class="fa-solid fa-calendar-days mr-3"></i>
-                Agenda
+                <a href="{{route('dashboard.agenda')}}" wire:navigate>Agenda</a>
             </li>
 
             <li class="text-white flex items-center">
@@ -46,7 +49,6 @@ new class extends Component
                     Cerrar Sesión
                 </button>
             </li>
-
         </ul>
     </nav>
 </aside>

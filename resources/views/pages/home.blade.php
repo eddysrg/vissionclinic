@@ -6,7 +6,8 @@ $carouselClasses = 'w-full flex flex-nowrap overflow-x-scroll';
     <div class="carousel-container">
         <div class="carousel">
             <section class="carousel-item item-one">
-                <div class="h-full px-20 md:px-32 flex flex-col items-center md:items-end justify-center text-white">
+                <div
+                    class="h-full px-10 xl:px-0 max-w-7xl mx-auto flex flex-col items-center md:items-end justify-center text-white">
                     <div class="text-center md:text-end space-y-5">
                         <span class="mb-5 md:mb-0 lg:text-2xl drop-shadow-lg">
                             El mejor expediente Clínico Electrónico
@@ -25,7 +26,8 @@ $carouselClasses = 'w-full flex flex-nowrap overflow-x-scroll';
             </section>
 
             <section class="carousel-item item-two">
-                <div class="h-full px-20 md:px-32 flex flex-col items-center md:items-end justify-center text-white">
+                <div
+                    class="h-full px-10 xl:px-0 max-w-7xl mx-auto flex flex-col items-center md:items-end justify-center text-white">
                     <div class="text-center md:text-end space-y-5">
                         <span class="mb-5 md:mb-0 lg:text-2xl drop-shadow-lg">
                             Sistema de Telemedicina y Telemonitorización
@@ -44,7 +46,8 @@ $carouselClasses = 'w-full flex flex-nowrap overflow-x-scroll';
             </section>
 
             <section class="carousel-item item-three">
-                <div class="h-full px-20 md:px-32 flex flex-col items-center md:items-end justify-center text-white">
+                <div
+                    class="h-full px-10 xl:px-0 max-w-7xl mx-auto flex flex-col items-center md:items-end justify-center text-white">
                     <div class="text-center md:text-end space-y-5">
                         <span class="mb-5 md:mb-0 lg:text-2xl drop-shadow-lg">
                             Sistema de información para laboratorios
@@ -63,7 +66,8 @@ $carouselClasses = 'w-full flex flex-nowrap overflow-x-scroll';
             </section>
 
             <section class="carousel-item item-four">
-                <div class="h-full px-20 md:px-32 flex flex-col items-center md:items-end justify-center text-white">
+                <div
+                    class="h-full px-10 xl:px-0 max-w-7xl mx-auto flex flex-col items-center md:items-end justify-center text-white">
                     <div class="text-center md:text-end space-y-5">
                         <span class="mb-5 md:mb-0 lg:text-2xl drop-shadow-lg">
                             Sistema de Seguridad con nuestro asistente de
@@ -82,7 +86,8 @@ $carouselClasses = 'w-full flex flex-nowrap overflow-x-scroll';
             </section>
 
             <section class="carousel-item item-five">
-                <div class="h-full px-20 md:px-32 flex flex-col items-center md:items-end justify-center text-white">
+                <div
+                    class="h-full px-10 xl:px-0 max-w-7xl mx-auto flex flex-col items-center md:items-end justify-center text-white">
                     <div class="text-center md:text-end space-y-5">
                         <span class="mb-5 md:mb-0 lg:text-2xl drop-shadow-lg">
                             El mejor sistema de información para Hospitales

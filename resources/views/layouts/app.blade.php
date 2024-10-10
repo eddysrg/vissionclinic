@@ -21,20 +21,20 @@
     <livewire:layout.navigation />
 
     <section class="w-full h-full relative">
-        <header class="bg-[#41759D] px-8 py-3 fixed z-10 top-0 right-0 w-full">
+        <header class="bg-[#41759D] px-8 py-2 fixed z-10 top-0 right-0 w-full">
             <div class="flex items-center justify-end gap-5">
-                <div class="w-8">
+                <div class="w-7">
                     <img src="{{asset('images/imagen_perfil.svg')}}" alt="Profile photo">
                 </div>
 
                 <div x-data="{ open: false }">
-                    <button @click="open = !open" class="text-white">
+                    <button @click="open = !open" class="text-white text-sm">
                         Bienvenido(a) {{Auth::user()->name}}
                         <i class="fa-solid fa-caret-down text-white"></i>
                     </button>
 
                     <div x-show="open" @click.outside="open = false" x-transition
-                        class="absolute z-50 bg-[#41759D] mt-5 rounded-md shadow-lg w-40 p-5">
+                        class="absolute z-50 bg-[#41759D] mt-5 rounded-md shadow-lg w-40 p-5" style="display: none">
                         <ul class="space-y-6 text-sm">
                             <li class="text-white">
                                 <a href="">Mi perfil</a>
@@ -45,7 +45,7 @@
             </div>
         </header>
 
-        <main class="ml-72 mt-14">
+        <main class="ml-52 mt-10">
             {{$slot}}
         </main>
 

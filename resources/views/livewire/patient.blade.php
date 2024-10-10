@@ -94,7 +94,7 @@ new class extends Component {
         </button>
 
         <div x-show="showSuccessMessage" x-transition:enter="transition ease-out duration-300"
-            class="fixed inset-0 z-50 flex items-center justify-center bg-gray-600 bg-opacity-60">
+            class="fixed inset-0 z-50 flex items-center justify-center bg-gray-600 bg-opacity-60" style="display: none">
             <div
                 class="bg-gradient-to-b from-[#41759D] to-[#0E2F5E] text-white px-8 py-4 rounded-lg flex justify-center items-center w-1/3 h-1/3">
                 <p class="text-3xl flex items-center gap-3">
@@ -106,7 +106,7 @@ new class extends Component {
 
         <div x-data="{show: false}" x-show="show" x-on:open-modal.window="show = true"
             x-on:close-modal.window="show = false" x-on:keydown.escape.window="show = false"
-            class="fixed z-50 inset-0 overflow-y-hidden">
+            class="fixed z-50 inset-0 overflow-y-hidden" style="display: none">
 
             <div x-on:click="show = false" wire:click='clearForm()' class="fixed inset-0 bg-gray-600 opacity-40"></div>
 

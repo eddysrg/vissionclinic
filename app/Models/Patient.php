@@ -21,4 +21,9 @@ class Patient extends Model
         'phone_number',
         'curp',
     ];
+
+    public function appointment()
+    {
+        return $this->hasOne(Appointment::class);
+    }
 }
