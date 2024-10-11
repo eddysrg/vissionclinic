@@ -1,4 +1,12 @@
 <x-guest-layout>
+
+    <x-slot name="meta">
+        <title>Odontología | Vission Clinic ECE</title>
+        <meta name="description" content="Modulo de odontología de Vission Clinic ECE.">
+        <link rel="canonical" href="{{ url()->current() }}">
+        <meta name="robots" content="index,follow">
+    </x-slot>
+
     <div>
         <div class="grid grid-cols-1">
             <div class="w-full md:h-[25rem] bg-red-500 col-start-1 col-end-2 row-start-1 row-end-2">

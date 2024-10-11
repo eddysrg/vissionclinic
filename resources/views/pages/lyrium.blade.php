@@ -1,4 +1,11 @@
 <x-guest-layout>
+    <x-slot name="meta">
+        <title>Lyrium | Vission Clinic</title>
+        <meta name="description" content="Lyrium es el asistente de Inteligencia Avanzada ubicado en la nube.">
+        <link rel="canonical" href="{{ url()->current() }}">
+        <meta name="robots" content="index,follow">
+    </x-slot>
+
     <div class="w-full">
         <img class="w-full block" src="{{asset('images/lyrium_site.png')}}" alt="">
     </div>

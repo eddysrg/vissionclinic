@@ -4,6 +4,14 @@ $fechaHoy = Carbon::now()->isoFormat('D [de] MMMM YYYY');
 @endphp
 
 <x-app-layout>
+
+    <x-slot name="meta">
+        <title>Vission Clinic ECE Dashboard</title>
+        <meta name="description" content="">
+        <link rel="canonical" href="{{ url()->current() }}">
+        <meta name="robots" content="index,follow">
+    </x-slot>
+
     <div class="flex">
         <div class="w-2/3 p-8">
             <div class="bg-[#41759D40] p-5">

@@ -64,7 +64,7 @@ new class extends Component {
                 <li>
                     <div x-data="{ open: false }">
                         <button @click="open = !open"
-                            class="py-3 px-8 md:p-0 hover:text-blue-500 flex items-center gap-2 uppercase">
+                            class="py-3 px-8 md:p-0 hover:text-[#0144E8] duration-300 flex items-center gap-2 uppercase">
                             Expediente Clínico
                             <i :class="open ? 'fa-angle-down': 'fa-angle-right'" class="fa-solid text-sm"></i>
                         </button>
@@ -97,7 +97,7 @@ new class extends Component {
                 <li>
                     <div x-data="{ open: false }">
                         <button @click="open = !open"
-                            class="py-3 px-8 md:p-0 hover:text-blue-500 flex items-center gap-2 uppercase">
+                            class="py-3 px-8 md:p-0 hover:text-[#0144E8] duration-300 flex items-center gap-2 uppercase">
                             Productos
                             <i :class="open ? 'fa-angle-down': 'fa-angle-right'" class="fa-solid text-sm"></i>
                         </button>

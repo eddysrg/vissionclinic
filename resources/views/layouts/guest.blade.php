@@ -21,7 +21,7 @@
 
 <body>
   @unless(request()->is('login'))
-  <livewire:header />
+  <livewire:layout.header />
   @endunless
 
   {{$slot}}

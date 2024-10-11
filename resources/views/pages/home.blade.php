@@ -5,7 +5,7 @@ $metaTitle = "Vission Clinic - Inicio"
 
 <x-guest-layout>
     <x-slot name="meta">
-        <title>Vission Clinic - Inicio </title>
+        <title>Vission Clinic</title>
         <meta name="description"
             content="Vission Clinic es la herramienta que optimiza la atención que se brinda en unidades médicas y centros de salud.">
         <link rel="canonical" href="{{ url()->current() }}">
@@ -121,11 +121,11 @@ $metaTitle = "Vission Clinic - Inicio"
     </div>
 
     <div class="bg-[#0144E8]">
-        <p
+        <h1
             class="text-white uppercase text-center py-11 text-xl leading-normal lg:text-2xl lg:leading-relaxed px-8 md:px-28">
             Vission Clinic tiene por objetivo optimizar la atención que se brinda en unidades médicas y centros de
             salud.
-        </p>
+        </h1>
     </div>
 
     <div class="py-9 px-8">

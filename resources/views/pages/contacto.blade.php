@@ -1,4 +1,11 @@
 <x-guest-layout>
+    <x-slot name="meta">
+        <title>Contacto | Vission Clinic</title>
+        <meta name="description" content="Contactanos.">
+        <link rel="canonical" href="{{ url()->current() }}">
+        <meta name="robots" content="index,follow">
+    </x-slot>
+
     <div class="w-full h-full">
         <div class="w-3/4 mx-auto py-20">
             <div class="grid lg:grid-cols-2 items-center">

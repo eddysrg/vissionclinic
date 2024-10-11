@@ -1,6 +1,15 @@
 <x-guest-layout>
 
     @if($nivel === 'nivel-uno')
+
+    <x-slot name="meta">
+        <title>ECE Nivel 1 | Vission Clinic</title>
+        <meta name="description"
+            content="El Expediente Clínico Electrónico es el producto perfecto para brindar una mejor atención y servicio a los pacientes, utilizando la modernización de los procesos de los servicios de salud.">
+        <link rel="canonical" href="{{ url()->current() }}">
+        <meta name="robots" content="index,follow">
+    </x-slot>
+
     <div class="grid md:flex md:justify-center md:items-center gap-5 py-8">
         <div class="px-8">
             <picture>
@@ -78,6 +87,15 @@
         </div>
     </div>
     @else
+
+    <x-slot name="meta">
+        <title>ECE Nivel 2 | Vission Clinic</title>
+        <meta name="description"
+            content="Esta dirigido a clínicas, centro de salud, hospitales y a todo el sector salud con las especialidades y servicios que cuenta Vission Clinic.">
+        <link rel="canonical" href="{{ url()->current() }}">
+        <meta name="robots" content="index,follow">
+    </x-slot>
+
     <div class="grid md:flex md:flex-row-reverse md:justify-center md:items-center gap-5 py-8">
         <div class="px-8">
             <img src="{{asset('images/main-nivel2.png')}}" alt="Image nivel 2">

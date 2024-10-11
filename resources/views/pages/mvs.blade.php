@@ -5,6 +5,15 @@ $arrowStyle = 'fa-solid fa-arrow-right text-3xl md:text-5xl text-[#0A125E]';
 @endphp
 
 <x-guest-layout>
+
+    <x-slot name="meta">
+        <title>Medical View System | Vission Clinic</title>
+        <meta name="description"
+            content="Medical View System es una colección de servicios inteligentes de software, basados en procesos de ETL.">
+        <link rel="canonical" href="{{ url()->current() }}">
+        <meta name="robots" content="index,follow">
+    </x-slot>
+
     <div class="md:w-2/3 px-8 md:px-0 md:grid md:grid-cols-[.5fr_.3fr_.5fr] md:grid-rows-[.2fr_1fr] py-8 mx-auto">
         <div class="col-start-1 col-end-3 row-start-1 row-end-3">
             <img class="w-full" src="{{asset('images/mvs-one.png')}}" alt="mvs one">
