@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
     <script src="https://kit.fontawesome.com/7c072a50bb.js" crossorigin="anonymous"></script>
-
+    {{$fullCalendarJs ?? ''}}
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -49,7 +49,7 @@
             {{$slot}}
         </main>
 
-        <div class="bg-[#174075] w-fit px-5 py-1 text-white fixed right-0 bottom-0">
+        <div class="bg-[#174075] w-fit px-5 py-1 text-white fixed right-0 bottom-0 z-50">
             <p class="text-sm">NOM-004-SSA3-2012 EXPEDIENTE CLÍNICO</p>
         </div>
     </section>
