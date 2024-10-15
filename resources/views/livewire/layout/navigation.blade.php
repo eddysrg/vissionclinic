@@ -40,10 +40,10 @@ new class extends Component
             </li>
             <li class="text-white">
                 <i class="fa-solid fa-calendar-days mr-3"></i>
-                <a href="{{route('dashboard.agenda')}}" wire:navigate>Agenda</a>
+                <a href="{{route('dashboard.agenda')}}">Agenda</a>
             </li>
 
-            <li class="text-white flex items-center">
+            <li class=" text-white flex items-center">
                 <i class="fa-solid fa-right-from-bracket mr-3"></i>
                 <button wire:click='logout' class="uppercase">
                     Cerrar Sesión
