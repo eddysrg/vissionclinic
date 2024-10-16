@@ -229,3 +229,32 @@
 .mb-last-carousel-item {
     width: calc(100% / 4);
 }
+
+.fc-daygrid-day {
+    background-color: #f0f8ff;
+    border: 1px solid #d1d5db;
+    color: #2d3748;
+}
+
+.fc-day-today {
+    background-color: #174075 !important;
+    color: white;
+}
+
+.fc-toolbar {
+    background-color: #15c5ec4f;
+    color: #41759d; /* Texto blanco */
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.fc-disabled-day {
+    background-color: #f0f0f0;
+    color: #cccccc;
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.fc-disabled-day:hover {
+    cursor: not-allowed;
+}
