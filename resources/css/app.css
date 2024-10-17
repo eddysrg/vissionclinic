@@ -243,9 +243,27 @@
 
 .fc-toolbar {
     background-color: #15c5ec4f;
-    color: #41759d; /* Texto blanco */
+    color: #133d5d; /* Texto blanco */
     padding: 10px;
-    border-radius: 8px;
+    border: 1px solid #d1d5db;
+}
+
+.fc .fc-button-primary {
+    background-color: #d7d7d7;
+    color: #174075;
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active {
+    background-color: #174075;
+}
+
+.fc-direction-ltr .fc-toolbar > * > :not(:first-child) {
+    background-color: #d7d7d7;
+    color: #174075;
+}
+
+.fc .fc-toolbar.fc-header-toolbar {
+    margin: 0;
 }
 
 .fc-disabled-day {

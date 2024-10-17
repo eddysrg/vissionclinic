@@ -13,26 +13,22 @@ new class extends Component {
     {
         return [
             'patients' => Patient::when($this->queryElement, function($query) {
-                $query->where('patient_name', 'LIKE', '%' . $this->queryElement . '%');
-            })
-            ->when($this->queryElement, function($query) {
-                $query->orWhere('fathers_last_name', 'LIKE', '%' . $this->queryElement . '%');
-            })
-            ->when($this->queryElement, function($query) {
-                $query->orWhere('mothers_last_name', 'LIKE', '%' . $this->queryElement . '%');
-            })
-            ->when($this->queryElement, function($query) {
-                $query->orWhere('id', 'LIKE', $this->queryElement);
-            })
-            ->paginate(5)
+                $query->where('patient_name', 'LIKE', '%' . $this->queryElement . '%')
+                ->orWhere('fathers_last_name', 'LIKE', '%' . $this->queryElement . '%')
+                ->orWhere('mothers_last_name', 'LIKE', '%' . $this->queryElement . '%')
+                ->orWhere('id', 'LIKE', $this->queryElement)
+                ->orWhereRaw('CONCAT(patient_name, " ", fathers_last_name) LIKE ?', ['%' . $this->queryElement . '%'])
+                ->orWhereRaw('CONCAT(patient_name, " ", fathers_last_name, " ", mothers_last_name) LIKE ?', ['%' . $this->queryElement . '%']);
+            })->paginate(5)
         ];  
     }
 }; ?>
 
+
 <div>
     <div>
         <form wire:submit="with" class="flex gap-5">
-            <input autocomplete="off" id="patient_search" wire:model="queryElement" class="rounded-full w-5/12"
+            <input autocomplete="off" id="patient_search" wire:model="queryElement" class="rounded-full w-full"
                 type="search" placeholder="No. Expediente | Nombre | Apellido P. | Apellido M.">
             <button wire:click='dispatch("cleanAppointmentForm")' type="submit"
                 class="bg-[#41759D] place-self-center px-8 py-2 rounded-lg text-white flex items-center gap-2">
@@ -47,7 +43,7 @@ new class extends Component {
             <h4>N° Expediente</h4>
             <h4>Nombre</h4>
             <h4>Número de contacto</h4>
-            <h4>Acciones</h4>
+            <h4>Editar</h4>
         </div>
 
         @if($queryElement)
@@ -65,9 +61,13 @@ new class extends Component {
                 {{$patient->phone_number}}
             </p>
 
+            {{-- <button wire:click='$dispatch("patientInfo", {patient: {{$patient}}})'>
+                <i class="fa-solid fa-pen-to-square text-[#03BCF6]"></i>
+            </button> --}}
+
             <button wire:click='$dispatch("patientInfo", {patient: {{$patient}}})'
-                class="bg-[#41759D] aspect-square w-10 h-10 flex justify-center items-center rounded self-stretch">
-                <i class="fa-solid fa-plus text-white"></i>
+                @click='$dispatch("open-modal", "patientModal")'>
+                <i class="fa-solid fa-pen-to-square text-[#03BCF6]"></i>
             </button>
         </div>
         @empty

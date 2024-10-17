@@ -17,14 +17,11 @@ new class extends Component {
     public $appointment_comments = '';
     public $patient_id = '';
     public $confirmed = '';
+    public $messageNotification = 'Cita creada con éxito';
 
 
     public function onDateClick($date)
     {
-        // dd($typeDate);
-        // dd(Carbon::parse($date['date'])->format('H:i'));
-        // dd(Carbon::parse($date['date'])->format('Y-m-d'));
-        // dd($date);
         $typeDate = $date['view']['type'];
 
 
@@ -70,7 +67,6 @@ new class extends Component {
 
         $this->dispatch('close-modal', 'scheduleModal');
         $this->cleanAppointmentForm();
-        session()->flash('scheduleMessage', 'Cita creada con éxito');
         $this->dispatch('show-notification');
     }
 
@@ -84,7 +80,6 @@ new class extends Component {
         $this->patient_id = '';
         $this->confirmed = '';
         $this->resetErrorBag();
-        // $this->dispatch('hidde-appointment');
     }
 
     public function makeAppointment($patient)
@@ -111,24 +106,7 @@ new class extends Component {
 }; ?>
 
 <div>
-
-    <div x-data="{showNotification: false}"
-        x-on:show-notification.window="showNotification = true; setTimeout(() => showNotification = false, 2000);">
-
-        <div x-show='showNotification' x-transition:enter="ease-out duration-300"
-            x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-            x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200"
-            x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
-            x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-            class="fixed rounded flex gap-4 justify-center items-center top-14 right-2 w-72 h-40 bg-green-500 z-50"
-            style="display: none">
-            <i
-                class="fa-solid fa-bell text-xl text-white bg-green-600 aspect-square w-10 h-10 flex items-center justify-center rounded-full"></i>
-            <p class="text-xl text-white">{{session('scheduleMessage')}}</p>
-        </div>
-    </div>
-
-
+    <x-notification message="{{$messageNotification}}" />
 
 
     <div class="flex mt-10 gap-8">
@@ -346,11 +324,16 @@ new class extends Component {
                     }
                 },
                 dateClick: function(info) {
-                    // $wire.onDateClick(info);
-                    var clickedDate = info.date;
+                    var clickedDate = new Date(info.date);
                     var now = new Date();
 
-                    console.log(clickedDate, now);
+                    if(info.view.type == 'timeGridWeek' || info.view.type == 'timeGridDay') {
+                        if(!(clickedDate.getUTCHours() > now.getHours())) {
+                            alert('No se puede elegir una hora anterior a la actual');
+                            return
+                        }
+                    }
+                    $wire.onDateClick(info);
                 },
             });
 

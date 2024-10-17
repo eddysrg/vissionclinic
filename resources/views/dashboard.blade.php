@@ -1,10 +1,10 @@
 @php
 use Carbon\Carbon;
 $fechaHoy = Carbon::now()->isoFormat('D [de] MMMM YYYY');
+$messageNotification = 'Paciente registrado con éxito';
 @endphp
 
 <x-app-layout>
-
     <x-slot name="meta">
         <title>Vission Clinic ECE Dashboard</title>
         <meta name="description" content="">
@@ -12,14 +12,24 @@ $fechaHoy = Carbon::now()->isoFormat('D [de] MMMM YYYY');
         <meta name="robots" content="index,follow">
     </x-slot>
 
+    <x-notification message="{{$messageNotification}}" />
+    <livewire:patient />
+
+
     <div class="flex">
         <div class="w-2/3 p-8">
             <div class="bg-[#41759D40] p-5">
-                <h2 class="text-2xl">¡Hola {{Auth::user()->name}}!</h2>
-                <p>¿Qué quieres hacer hoy?</p>
+                <h2 class="text-4xl mb-2">¡Hola {{Auth::user()->name}}!</h2>
+                <p class="text-xl">¿Qué quieres hacer hoy?</p>
 
-                <div class="mt-8 w-full flex justify-evenly">
-                    <livewire:patient />
+                <div class="mt-9 w-full flex justify-center gap-10">
+
+                    <button class="text-xs text-white bg-[#41759D] p-3 rounded-md" x-data
+                        @click='$dispatch("open-modal", "patientModal")'>
+                        Registro Paciente Nuevo
+                        <i class="fa-solid fa-plus ml-2"></i>
+                    </button>
+
 
                     <a href="{{route('dashboard.agenda')}}" class="text-xs text-white bg-[#41759D] p-3 rounded-md">
                         Agendar Cita
