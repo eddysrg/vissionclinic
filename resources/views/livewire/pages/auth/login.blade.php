@@ -45,10 +45,10 @@ new #[Layout('layouts.guest')] class extends Component
             <form wire:submit="login">
                 <!-- Name -->
                 <div>
-                    <x-input-label for="name" :value="__('Usuario')" class="text-white" />
-                    <x-text-input wire:model="form.name" id="name" class="block mt-1 w-full" type="text" name="name"
-                        autofocus autocomplete="username" />
-                    <x-input-error :messages="$errors->get('form.name')" class="mt-2" />
+                    <x-input-label for="username" :value="__('Usuario')" class="text-white" />
+                    <x-text-input wire:model="form.username" id="username" class="block mt-1 w-full" type="text"
+                        name="username" autofocus autocomplete="username" />
+                    <x-input-error :messages="$errors->get('form.username')" class="mt-2" />
                 </div>
 
                 <!-- Password -->

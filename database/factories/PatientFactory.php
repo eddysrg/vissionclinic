@@ -27,6 +27,7 @@ class PatientFactory extends Factory
             'age' => $this->faker->numberBetween(1, 100),
             'phone_number' => $this->faker->numerify('##########'),
             'curp' => strtoupper($this->faker->bothify('????######??????##')),
+            'user_id' => $this->faker->randomElement([1, 2]),
             'created_at' => now(),
             'updated_at' => now(),
         ];

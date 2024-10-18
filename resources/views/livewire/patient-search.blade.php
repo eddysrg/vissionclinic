@@ -9,7 +9,7 @@ new class extends Component {
 
     public $queryElement = "";
     
-    public function with()
+    /* public function with()
     {
         return [
             'patients' => Patient::when($this->queryElement, function($query) {
@@ -21,7 +21,31 @@ new class extends Component {
                 ->orWhereRaw('CONCAT(patient_name, " ", fathers_last_name, " ", mothers_last_name) LIKE ?', ['%' . $this->queryElement . '%']);
             })->paginate(5)
         ];  
+    } */
+
+
+    public function with()
+    {
+
+        if($this->queryElement)
+        {
+            return [
+                'patients' => Patient::when($this->queryElement, function($query) {
+                    $query->where('patient_name', 'LIKE', '%' . $this->queryElement . '%')
+                    ->orWhere('fathers_last_name', 'LIKE', '%' . $this->queryElement . '%')
+                    ->orWhere('mothers_last_name', 'LIKE', '%' . $this->queryElement . '%')
+                    ->orWhere('id', 'LIKE', $this->queryElement)
+                    ->orWhereRaw('CONCAT(patient_name, " ", fathers_last_name) LIKE ?', ['%' . $this->queryElement . '%'])
+                    ->orWhereRaw('CONCAT(patient_name, " ", fathers_last_name, " ", mothers_last_name) LIKE ?', ['%' . $this->queryElement . '%']);
+                })->paginate(5)
+            ];
+        }
+
+        return [
+            'patients' => Patient::where('user_id', auth()->user()->id)->paginate(5)
+        ];
     }
+    
 }; ?>
 
 
@@ -46,7 +70,6 @@ new class extends Component {
             <h4>Editar</h4>
         </div>
 
-        @if($queryElement)
         @forelse ($patients as $patient)
         <div class="grid grid-cols-4 justify-items-center uppercase py-4 items-center bg-cyan-50">
             <p>{{$patient->id}}</p>
@@ -61,9 +84,30 @@ new class extends Component {
                 {{$patient->phone_number}}
             </p>
 
-            {{-- <button wire:click='$dispatch("patientInfo", {patient: {{$patient}}})'>
+            <button wire:click='$dispatch("patientInfo", {patient: {{$patient}}})'
+                @click='$dispatch("open-modal", "patientModal")'>
                 <i class="fa-solid fa-pen-to-square text-[#03BCF6]"></i>
-            </button> --}}
+            </button>
+        </div>
+        @empty
+        <p class="text-center py-5 text-lg font-semibold">No hay registros</p>
+        @endforelse
+        <div class="p-6">{{$patients->links()}}</div>
+
+        {{-- @if($queryElement)
+        @forelse ($patients as $patient)
+        <div class="grid grid-cols-4 justify-items-center uppercase py-4 items-center bg-cyan-50">
+            <p>{{$patient->id}}</p>
+            <div class="flex gap-3 items-center justify-self-start">
+                <div class="p-2 bg-[#174075] aspect-square rounded-full text-white">DH</div>
+                <p class="text-[#03BCF6] underline ">
+                    {{$patient->patient_name . ' ' . $patient->fathers_last_name . ' ' . $patient->mothers_last_name}}
+                </p>
+            </div>
+
+            <p>
+                {{$patient->phone_number}}
+            </p>
 
             <button wire:click='$dispatch("patientInfo", {patient: {{$patient}}})'
                 @click='$dispatch("open-modal", "patientModal")'>
@@ -74,7 +118,7 @@ new class extends Component {
         <p class="text-center py-5 text-lg font-semibold">No hay registros</p>
         @endforelse
         <div class="p-6">{{$patients->links()}}</div>
-        @endif
+        @endif --}}
     </div>
 
 

@@ -23,6 +23,7 @@ return new class extends Migration
             $table->integer('age');
             $table->string('phone_number', 10);
             $table->string('curp', 18);
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
