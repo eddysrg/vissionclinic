@@ -18,7 +18,7 @@ class PatientFactory extends Factory
     {
         return [
             'date' => $this->faker->date(),
-            'time' => $this->faker->time(),
+            'time' => $this->faker->time('H:i'),
             'doctor' => $this->faker->name(),
             'patient_name' => $this->faker->firstName(),
             'fathers_last_name' => $this->faker->lastName(),

@@ -18,6 +18,8 @@ use Spatie\Sitemap\Tags\Url;
 
 Route::view('/', 'pages.home')->name('home');
 
+Route::view('/pruebas', 'pages.pruebas');
+
 Route::controller(PageController::class)->group(function () {
     Route::get('/lyrium', 'lyrium')->name('lyrium');
     Route::get('/ece/{nivel}', 'ece')->name('ece');
@@ -46,6 +48,10 @@ Route::view('dashboard/agendar-cita/editar/{appointmentId}', 'record.edit-appoin
 Route::view('dashboard/agenda', 'record.schedule')
     ->middleware('auth')
     ->name('dashboard.agenda');
+
+Route::view('manage-users', 'users.manage-users')
+    ->middleware('auth')
+    ->name('manageUsers');
 
 Route::view('profile', 'profile')
     ->middleware(['auth'])

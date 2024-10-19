@@ -2,6 +2,7 @@
 
 use Livewire\Volt\Component;
 use App\Models\Patient;
+use Carbon\Carbon;
 
 new class extends Component {
     //
@@ -89,7 +90,7 @@ new class extends Component {
     public function patientInfo($patient) {
         // $this->patient = $patient;
         $this->patientData['date'] = $patient['date'];
-        $this->patientData['time'] = $patient['time'];
+        $this->patientData['time'] = Carbon::createFromFormat('H:i:s', $patient['time'])->format('H:i');
         $this->patientData['doctor'] = $patient['doctor'];
         $this->patientData['patient_name'] = $patient['patient_name'];
         $this->patientData['fathers_last_name'] = $patient['fathers_last_name'];

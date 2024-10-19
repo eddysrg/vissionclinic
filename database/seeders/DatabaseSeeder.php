@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        $this->call(RouteNameSeeder::class);
+        // $this->call(RouteNameSeeder::class);
 
         \App\Models\Patient::factory(20)->create();
     }

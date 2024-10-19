@@ -3,47 +3,37 @@
 use Livewire\Volt\Component;
 use App\Models\Patient;
 use Livewire\WithPagination;
+use Livewire\WithoutUrlPagination;
 
 new class extends Component {
-    use WithPagination;
+    use WithPagination, WithoutUrlPagination;
 
     public $queryElement = "";
-    
-    /* public function with()
-    {
-        return [
-            'patients' => Patient::when($this->queryElement, function($query) {
-                $query->where('patient_name', 'LIKE', '%' . $this->queryElement . '%')
-                ->orWhere('fathers_last_name', 'LIKE', '%' . $this->queryElement . '%')
-                ->orWhere('mothers_last_name', 'LIKE', '%' . $this->queryElement . '%')
-                ->orWhere('id', 'LIKE', $this->queryElement)
-                ->orWhereRaw('CONCAT(patient_name, " ", fathers_last_name) LIKE ?', ['%' . $this->queryElement . '%'])
-                ->orWhereRaw('CONCAT(patient_name, " ", fathers_last_name, " ", mothers_last_name) LIKE ?', ['%' . $this->queryElement . '%']);
-            })->paginate(5)
-        ];  
-    } */
-
 
     public function with()
     {
-
-        if($this->queryElement)
-        {
-            return [
-                'patients' => Patient::when($this->queryElement, function($query) {
-                    $query->where('patient_name', 'LIKE', '%' . $this->queryElement . '%')
-                    ->orWhere('fathers_last_name', 'LIKE', '%' . $this->queryElement . '%')
-                    ->orWhere('mothers_last_name', 'LIKE', '%' . $this->queryElement . '%')
-                    ->orWhere('id', 'LIKE', $this->queryElement)
-                    ->orWhereRaw('CONCAT(patient_name, " ", fathers_last_name) LIKE ?', ['%' . $this->queryElement . '%'])
-                    ->orWhereRaw('CONCAT(patient_name, " ", fathers_last_name, " ", mothers_last_name) LIKE ?', ['%' . $this->queryElement . '%']);
-                })->paginate(5)
-            ];
-        }
-
         return [
-            'patients' => Patient::where('user_id', auth()->user()->id)->paginate(5)
+            'patients' => Patient::where('user_id', auth()->user()->id) // Filtrar por el usuario autenticado
+                ->when($this->queryElement, function($query) {
+                    $search = '%' . $this->queryElement . '%';
+                    $query->where(function($q) use ($search) {
+                        // Aplicar los filtros de búsqueda
+                        $q->where('patient_name', 'LIKE', $search)
+                            ->orWhere('fathers_last_name', 'LIKE', $search)
+                            ->orWhere('mothers_last_name', 'LIKE', $search)
+                            ->orWhere('id', 'LIKE', $this->queryElement)
+                            ->orWhereRaw('CONCAT(patient_name, " ", fathers_last_name) LIKE ?', [$search])
+                            ->orWhereRaw('CONCAT(patient_name, " ", fathers_last_name, " ", mothers_last_name) LIKE ?', [$search]);
+                    });
+                })
+                ->paginate(5)
+                ->appends(['search' => $this->queryElement])
         ];
+    }
+
+    public function searchPatient()
+    {
+        $this->resetPage();
     }
     
 }; ?>
@@ -53,8 +43,8 @@ new class extends Component {
     <div>
         <form wire:submit="with" class="flex gap-5">
             <input autocomplete="off" id="patient_search" wire:model="queryElement" class="rounded-full w-full"
-                type="search" placeholder="No. Expediente | Nombre | Apellido P. | Apellido M.">
-            <button wire:click='dispatch("cleanAppointmentForm")' type="submit"
+                type="text" placeholder="No. Expediente | Nombre | Apellido P. | Apellido M.">
+            <button wire:click='searchPatient' type="submit"
                 class="bg-[#41759D] place-self-center px-8 py-2 rounded-lg text-white flex items-center gap-2">
                 Buscar
                 <i class="fa-solid fa-magnifying-glass"></i>

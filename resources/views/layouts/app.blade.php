@@ -34,10 +34,16 @@
                     </button>
 
                     <div x-show="open" @click.outside="open = false" x-transition
-                        class="absolute z-50 bg-[#41759D] mt-5 rounded-md shadow-lg w-40 p-5" style="display: none">
-                        <ul class="space-y-6 text-sm">
-                            <li class="text-white">
+                        class="absolute z-50 bg-[#41759D] mt-5 rounded-md shadow-lg w-40" style="display: none">
+                        <ul class="text-sm">
+                            <li
+                                class="text-white p-3 hover:bg-slate-300 hover:rounded-md hover:duration-300 hover:text-[#41759D]">
                                 <a href="">Mi perfil</a>
+                            </li>
+
+                            <li
+                                class="text-white p-3 hover:bg-slate-300 hover:rounded-md hover:duration-300 hover:text-[#41759D]">
+                                <a href="{{route('manageUsers')}}">Administrar usuarios</a>
                             </li>
                         </ul>
                     </div>
