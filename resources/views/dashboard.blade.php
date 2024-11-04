@@ -1,7 +1,6 @@
 @php
 use Carbon\Carbon;
 $fechaHoy = Carbon::now()->isoFormat('D [de] MMMM YYYY');
-$messageNotification = 'Paciente registrado con éxito';
 @endphp
 
 <x-app-layout>
@@ -12,8 +11,10 @@ $messageNotification = 'Paciente registrado con éxito';
         <meta name="robots" content="index,follow">
     </x-slot>
 
-    <x-notification message="{{$messageNotification}}" />
     <livewire:patient />
+    @livewire('appointment')
+
+    <x-notification />
 
 
     <div class="flex">
@@ -24,17 +25,18 @@ $messageNotification = 'Paciente registrado con éxito';
 
                 <div class="mt-9 w-full flex justify-center gap-10">
 
-                    <button class="text-xs text-white bg-[#41759D] p-3 rounded-md" x-data
-                        @click='$dispatch("open-modal", "patientModal")'>
+                    <button x-data @click='$dispatch("open-modal", "patientModal")'
+                        class="text-xs text-white bg-[#41759D] p-3 rounded-md">
                         Registro Paciente Nuevo
                         <i class="fa-solid fa-plus ml-2"></i>
                     </button>
 
 
-                    <a href="{{route('dashboard.agenda')}}" class="text-xs text-white bg-[#41759D] p-3 rounded-md">
+                    <button x-data @click='$dispatch("open-modal", "appointmentModal")'
+                        class="text-xs text-white bg-[#41759D] p-3 rounded-md">
                         Agendar Cita
                         <i class="fa-solid fa-plus ml-2"></i>
-                    </a>
+                    </button>
 
                     <a href="{{route('dashboard.agenda')}}" class="text-xs text-white bg-[#41759D] p-3 rounded-md">
                         Revisar Agenda
@@ -47,70 +49,44 @@ $messageNotification = 'Paciente registrado con éxito';
                 <h3>Citas de hoy: <span class="font-semibold">{{$fechaHoy}}</span></h3>
 
                 <div class="grid grid-cols-5 gap-x-5 mt-3">
+                    @foreach ($appointments as $appointment)
                     <div class="border border-zinc-300 flex flex-col items-center p-2">
-                        <p
-                            class="text-2xl bg-slate-700 w-fit aspect-square px-2 py-2 rounded-full flex items-center text-white">
-                            DH
+                        @php
+                        $firstLetter = substr($appointment->patient->name, 0, 1);
+                        $secondLetter = substr($appointment->patient->father_last_name, 0, 1);
+                        @endphp
+
+                        <p class="
+                            
+                            {{$appointment->patient->gender === 'male' ? 'bg-[#174075] text-white' : 'bg-[#41759D40] text-[#41759D]'}}
+                            text-2xl 
+                            font-medium
+                            w-fit 
+                            aspect-square 
+                            px-2 
+                            py-2 
+                            rounded-full 
+                            flex 
+                            items-center ">
+                            {{$firstLetter . $secondLetter}}
                         </p>
 
                         <div class="mt-3 text-xs text-center space-y-2">
-                            <p class="">Diego Hernandez</p>
-                            <p class="">2:30 pm</p>
+                            <p class="">
+                                {{$appointment->patient->name . ' ' . $appointment->patient->father_last_name . ' '
+                                . $appointment->patient->mother_last_name}}
+                            </p>
+                            <p class="">
+                                {{Carbon::createFromFormat('H:i:s', $appointment->time)->format('g:i A')}}
+                            </p>
+                            @if ($appointment->confirmed === 0)
                             <p class="bg-red-600 text-white p-1 rounded-full">Sin confirmar</p>
+                            @else
+                            <p class="bg-green-600 text-white p-1 rounded-full">Confirmada</p>
+                            @endif
                         </div>
                     </div>
-
-                    <div class="border border-zinc-300 flex flex-col items-center p-2">
-                        <p
-                            class="text-2xl bg-slate-700 w-fit aspect-square px-2 py-2 rounded-full flex items-center text-white">
-                            DH
-                        </p>
-
-                        <div class="mt-3 text-xs text-center space-y-2">
-                            <p class="">Diego Hernandez</p>
-                            <p class="">2:30 pm</p>
-                            <p class="bg-red-600 text-white p-1 rounded-full">Sin confirmar</p>
-                        </div>
-                    </div>
-
-                    <div class="border border-zinc-300 flex flex-col items-center p-2">
-                        <p
-                            class="text-2xl bg-slate-700 w-fit aspect-square px-2 py-2 rounded-full flex items-center text-white">
-                            DH
-                        </p>
-
-                        <div class="mt-3 text-xs text-center space-y-2">
-                            <p class="">Diego Hernandez</p>
-                            <p class="">2:30 pm</p>
-                            <p class="bg-red-600 text-white p-1 rounded-full">Sin confirmar</p>
-                        </div>
-                    </div>
-
-                    <div class="border border-zinc-300 flex flex-col items-center p-2">
-                        <p
-                            class="text-2xl bg-slate-700 w-fit aspect-square px-2 py-2 rounded-full flex items-center text-white">
-                            DH
-                        </p>
-
-                        <div class="mt-3 text-xs text-center space-y-2">
-                            <p class="">Diego Hernandez</p>
-                            <p class="">2:30 pm</p>
-                            <p class="bg-red-600 text-white p-1 rounded-full">Sin confirmar</p>
-                        </div>
-                    </div>
-
-                    <div class="border border-zinc-300 flex flex-col items-center p-2">
-                        <p
-                            class="text-2xl bg-slate-700 w-fit aspect-square px-2 py-2 rounded-full flex items-center text-white">
-                            DH
-                        </p>
-
-                        <div class="mt-3 text-xs text-center space-y-2">
-                            <p class="">Diego Hernandez</p>
-                            <p class="">2:30 pm</p>
-                            <p class="bg-red-600 text-white p-1 rounded-full">Sin confirmar</p>
-                        </div>
-                    </div>
+                    @endforeach
 
                 </div>
             </div>

@@ -1,7 +1,8 @@
-@props(['message'])
-
-<div x-data="{showNotification: false}"
-    x-on:show-notification.window="showNotification = true; setTimeout(() => showNotification = false, 3000);">
+<div x-data="{showNotification: false, message: ''}" x-on:show-notification.window="
+    showNotification = true; 
+    message = $event.detail.message;
+    setTimeout(() => showNotification = false, 4000);
+    ">
 
     <div x-show='showNotification' x-transition:enter="ease-out duration-300"
         x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
@@ -12,6 +13,6 @@
         style="display: none">
         <i
             class="fa-solid fa-bell text-xl text-white bg-green-600 aspect-square w-10 h-10 flex items-center justify-center rounded-full"></i>
-        <p class="text-xl text-center text-white">{{ $message }}</p>
+        <p class="text-xl text-center text-white" x-text='message'></p>
     </div>
 </div>

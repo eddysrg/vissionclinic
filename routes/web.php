@@ -1,9 +1,14 @@
 <?php
 
-use App\Http\Controllers\PageController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
+use App\Models;
+use App\Models\Clinic;
 use Spatie\Sitemap\Sitemap;
 use Spatie\Sitemap\Tags\Url;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PageController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,7 +34,7 @@ Route::controller(PageController::class)->group(function () {
     Route::get('/contacto', 'contacto')->name('contacto');
 });
 
-Route::view('dashboard', 'dashboard')
+Route::get('dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
@@ -49,7 +54,7 @@ Route::view('dashboard/agenda', 'record.schedule')
     ->middleware('auth')
     ->name('dashboard.agenda');
 
-Route::view('manage-users', 'users.manage-users')
+Route::get('manage-users', [UserController::class, 'manageUsers'])
     ->middleware('auth')
     ->name('manageUsers');
 

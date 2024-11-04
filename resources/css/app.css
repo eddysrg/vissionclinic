@@ -276,3 +276,7 @@
 .fc-disabled-day:hover {
     cursor: not-allowed;
 }
+
+.is-invalid {
+    border: 1px solid red;
+}

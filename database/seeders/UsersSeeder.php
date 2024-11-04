@@ -17,20 +17,24 @@ class UsersSeeder extends Seeder
     {
         User::create(
             [
+                'clinic_id' => 1,
+                'role_id' => 1,
                 'name' => 'Eduardo Ramírez Galindo',
                 'username' => 'eddysrg',
-                'email' => 'correo@correo.com',
-                'password' => Hash::make('password'),
+                'email' => 'eddysrg@email.com',
+                'password' => Hash::make('eddysrg1890*'),
                 'created_at' => now(),
                 'updated_at' => now(),
             ]
         );
 
         User::create([
-            'name' => 'Juan Inventado Perez',
-            'username' => 'juan_inventado',
-            'email' => 'correo2@correo.com',
-            'password' => Hash::make('mypassword'),
+            'clinic_id' => 2,
+            'role_id' => 1,
+            'name' => 'Juan García Perez',
+            'username' => 'juan_garcia',
+            'email' => 'jgarcia@email.com',
+            'password' => Hash::make('jgarcia1097*'),
             'created_at' => now(),
             'updated_at' => now(),
         ]);
