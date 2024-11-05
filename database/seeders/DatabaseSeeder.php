@@ -21,6 +21,6 @@ class DatabaseSeeder extends Seeder
 
         // $this->call(RouteNameSeeder::class);
 
-        \App\Models\Patient::factory(20)->create();
+        // \App\Models\Patient::factory(20)->create();
     }
 }
