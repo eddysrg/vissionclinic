@@ -23,9 +23,19 @@
     <section class="w-full h-full relative">
         <header class="bg-[#41759D] px-8 py-2 fixed z-10 top-0 right-0 w-full">
             <div class="flex items-center justify-end gap-5">
+
+                @if(auth()->user()->profile_photo)
+                <div class="w-7 h-7 aspect-square object-cover rounded-full overflow-hidden">
+                    <img class="w-full h-full" src="{{asset('storage/' . auth()->user()->profile_photo)}}"
+                        alt="Profile photo">
+                </div>
+                @else
                 <div class="w-7">
                     <img src="{{asset('images/imagen_perfil.svg')}}" alt="Profile photo">
                 </div>
+                @endif
+
+
 
                 <div x-data="{ open: false }">
                     <button @click="open = !open" class="text-white text-sm">
@@ -38,7 +48,7 @@
                         <ul class="text-sm">
                             <li
                                 class="text-white p-3 hover:bg-slate-300 hover:rounded-md hover:duration-300 hover:text-[#41759D]">
-                                <a href="">Mi perfil</a>
+                                <a href="{{route('profile')}}">Mi perfil</a>
                             </li>
 
                             @if (auth()->user()->role_id === 1 )

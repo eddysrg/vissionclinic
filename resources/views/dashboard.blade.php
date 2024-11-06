@@ -1,6 +1,7 @@
 @php
 use Carbon\Carbon;
-$fechaHoy = Carbon::now()->isoFormat('D [de] MMMM YYYY');
+$todaysDate = Carbon::now()->isoFormat('D [de] MMMM YYYY');
+$date = Carbon::now()->format('Y-m-d');
 @endphp
 
 <x-app-layout>
@@ -15,7 +16,6 @@ $fechaHoy = Carbon::now()->isoFormat('D [de] MMMM YYYY');
     @livewire('appointment')
 
     <x-notification />
-
 
     <div class="flex">
         <div class="w-2/3 p-8">
@@ -46,10 +46,10 @@ $fechaHoy = Carbon::now()->isoFormat('D [de] MMMM YYYY');
             </div>
 
             <div class="mt-10 border border-zinc-300 p-5">
-                <h3>Citas de hoy: <span class="font-semibold">{{$fechaHoy}}</span></h3>
+                <h3>Citas de hoy: <span class="font-semibold">{{$todaysDate}}</span></h3>
 
                 <div class="grid grid-cols-5 gap-x-5 mt-3">
-                    @foreach ($appointments as $appointment)
+                    @forelse ($appointments as $appointment)
                     <div class="border border-zinc-300 flex flex-col items-center p-2">
                         @php
                         $firstLetter = substr($appointment->patient->name, 0, 1);
@@ -86,8 +86,9 @@ $fechaHoy = Carbon::now()->isoFormat('D [de] MMMM YYYY');
                             @endif
                         </div>
                     </div>
-                    @endforeach
-
+                    @empty
+                    <p class="col-span-5 text-center py-3">No hay citas para el día de hoy</p>
+                    @endforelse
                 </div>
             </div>
         </div>

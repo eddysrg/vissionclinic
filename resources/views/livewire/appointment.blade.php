@@ -6,7 +6,6 @@ use App\Models\User;
 use App\Models\Appointment;
 
 new class extends Component {
-
     public $search;
 
     public $chosenPatient = '';
@@ -35,6 +34,7 @@ new class extends Component {
         $validated['patient_id'] = $this->chosenPatient->id;
 
         Appointment::create($validated);
+        $this->clearForm();
         $this->dispatch('close-modal', 'appointmentModal');
         $this->dispatch('show-notification', message: 'Cita guardada con éxito');
 
@@ -68,6 +68,20 @@ new class extends Component {
         $this->doctor = User::find($this->chosenPatient->doctor_id)->name;
     }
 
+    public function clearForm()
+    {
+        $this->search = '';
+        $this->chosenPatient = '';
+        $this->doctor = '';
+        $this->date = '';
+        $this->time = '';
+        $this->type = '';
+        $this->comments = '';
+        $this->confirmed = '';
+
+        $this->resetErrorBag();
+    }
+
     public function with()
     {
         return [
@@ -77,7 +91,7 @@ new class extends Component {
 }; ?>
 
 <div>
-    <x-appointment-modal name='appointmentModal'>
+    <x-appointment-modal name='appointmentModal' clean='clearForm'>
         <div>
             <section class="p-8">
                 <h2 class="text-lg font-medium text-[#174075] mb-6">Buscar Paciente</h2>

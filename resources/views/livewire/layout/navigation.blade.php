@@ -24,9 +24,17 @@ new class extends Component
         </picture>
     </div>
 
+    @if(auth()->user()->profile_photo)
+    <div class="w-16 h-16 object-cover rounded-full overflow-hidden">
+        <img src="{{asset('storage/' . auth()->user()->profile_photo)}}" alt="Profile photo">
+    </div>
+    @else
     <div class="w-16">
         <img src="{{asset('images/imagen_perfil.svg')}}" alt="Profile photo">
     </div>
+    @endif
+
+
 
     <nav>
         <ul class="space-y-5 uppercase text-xs">

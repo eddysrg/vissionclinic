@@ -1,15 +1,18 @@
 <?php
 
+use Carbon\Carbon;
 use Livewire\Volt\Component;
 use App\Models\Patient;
-use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Doctor;
+use Illuminate\Validation\Rule;
+
 
 new class extends Component {
-    protected $listeners = ['patientInfo'];
-    public $appointmentStatus = null;
-    public $patient = [];
+    protected $listeners = ['setPatientInfo'];
+
+    public $isEditing = false;
+    public $patientId = '';
 
     public $clinic_id = ''; 
     public $doctor_id = ''; 
@@ -32,14 +35,15 @@ new class extends Component {
             'gender' => 'required|in:male,female',
             'birthdate' => 'required|date',
             'phone_number' => 'required|digits:10',
-            'curp' => 'required|min:18|unique:App\Models\Patient,curp',
+            'curp' => ['required', 'min:18', Rule::unique('patients', 'curp')->ignore($this->patientId)],
         ]);
 
-        Patient::create($validated);
+        Patient::updateOrCreate(['curp' => $validated['curp']], $validated);
 
+        $this->dispatch('show-notification', message: $this->isEditing ? 'Paciente actualizado con éxito' : 'Paciente creado con éxito');
         $this->dispatch('close-modal', 'patientModal');
+        $this->dispatch('clearSearch');
         $this->clearForm();
-        $this->dispatch('show-notification', message: 'Paciente creado con éxito');
     }
 
     public function messages() {
@@ -51,6 +55,7 @@ new class extends Component {
 
     public function clearForm()
     {
+        $this->isEditing = false;
         $this->clinic_id = ''; 
         $this->doctor_id = ''; 
         $this->name = ''; 
@@ -64,20 +69,23 @@ new class extends Component {
         $this->resetErrorBag();
     }
 
-    public function patientInfo($patient) {
-        // $this->patient = $patient;
-        $this->patientData['date'] = $patient['date'];
-        $this->patientData['time'] = Carbon::createFromFormat('H:i:s', $patient['time'])->format('H:i');
-        $this->patientData['doctor'] = $patient['doctor'];
-        $this->patientData['patient_name'] = $patient['patient_name'];
-        $this->patientData['fathers_last_name'] = $patient['fathers_last_name'];
-        $this->patientData['mothers_last_name'] = $patient['mothers_last_name'];
-        $this->patientData['gender'] = $patient['gender'];
-        $this->patientData['age'] = $patient['age'];
-        $this->patientData['phone_number'] = $patient['phone_number'];
-        $this->patientData['curp'] = $patient['curp'];
-        // $this->appointmentData['patient_id'] = $patient['id'];
-        // $this->dispatch('show-appointment');
+    public function setPatientInfo($id) {
+
+        $this->isEditing = true;
+
+        $patient = Patient::find($id);
+
+        $this->patientId = $id;
+
+        $this->clinic_id = $patient->clinic_id; 
+        $this->doctor_id = $patient->doctor_id; 
+        $this->name = $patient->name; 
+        $this->father_last_name = $patient->father_last_name; 
+        $this->mother_last_name = $patient->mother_last_name; 
+        $this->gender = $patient->gender; 
+        $this->birthdate = $patient->birthdate; 
+        $this->phone_number = $patient->phone_number; 
+        $this->curp = $patient->curp;
     }
 
     public function with()
@@ -95,9 +103,8 @@ new class extends Component {
 }; ?>
 
 <div>
-
     <x-patient-modal name="patientModal" :show="false" maxWidth="lg">
-        <h2 class="p-8 text-xl text-[#174075] shadow-sm">Paciente Nuevo</h2>
+        <h2 class="p-8 text-xl text-[#174075] shadow-sm">{{$isEditing ? 'Editar Paciente' : 'Paciente nuevo'}}</h2>
         <div class="bg-[#d2f4fc] p-8">
 
             <form wire:submit='createPatient' class="space-y-10">
