@@ -4,8 +4,14 @@ use Livewire\Volt\Component;
 use App\Models\Patient;
 use App\Models\User;
 use App\Models\Appointment;
+use Livewire\Attributes\On; 
+use Carbon\Carbon;
+
 
 new class extends Component {
+
+    // protected $listeners = ['setDateValues'];
+
     public $search;
 
     public $chosenPatient = '';
@@ -82,6 +88,28 @@ new class extends Component {
         $this->resetErrorBag();
     }
 
+    #[On('setDateValues')] 
+    public function setDateValues($dateInfo)
+    {
+        $typeDate = $dateInfo['view']['type'];
+        $formattedDate = Carbon::parse($dateInfo['date'])->format('Y-m-d');
+        $formattedTime = Carbon::parse($dateInfo['date'])->format('H:i');
+
+        switch ($typeDate) {
+            case 'dayGridMonth':
+                $this->date = $formattedDate;
+                break;
+
+            case 'timeGridWeek';
+            case 'timeGridDay':
+                $this->time = $formattedTime;
+                $this->date = $formattedDate;
+                break;
+            default:
+                break;
+        }
+    }
+
     public function with()
     {
         return [
@@ -99,6 +127,7 @@ new class extends Component {
                 <form wire:submit='searchPatient'>
                     <div class="flex gap-5">
                         <input wire:model='search' id="search" type="text"
+                            placeholder="Nombre | Apellido Paterno | Apellido Materno"
                             class="w-full rounded-full border border-zinc-300">
                         <button class="px-6 py-3 bg-[#41759D] text-white rounded" type="submit">Buscar</button>
                     </div>

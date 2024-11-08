@@ -23,8 +23,6 @@ use App\Http\Controllers\UserController;
 
 Route::view('/', 'pages.home')->name('home');
 
-Route::view('/pruebas', 'pages.pruebas');
-
 Route::controller(PageController::class)->group(function () {
     Route::get('/lyrium', 'lyrium')->name('lyrium');
     Route::get('/ece/{nivel}', 'ece')->name('ece');
@@ -42,14 +40,6 @@ Route::view('dashboard/expedientes', 'record.records')
     ->middleware('auth')
     ->name('dashboard.expedientes');
 
-Route::view('dashboard/agendar-cita', 'record.appointment')
-    ->middleware('auth')
-    ->name('dashboard.cita');
-
-Route::view('dashboard/agendar-cita/editar/{appointmentId}', 'record.edit-appointment')
-    ->middleware('auth')
-    ->name('dashboard.editarCita');
-
 Route::view('dashboard/agenda', 'record.schedule')
     ->middleware('auth')
     ->name('dashboard.agenda');
@@ -61,12 +51,5 @@ Route::get('manage-users', [UserController::class, 'manageUsers'])
 Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
-
-/* Route::get('/sitemap', function () {
-    $sitemap = Sitemap::create()
-        ->add(Url::create('/'));
-
-    return $sitemap->writeToFile(public_path('sitemap.xml'));
-}); */
 
 require __DIR__ . '/auth.php';

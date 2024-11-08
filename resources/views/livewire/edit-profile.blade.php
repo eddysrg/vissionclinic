@@ -1,10 +1,7 @@
 <?php
-
 use Livewire\Volt\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Storage;
-
-
 
 new class extends Component {
 
@@ -31,7 +28,8 @@ new class extends Component {
 
         $user->save();
 
-        $this->dispatch('show-notification', message: 'Foto de perfil actualizada');
+        // $this->dispatch('show-notification', message: 'Foto de perfil actualizada');
+        $this->redirectRoute('profile');
     }
 
 

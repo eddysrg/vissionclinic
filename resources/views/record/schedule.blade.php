@@ -16,7 +16,3 @@
         <livewire:calendar />
     </div>
 </x-app-layout>
-
-{{-- <button class="mt-5 px-3 py-2 bg-blue-400 rounded">
-    <a href="{{route('dashboard.editarCita', ['appointmentId' => '3'])}}">Editar</a>
-</button> --}}

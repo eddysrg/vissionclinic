@@ -93,14 +93,35 @@ $date = Carbon::now()->format('Y-m-d');
             </div>
         </div>
 
-        <div class="w-1/3 p-8">
-            <p class="bg-[#0E2F5E] text-white text-center py-2 uppercase">Notificaciones</p>
-            <p class="text-[#0E2F5E] text-center py-2">Paciente nuevo agregado</p>
-            <p class="bg-[#174075] text-white text-center py-2">Paciente nuevo agregado</p>
-            <p class="text-[#0E2F5E] text-center py-2">Videoconsulta 6:30 pm</p>
-            <p class="bg-[#174075] text-white text-center py-2">Paciente nuevo agregado</p>
-            <p class="text-[#0E2F5E] text-center py-2">Paciente nuevo agregado</p>
-            <p class="bg-[#174075] text-white text-center py-2">Paciente nuevo agregado</p>
-        </div>
+        <section class="w-1/3 p-8">
+            <h2 class="bg-[#0E2F5E] text-white text-center py-2 uppercase">Notificaciones</h2>
+            <div class="h-80 overflow-y-scroll border">
+
+                @forelse (auth()->user()->notifications as $notification)
+                <p class="bg-[#174075] text-white text-center py-2">{{$notification->data['mensaje']}}</p>
+                @empty
+                <div class="w-full h-full flex justify-center items-center">
+                    <p class="font-semibold text-lg">No hay notificaciones</p>
+                </div>
+                @endforelse
+
+                {{-- <p class="text-[#0E2F5E] text-center py-2">Paciente nuevo agregado</p>
+                <p class="bg-[#174075] text-white text-center py-2">Paciente nuevo agregado</p>
+                <p class="text-[#0E2F5E] text-center py-2">Videoconsulta 6:30 pm</p>
+                <p class="bg-[#174075] text-white text-center py-2">Paciente nuevo agregado</p>
+                <p class="text-[#0E2F5E] text-center py-2">Paciente nuevo agregado</p>
+                <p class="bg-[#174075] text-white text-center py-2">Paciente nuevo agregado</p>
+                <p class="bg-[#174075] text-white text-center py-2">Paciente nuevo agregado</p>
+                <p class="bg-[#174075] text-white text-center py-2">Paciente nuevo agregado</p>
+                <p class="bg-[#174075] text-white text-center py-2">Paciente nuevo agregado</p>
+                <p class="bg-[#174075] text-white text-center py-2">Paciente nuevo agregado</p>
+                <p class="bg-[#174075] text-white text-center py-2">Paciente nuevo agregado</p> --}}
+
+
+            </div>
+
+        </section>
+
+
     </div>
 </x-app-layout>

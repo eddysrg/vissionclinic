@@ -40,11 +40,11 @@ new class extends Component
         <ul class="space-y-5 uppercase text-xs">
             <li class="text-white">
                 <i class="fa-solid fa-house mr-3"></i>
-                <a href="{{route('dashboard')}}" wire:navigate>Inicio</a>
+                <a href="{{route('dashboard')}}">Inicio</a>
             </li>
             <li class="text-white">
                 <i class="fa-solid fa-user-group mr-3"></i>
-                <a href="{{route('dashboard.expedientes')}}" wire:navigate>Expedientes</a>
+                <a href="{{route('dashboard.expedientes')}}">Expedientes</a>
             </li>
             <li class="text-white">
                 <i class="fa-solid fa-calendar-days mr-3"></i>

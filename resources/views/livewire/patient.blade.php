@@ -6,6 +6,7 @@ use App\Models\Patient;
 use App\Models\User;
 use App\Models\Doctor;
 use Illuminate\Validation\Rule;
+use App\Notifications\DashboardNotification;
 
 
 new class extends Component {
@@ -43,6 +44,7 @@ new class extends Component {
         $this->dispatch('show-notification', message: $this->isEditing ? 'Paciente actualizado con éxito' : 'Paciente creado con éxito');
         $this->dispatch('close-modal', 'patientModal');
         $this->dispatch('clearSearch');
+        auth()->user()->notify(new DashboardNotification());
         $this->clearForm();
     }
 
