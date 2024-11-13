@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\View\View;
+use App\Http\Requests\ProfileUpdateRequest;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -35,6 +37,27 @@ class ProfileController extends Controller
         $request->user()->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
+    }
+
+    public function updatePhoto(Request $request)
+    {
+        $request->validate([
+            'profile_image' => 'required|image|mimes:png,jpg,jpeg,webp|max:2048',
+        ]);
+
+        $image = $request->file('profile_image');
+
+        $fileName = 'profile_' . Str::uuid() . '.' . $image->guessExtension();
+
+        $path = $image->storeAs('public/profiles', $fileName);
+
+        $imageUrl = Storage::url($path);
+
+        $user = $request->user();
+        $user->profile_photo = $imageUrl;
+        $user->save();
+
+        return response()->json(['message' => 'Imagen subida correctamente', 'image_url' => $imageUrl]);
     }
 
     /**

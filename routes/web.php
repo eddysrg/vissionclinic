@@ -8,6 +8,7 @@ use Spatie\Sitemap\Tags\Url;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 
 /*
@@ -51,5 +52,9 @@ Route::get('manage-users', [UserController::class, 'manageUsers'])
 Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
+
+Route::post('/update-photo', [ProfileController::class, 'updatePhoto'])
+    ->middleware(['auth'])
+    ->name('photo.update');
 
 require __DIR__ . '/auth.php';

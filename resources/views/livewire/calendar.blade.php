@@ -148,10 +148,14 @@ new class extends Component {
                     $wire.onDateClick(info);
                 },
                 events: @json($appointmentEvents),
+                eventClick: function(info) {
+                    @this.dispatch('setAppointmentData', { id: info.event.id });
+                },
+                eventMouseEnter: function(info) {
+                    info.el.style.cursor = 'pointer';
+                }
             });
             calendar.render();
-
-            console.log(@json($appointmentEvents))
         });
 
     </script>

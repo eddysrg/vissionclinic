@@ -17,6 +17,7 @@ class Patient extends Model
         'mother_last_name',
         'gender',
         'birthdate',
+        'birthplace',
         'phone_number',
         'curp'
     ];

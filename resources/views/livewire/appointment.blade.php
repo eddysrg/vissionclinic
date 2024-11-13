@@ -9,9 +9,6 @@ use Carbon\Carbon;
 
 
 new class extends Component {
-
-    // protected $listeners = ['setDateValues'];
-
     public $search;
 
     public $chosenPatient = '';
@@ -22,6 +19,8 @@ new class extends Component {
     public $type = '';
     public $comments = '';
     public $confirmed = '';
+
+    public $isEditing = false;
 
     public function createAppointment()
     {
@@ -39,11 +38,18 @@ new class extends Component {
 
         $validated['patient_id'] = $this->chosenPatient->id;
 
-        Appointment::create($validated);
+        if ($this->isEditing) {
+            $appointment = Appointment::find($this->search);
+            $appointment->update($validated);
+            $message = 'Cita actualizada con éxito';
+        } else {
+            Appointment::create($validated);
+            $message = 'Cita creada con éxito';
+        }
+
         $this->clearForm();
         $this->dispatch('close-modal', 'appointmentModal');
-        $this->dispatch('show-notification', message: 'Cita guardada con éxito');
-
+        $this->dispatch('show-notification', message: $message);
     }
 
     public function searchPatient()
@@ -59,11 +65,12 @@ new class extends Component {
         return $patients = Patient::where('clinic_id', auth()->user()->clinic_id)
         ->where(function($query) use ($terms) {
             foreach ($terms as $term) {
-                $query->where(function($query) use ($term) {
-                    $query->where('name', 'LIKE', "%{$term}%")
-                    ->orWhere('father_last_name', 'LIKE', "%{$term}%")
-                    ->orWhere('mother_last_name', 'LIKE', "%{$term}%");
-                });
+            $query->where(function($query) use ($term) {
+                $query->where('name', 'LIKE', "%{$term}%")
+                ->orWhere('father_last_name', 'LIKE', "%{$term}%")
+                ->orWhere('mother_last_name', 'LIKE', "%{$term}%")
+                ->orWhere('id', 'LIKE', "%{$term}%");
+            });
             }
         })->get();
     }
@@ -108,6 +115,24 @@ new class extends Component {
             default:
                 break;
         }
+    }
+
+    #[On('setAppointmentData')] 
+    public function setAppointmentData($id)
+    {
+        $appointment = Appointment::find($id);
+
+        $this->isEditing = true;
+        $this->search = $id;
+        $this->setPatientData($id);
+        $this->date = $appointment->date;
+        $this->time = $appointment->time;
+        $this->time = Carbon::parse($appointment->time)->format('H:i');
+        $this->type = $appointment->type;
+        $this->comments = $appointment->comments;
+        $this->confirmed = $appointment->confirmed;
+
+        $this->dispatch('open-modal', 'appointmentModal');
     }
 
     public function with()
@@ -266,8 +291,9 @@ new class extends Component {
 
                     <div class="flex justify-end">
                         @if ($chosenPatient)
-                        <button class="mt-10 px-6 py-4 bg-amber-400 rounded font-semibold">Guardar
-                            cita</button>
+                        <button class="mt-10 px-6 py-4 bg-amber-400 rounded font-semibold">
+                            {{$isEditing ? 'Editar' : 'Guardar'}} cita
+                        </button>
                         @else
                         <button disabled
                             class="cursor-not-allowed opacity-85 mt-10 px-6 py-4 bg-amber-300 text-opacity-75 rounded font-semibold">Guardar

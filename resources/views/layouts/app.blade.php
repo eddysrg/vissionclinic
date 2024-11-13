@@ -15,6 +15,11 @@
     {{$fullCalendarJs ?? ''}}
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    @if (request()->is('profile'))
+    @vite('resources/js/profile.js')
+    @endif
+
 </head>
 
 <body class="font-sans antialiased h-screen flex">
@@ -26,7 +31,7 @@
 
                 @if(auth()->user()->profile_photo)
                 <div class="w-7 h-7 aspect-square object-cover rounded-full overflow-hidden">
-                    <img src="{{asset('storage/' . auth()->user()->profile_photo)}}" alt="Profile photo">
+                    <img src="{{asset(auth()->user()->profile_photo)}}" alt="Profile photo">
                 </div>
                 @else
                 <div class="w-7">
@@ -34,12 +39,9 @@
                 </div>
                 @endif
 
-
-
                 <div x-data="{ open: false }">
                     <button @click="open = !open" class="text-white text-sm">
-                        Bienvenido(a) {{Auth::user()->name}}
-                        <i class="fa-solid fa-caret-down text-white"></i>
+                        <x-user-name :isHeader='true' />
                     </button>
 
                     <div x-show="open" @click.outside="open = false" x-transition

@@ -16,18 +16,24 @@ new class extends Component
     }
 }; ?>
 
-<aside class="fixed top-0 left-0 z-20 w-52 h-full bg-[#174075] flex flex-col items-center justify-evenly">
-    <div class="w-36">
+<aside class="fixed top-0 left-0 z-20 w-52 h-full bg-[#174075] flex flex-col gap-10">
+    <a href="{{route('dashboard')}}" class="mt-10">
         <picture>
             <source srcset="{{asset('images/ece_white_logo.webp')}}" type="image/webp">
             <img src="{{asset('images/ece_white_logo.png')}}" alt="Logo ece blanco">
         </picture>
-    </div>
+    </a>
 
     @if(auth()->user()->profile_photo)
-    <div class="w-16 h-16 object-cover rounded-full overflow-hidden">
-        <img src="{{asset('storage/' . auth()->user()->profile_photo)}}" alt="Profile photo">
+    <div class="px-10">
+        <div class="aspect-square object-cover rounded-full overflow-hidden">
+            <img src="{{asset(auth()->user()->profile_photo)}}" alt="Profile photo">
+        </div>
+
+        <x-user-name classes='text-white mt-3 text-sm text-center' />
+        <p class="mt-2 text-white text-center text-xs">600897456</p>
     </div>
+
     @else
     <div class="w-16">
         <img src="{{asset('images/imagen_perfil.svg')}}" alt="Profile photo">
@@ -36,8 +42,8 @@ new class extends Component
 
 
 
-    <nav>
-        <ul class="space-y-5 uppercase text-xs">
+    <nav class="px-10">
+        <ul class="space-y-3 uppercase text-xs">
             <li class="text-white">
                 <i class="fa-solid fa-house mr-3"></i>
                 <a href="{{route('dashboard')}}">Inicio</a>

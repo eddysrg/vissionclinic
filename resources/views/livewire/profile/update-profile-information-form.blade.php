@@ -9,28 +9,48 @@ use Livewire\Volt\Component;
 
 new class extends Component
 {
-    public string $name = '';
-    public string $email = '';
+    public $degree = ''; 
+    public $name = ''; 
+    public $father_lastname = ''; 
+    public $mother_lastname = ''; 
+    public $gender = '';
+    public $birthdate = '';
+    public $phone_number = '';
+    public $email = '';
+    public $curp = ''; 
+    public $rfc = ''; 
 
-    /**
-     * Mount the component.
-     */
-    public function mount(): void
+    public function mount()
     {
-        $this->name = Auth::user()->name;
-        $this->email = Auth::user()->email;
+        $this->degree = auth()->user()->degree;
+        $this->name = auth()->user()->name;
+        $this->father_lastname = auth()->user()->father_lastname;
+        $this->mother_lastname = auth()->user()->mother_lastname;
+        $this->gender = auth()->user()->gender;
+        $this->birthdate = auth()->user()->birthdate;
+        $this->phone_number = auth()->user()->phone_number;
+        $this->email = auth()->user()->email;
+        $this->curp = auth()->user()->curp;
+        $this->rfc = auth()->user()->rfc;
+        $this->username = auth()->user()->username;
     }
 
-    /**
-     * Update the profile information for the currently authenticated user.
-     */
-    public function updateProfileInformation(): void
+    public function updateProfileInformation()
     {
         $user = Auth::user();
 
         $validated = $this->validate([
+            
+            'degree' => ['required', 'string', 'max:255'],
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($user->id)],
+            'father_lastname' => ['required', 'string', 'max:255'],
+            'mother_lastname' => ['required', 'string', 'max:255'],
+            'gender' => ['required', 'in:male,female'],
+            'birthdate' => ['required', 'date'],
+            'phone_number' => ['required', 'digits:10'],
+            'email' => ['required', 'email', Rule::unique(User::class)->ignore($user->id)],
+            'rfc' => ['required', 'min:13', Rule::unique(User::class)->ignore($user->id)],
+            'curp' => ['required', 'min:18', Rule::unique(User::class)->ignore($user->id)],
         ]);
 
         $user->fill($validated);
@@ -41,76 +61,114 @@ new class extends Component
 
         $user->save();
 
-        $this->dispatch('profile-updated', name: $user->name);
-    }
 
-    /**
-     * Send an email verification notification to the current user.
-     */
-    public function sendVerification(): void
-    {
-        $user = Auth::user();
-
-        if ($user->hasVerifiedEmail()) {
-            $this->redirectIntended(default: RouteServiceProvider::HOME);
-
-            return;
-        }
-
-        $user->sendEmailVerificationNotification();
-
-        Session::flash('status', 'verification-link-sent');
+        $this->dispatch('show-notification', message: 'Perfil actualizado correctamente');
     }
 }; ?>
 
 <section>
-    <header>
-        <h2 class="text-lg font-medium text-gray-900">
-            {{ __('Profile Information') }}
-        </h2>
+    <div class="mt-10 pb-10 border-b border-dotted border-black">
+        <h2 class="text-xl uppercase text-[#174075] mb-8">Perfil</h2>
 
-        <p class="mt-1 text-sm text-gray-600">
-            {{ __("Update your account's profile information and email address.") }}
-        </p>
-    </header>
-
-    <form wire:submit="updateProfileInformation" class="mt-6 space-y-6">
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input wire:model="name" id="name" name="name" type="text" class="mt-1 block w-full" required autofocus autocomplete="name" />
-            <x-input-error class="mt-2" :messages="$errors->get('name')" />
-        </div>
-
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input wire:model="email" id="email" name="email" type="email" class="mt-1 block w-full" required autocomplete="username" />
-            <x-input-error class="mt-2" :messages="$errors->get('email')" />
-
-            @if (auth()->user() instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! auth()->user()->hasVerifiedEmail())
-                <div>
-                    <p class="text-sm mt-2 text-gray-800">
-                        {{ __('Your email address is unverified.') }}
-
-                        <button wire:click.prevent="sendVerification" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            {{ __('Click here to re-send the verification email.') }}
-                        </button>
-                    </p>
-
-                    @if (session('status') === 'verification-link-sent')
-                        <p class="mt-2 font-medium text-sm text-green-600">
-                            {{ __('A new verification link has been sent to your email address.') }}
-                        </p>
-                    @endif
+        <form wire:submit='updateProfileInformation'>
+            <div class="grid grid-cols-5 gap-10">
+                <div class="flex flex-col gap-2">
+                    <label class="uppercase text-xs" for="degree">Grado</label>
+                    <select wire:model='degree' name="degree" id="degree">
+                        <option value="">--Selecciona una opción--</option>
+                        <option value="Dr.">Dr.</option>
+                        <option value="Dra.">Dra.</option>
+                        <option value="Asistente">Asistente</option>
+                    </select>
+                    @error('degree')
+                    <span class="text-red-500 text-xs">{{ $message }}</span>
+                    @enderror
                 </div>
-            @endif
-        </div>
 
-        <div class="flex items-center gap-4">
-            <x-primary-button>{{ __('Save') }}</x-primary-button>
+                <div class="flex flex-col gap-2">
+                    <label class="uppercase text-xs" for="name">Nombre</label>
+                    <input wire:model='name' id="name" name="name" class=" rounded" type="text" autocomplete="name">
+                    @error('name')
+                    <span class="text-red-500 text-xs">{{ $message }}</span>
+                    @enderror
+                </div>
 
-            <x-action-message class="me-3" on="profile-updated">
-                {{ __('Saved.') }}
-            </x-action-message>
-        </div>
-    </form>
+                <div class="flex flex-col gap-2">
+                    <label class="uppercase text-xs" for="father_lastname">Apellido Paterno</label>
+                    <input wire:model='father_lastname' id="father_lastname" name="father_lastname" class="rounded"
+                        type="text">
+                    @error('father_lastname')
+                    <span class="text-red-500 text-xs">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="flex flex-col gap-2">
+                    <label class="uppercase text-xs" for="mother_lastname">Apellido Materno</label>
+                    <input wire:model='mother_lastname' id="mother_lastname" name="mother_lastname" class="rounded"
+                        type="text">
+                    @error('mother_lastname')
+                    <span class="text-red-500 text-xs">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="flex flex-col gap-2">
+                    <label class="uppercase text-xs" for="gender">Sexo</label>
+                    <select wire:model='gender' id="gender" name="gender" class="rounded" name="" id="">
+                        <option value="">--Selecciona una opción</option>
+                        <option value="male">Masculino</option>
+                        <option value="female">Femenino</option>
+                    </select>
+                    @error('gender')
+                    <span class="text-red-500 text-xs">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="flex flex-col gap-2">
+                    <label class="uppercase text-xs" for="birthdate">Fecha Nacimiento</label>
+                    <input wire:model='birthdate' id="birthdate" name="birthdate" class="rounded" type="date">
+                    @error('birthdate')
+                    <span class="text-red-500 text-xs">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="flex flex-col gap-2">
+                    <label class="uppercase text-xs" for="phone_number">Teléfono</label>
+                    <input wire:model='phone_number' id="phone_number" name="phone_number" class="rounded" type="text"
+                        maxlength="10">
+                    @error('phone_number')
+                    <span class="text-red-500 text-xs">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="flex flex-col gap-2">
+                    <label class="uppercase text-xs" for="email">Correo electrónico</label>
+                    <input wire:model='email' id="email" name="email" class="rounded" type="text" autocomplete="email">
+                    @error('email')
+                    <span class="text-red-500 text-xs">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="flex flex-col gap-2">
+                    <label class="uppercase text-xs" for="rfc">RFC</label>
+                    <input wire:model='rfc' id="rfc" name="rfc" class="rounded" type="text">
+                    @error('rfc')
+                    <span class="text-red-500 text-xs">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="flex flex-col gap-2">
+                    <label class="uppercase text-xs" for="curp">Curp</label>
+                    <input wire:model='curp' id="curp" name="curp" class="rounded" type="text">
+                    @error('curp')
+                    <span class="text-red-500 text-xs">{{ $message }}</span>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="flex justify-end mt-5">
+                <button class="button py-2 px-10 bg-[#174075] text-white rounded-full mt-5"
+                    type="submit">Guardar</button>
+            </div>
+        </form>
+    </div>
 </section>

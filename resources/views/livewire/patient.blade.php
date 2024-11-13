@@ -22,6 +22,7 @@ new class extends Component {
     public $mother_last_name = ''; 
     public $gender = ''; 
     public $birthdate = ''; 
+    public $birthplace = ''; 
     public $phone_number = ''; 
     public $curp = '';
 
@@ -35,6 +36,7 @@ new class extends Component {
             'mother_last_name' => 'required|string|max:255',
             'gender' => 'required|in:male,female',
             'birthdate' => 'required|date',
+            'birthplace' => 'required|string|max:255',
             'phone_number' => 'required|digits:10',
             'curp' => ['required', 'min:18', Rule::unique('patients', 'curp')->ignore($this->patientId)],
         ]);
@@ -65,6 +67,7 @@ new class extends Component {
         $this->mother_last_name = ''; 
         $this->gender = ''; 
         $this->birthdate = ''; 
+        $this->birthplace = ''; 
         $this->phone_number = ''; 
         $this->curp = '';
 
@@ -86,22 +89,30 @@ new class extends Component {
         $this->mother_last_name = $patient->mother_last_name; 
         $this->gender = $patient->gender; 
         $this->birthdate = $patient->birthdate; 
+        $this->birthplace = $patient->birthplace; 
         $this->phone_number = $patient->phone_number; 
         $this->curp = $patient->curp;
     }
 
     public function with()
     {
+        $states = [
+            'Aguascalientes', 'Baja California', 'Baja California Sur', 'Campeche', 'Chiapas', 
+            'Chihuahua', 'Ciudad de México', 'Coahuila', 'Colima', 'Durango', 'Estado de México', 
+            'Guanajuato', 'Guerrero', 'Hidalgo', 'Jalisco', 'Michoacán', 'Morelos', 'Nayarit', 
+            'Nuevo León', 'Oaxaca', 'Puebla', 'Querétaro', 'Quintana Roo', 'San Luis Potosí', 
+            'Sinaloa', 'Sonora', 'Tabasco', 'Tamaulipas', 'Tlaxcala', 'Veracruz', 'Yucatán', 'Zacatecas'
+        ];
+
         return [
             'clinic' => User::find(auth()->id())->clinic,
             'doctors' => Doctor::with(['user' => function ($query) {
                 $query->select('id', 'name')
                 ->where('clinic_id', 1);
             }])->get(),
+            'states' => $states,
         ];
     }
-
-    
 }; ?>
 
 <div>
@@ -149,6 +160,22 @@ new class extends Component {
                         <input wire:model='birthdate' type="date" class="rounded" name="birthdate" id="birthdate"
                             autocomplete="off">
                         @error('birthdate')
+                        <span class="text-red-600 mt-2">
+                            {{ $message }}
+                        </span>
+                        @enderror
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <label class="text-xs text-[#41759D]" for="birthplace">Entidad de nacimiento</label>
+                        <select wire:model='birthplace' class="rounded" name="birthplace" id="birthplace"
+                            autocomplete="off">
+                            <option value="">-- Selecciona una opción --</option>
+                            @foreach ($states as $state)
+                            <option value="{{$state}}">{{$state}}</option>
+                            @endforeach
+                        </select>
+                        @error('birthplace')
                         <span class="text-red-600 mt-2">
                             {{ $message }}
                         </span>
