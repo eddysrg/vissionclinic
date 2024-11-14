@@ -31,7 +31,7 @@
 
                 @if(auth()->user()->profile_photo)
                 <div class="w-7 h-7 aspect-square object-cover rounded-full overflow-hidden">
-                    <img src="{{asset(auth()->user()->profile_photo)}}" alt="Profile photo">
+                    <img src="{{asset('storage/' . auth()->user()->profile_photo)}}" alt="Profile photo">
                 </div>
                 @else
                 <div class="w-7">

@@ -53,7 +53,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     })
                         .then((response) => response.json())
                         .then((data) => {
-                            console.log(data.message);
+                            // console.log(data.message);
+                            // alert(data.image_url);
                             if (
                                 data.message === "Imagen subida correctamente"
                             ) {

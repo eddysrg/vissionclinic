@@ -45,19 +45,29 @@ class ProfileController extends Controller
             'profile_image' => 'required|image|mimes:png,jpg,jpeg,webp|max:2048',
         ]);
 
-        $image = $request->file('profile_image');
+        /* $image = $request->file('profile_image');
 
-        $fileName = 'profile_' . Str::uuid() . '.' . $image->guessExtension();
+        $fileName = 'profile_' . Str::uuid() . '.' . $image->extension();
 
-        $path = $image->storeAs('public/profiles', $fileName);
+        $path = $image->store('profiles', $fileName);
 
         $imageUrl = Storage::url($path);
 
         $user = $request->user();
         $user->profile_photo = $imageUrl;
+        $user->save(); */
+
+        $extension = $request->file('profile_image')->extension();
+
+        $fileName = 'profile_' . Str::uuid() . '.' . $extension;
+
+        $path = $request->file('profile_image')->storeAs('profiles', $fileName, 'public');
+
+        $user = $request->user();
+        $user->profile_photo = $path;
         $user->save();
 
-        return response()->json(['message' => 'Imagen subida correctamente', 'image_url' => $imageUrl]);
+        return response()->json(['message' => 'Imagen subida correctamente', 'image_url' => $path]);
     }
 
     /**

@@ -16,7 +16,7 @@ new class extends Component
     }
 }; ?>
 
-<aside class="fixed top-0 left-0 z-20 w-52 h-full bg-[#174075] flex flex-col gap-10">
+<aside class="fixed top-0 left-0 z-20 w-52 h-full bg-[#174075] flex flex-col items-center gap-10">
     <a href="{{route('dashboard')}}" class="mt-10">
         <picture>
             <source srcset="{{asset('images/ece_white_logo.webp')}}" type="image/webp">
@@ -27,7 +27,7 @@ new class extends Component
     @if(auth()->user()->profile_photo)
     <div class="px-10">
         <div class="aspect-square object-cover rounded-full overflow-hidden">
-            <img src="{{asset(auth()->user()->profile_photo)}}" alt="Profile photo">
+            <img src="{{asset('storage/' . auth()->user()->profile_photo)}}" alt="Profile photo">
         </div>
 
         <x-user-name classes='text-white mt-3 text-sm text-center' />
@@ -35,14 +35,14 @@ new class extends Component
     </div>
 
     @else
-    <div class="w-16">
+    <div class="w-24">
         <img src="{{asset('images/imagen_perfil.svg')}}" alt="Profile photo">
     </div>
     @endif
 
 
 
-    <nav class="px-10">
+    <nav>
         <ul class="space-y-3 uppercase text-xs">
             <li class="text-white">
                 <i class="fa-solid fa-house mr-3"></i>
