@@ -34,6 +34,11 @@ class Patient extends Model
 
     public function doctor()
     {
-        return $this->belongsTo(Doctor::class, 'user_id');
+        return $this->belongsTo(Doctor::class, 'doctor_id', 'user_id');
+    }
+
+    public function doctorUser()
+    {
+        return $this->hasOneThrough(User::class, Doctor::class, 'user_id', 'id', 'doctor_id', 'user_id');
     }
 }

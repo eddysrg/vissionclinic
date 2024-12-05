@@ -11,4 +11,9 @@ class UserController extends Controller
         $this->authorize('viewManageUsers', auth()->user());
         return view('users.manage-users');
     }
+
+    public function loginRegister()
+    {
+        return view('users.login-register');
+    }
 }

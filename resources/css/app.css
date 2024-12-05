@@ -280,3 +280,36 @@
 .is-invalid {
     border: 1px solid red;
 }
+
+.toggle-button {
+    background-color: #d2d2d2;
+    width: 35px;
+    height: 18px;
+    border-radius: 200px;
+    cursor: pointer;
+    position: relative;
+}
+
+.toggle-button::before {
+    content: "";
+    background-color: #174075;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    position: absolute;
+    transition: 0.3s;
+    margin: 1.25px;
+}
+
+input[type="checkbox"]:checked + .toggle-button {
+    background-color: #41759d;
+}
+
+input[type="checkbox"]:checked + .toggle-button::before {
+    background-color: white;
+    transform: translateX(17.5px);
+}
+
+.togggle-input {
+    display: none;
+}

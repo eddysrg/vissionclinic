@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\DashboardController;
 use App\Models;
 use App\Models\Clinic;
 use Spatie\Sitemap\Sitemap;
@@ -8,8 +7,10 @@ use Spatie\Sitemap\Tags\Url;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\RecordController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,6 +41,42 @@ Route::get('dashboard', [DashboardController::class, 'index'])
 Route::view('dashboard/expedientes', 'record.records')
     ->middleware('auth')
     ->name('dashboard.expedientes');
+
+/* Route::get('dashboard/expedientes/{id}', [RecordController::class, 'show'])
+    ->middleware('auth')
+    ->name('dashboard.expedientes.show'); */
+
+Route::prefix('dashboard/expedientes/{id}')
+    ->name('dashboard.expedientes.')
+    ->middleware('auth')
+    ->group(function () {
+
+        Route::get('resumen', [RecordController::class, 'summary'])
+            ->name('summary');
+
+        Route::prefix('medical-record')
+            ->name('medical-record.')
+            ->group(function () {
+                Route::get('identification-card', [RecordController::class, 'identificationCard'])
+                    ->name('identification-card');
+
+                Route::get('family-medical-history', [RecordController::class, 'familyMedicalHistory'])
+                    ->name('family-medical-history');
+
+                Route::get('pathological-history', [RecordController::class, 'pathologicalHistory'])
+                    ->name('pathological-history');
+
+                Route::get('no-pathological-history', [RecordController::class, 'noPathologicalHistory'])
+                    ->name('no-pathological-history');
+            });
+
+        Route::get('medical-record', [RecordController::class, 'medicalRecord'])
+            ->name('medicalRecord');
+    });
+
+/* Route::get('dashboard/expedientes/{id}/medical-record', [RecordController::class, 'medicalRecord'])
+    ->middleware('auth')
+    ->name('dashboard.expedientes.medicalRecord'); */
 
 Route::view('dashboard/agenda', 'record.schedule')
     ->middleware('auth')

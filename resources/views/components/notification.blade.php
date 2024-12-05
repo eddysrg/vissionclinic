@@ -1,8 +1,10 @@
 <div x-data="{showNotification: false, message: ''}" x-show='showNotification' x-on:show-notification.window="
     showNotification = true; 
     message = $event.detail.message;
-    setTimeout(() => showNotification = false, 2000);" class="fixed inset-0 overflow-y-auto px-4 py-6 sm:px-0 z-50"
-    style="display: none">
+    setTimeout(() => {
+    showNotification = false;
+    window.location.reload();
+    }, 2000);" class="fixed inset-0 overflow-y-auto px-4 py-6 sm:px-0 z-50" style="display: none">
 
     <div x-show='showNotification' x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0"
         x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200"

@@ -1,12 +1,13 @@
 <?php
 
-use App\Http\Controllers\Auth\VerifyEmailController;
-use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\Auth\VerifyEmailController;
 
 Route::middleware('guest')->group(function () {
-    Volt::route('register', 'pages.auth.register')
-        ->name('register');
+    // Volt::route('register', 'pages.auth.register')
+    //     ->name('register');
 
     Volt::route('login', 'pages.auth.login')
         ->name('login');
@@ -17,6 +18,14 @@ Route::middleware('guest')->group(function () {
     Volt::route('reset-password/{token}', 'pages.auth.reset-password')
         ->name('password.reset');
 });
+
+Route::get('register', function () {
+    return view('pages.auth.register');
+})->middleware('auth')->name('register');
+
+Route::get('login-register', [UserController::class, 'loginRegister'])
+    ->middleware('guest')
+    ->name('loginRegister');
 
 Route::middleware('auth')->group(function () {
     Volt::route('verify-email', 'pages.auth.verify-email')
@@ -29,3 +38,5 @@ Route::middleware('auth')->group(function () {
     Volt::route('confirm-password', 'pages.auth.confirm-password')
         ->name('password.confirm');
 });
+
+//6.44

@@ -78,8 +78,15 @@ new class extends Component {
                         </td>
 
                         <td class="py-3">
-                            {{$patient->name . ' ' . $patient->father_last_name . ' ' .
-                            $patient->mother_last_name}}
+                            <div class="flex justify-center items-center gap-5">
+                                <x-patient-initials :patient="$patient" />
+
+                                <a href="{{route('dashboard.expedientes.summary', $patient->id)}}"
+                                    class="text-[#32ADE6] underline uppercase">
+                                    {{$patient->name . ' ' . $patient->father_last_name . ' ' .
+                                    $patient->mother_last_name}}
+                                </a>
+                            </div>
                         </td>
 
                         <td class="py-3">

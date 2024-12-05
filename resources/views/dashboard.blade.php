@@ -59,26 +59,7 @@ $currentUser->mother_lastname;
                 <div class="grid grid-cols-5 gap-x-5 mt-3">
                     @forelse ($appointments as $appointment)
                     <div class="border border-zinc-300 flex flex-col items-center p-2">
-                        @php
-                        $firstLetter = substr($appointment->patient->name, 0, 1);
-                        $secondLetter = substr($appointment->patient->father_last_name, 0, 1);
-                        @endphp
-
-                        <p class="
-                            
-                            {{$appointment->patient->gender === 'male' ? 'bg-[#174075] text-white' : 'bg-[#41759D40] text-[#41759D]'}}
-                            text-2xl 
-                            font-medium
-                            w-fit 
-                            aspect-square 
-                            px-2 
-                            py-2 
-                            rounded-full 
-                            flex 
-                            justify-center
-                            items-center ">
-                            {{$firstLetter . $secondLetter}}
-                        </p>
+                        <x-patient-initials :patient="$appointment->patient" />
 
                         <div class="mt-3 text-xs text-center space-y-2">
                             <p class="">
