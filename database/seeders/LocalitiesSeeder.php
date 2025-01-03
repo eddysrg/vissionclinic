@@ -19,7 +19,7 @@ class LocalitiesSeeder extends Seeder
 public function run(): void
 {
     // Ruta de la carpeta que contiene los archivos CSV
-    $folderPath = storage_path('app/states');
+    $folderPath = public_path('states');
 
     // Obtiene todos los archivos CSV en la carpeta
     $files = glob($folderPath . '/*.csv');

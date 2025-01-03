@@ -13,7 +13,7 @@ class DiagnosesSeeder extends Seeder
      */
     public function run(): void
     {
-        $file = fopen(storage_path('app/catalogs/diagnoses.csv'), 'r');
+        $file = fopen(public_path('catalogs/diagnoses.csv'), 'r');
         $header = fgetcsv($file);
 
         while(($data = fgetcsv($file, 1000, ',')) !== false) {
