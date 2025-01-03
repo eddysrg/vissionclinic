@@ -116,7 +116,7 @@
 
                 <div x-data="{ open: false }">
                     <x-nav-link @click="open = !open" class="flex items-center gap-2 cursor-pointer"
-                        :active="request()->routeIs('dashboard.expedientes.medicalRecord') || request()->routeIs('dashboard.expedientes.medical-record.identification-card') || request()->routeIs('dashboard.expedientes.medical-record.family-medical-history') || request()->routeIs('dashboard.expedientes.medical-record.pathological-history') || request()->routeIs('dashboard.expedientes.medical-record.no-pathological-history')">
+                        :active="request()->routeIs('dashboard.expedientes.medicalRecord') || request()->routeIs('dashboard.expedientes.medical-record.identification-form') || request()->routeIs('dashboard.expedientes.medical-record.family-medical-history') || request()->routeIs('dashboard.expedientes.medical-record.pathological-history') || request()->routeIs('dashboard.expedientes.medical-record.no-pathological-history') || request()->routeIs('dashboard.expedientes.medical-record.physical-examination')">
                         Historia Clínica
                         <i class="fa-solid fa-caret-down"></i>
                     </x-nav-link>
@@ -125,7 +125,7 @@
                         class="absolute bg-[#174075] shadow-lg rounded-xl mt-2 p-5 z-10" style="display: none">
                         <nav class="flex flex-col text-white gap-3">
                             <x-nav-link
-                                :href="route('dashboard.expedientes.medical-record.identification-card', ['id' => $patient->id])"
+                                :href="route('dashboard.expedientes.medical-record.identification-form', ['id' => $patient->id])"
                                 class="hover:text-blue-200 cursor-pointer">
                                 Ficha de identificación
                             </x-nav-link>
@@ -148,18 +148,37 @@
                                 Ant. No Patológicos
                             </x-nav-link>
 
-                            <x-nav-link class="hover:text-blue-200 cursor-pointer">
+                            <x-nav-link :href="route('dashboard.expedientes.medical-record.physical-examination', ['id' => $patient->id])" class="hover:text-blue-200 cursor-pointer">
                                 Exploración Física
                             </x-nav-link>
                         </nav>
                     </div>
                 </div>
 
-                <p>Consulta Médica</p>
-                <p>Laboratorio</p>
-                <p>Referencia</p>
-                <p>Recetario</p>
-                <p>Archivo digital (Anexos)</p>
+                <x-nav-link :href="route('dashboard.expedientes.medicalConsultation', ['id' => $patient->id])"
+                    :active="request()->routeIs('dashboard.expedientes.medicalConsultation')">
+                    Consulta Médica
+                </x-nav-link>
+
+                <x-nav-link :href="route('dashboard.expedientes.laboratory', ['id' => $patient->id])"
+                    :active="request()->routeIs('dashboard.expedientes.laboratory')">
+                    Laboratorio
+                </x-nav-link>
+
+                <x-nav-link :href="route('dashboard.expedientes.reference', ['id' => $patient->id])"
+                    :active="request()->routeIs('dashboard.expedientes.reference')">
+                    Referencia
+                </x-nav-link>
+
+                <x-nav-link :href="route('dashboard.expedientes.prescriptionRegister', ['id' => $patient->id])"
+                    :active="request()->routeIs('dashboard.expedientes.prescriptionRegister')">
+                    Recetario
+                </x-nav-link>
+
+                <x-nav-link :href="route('dashboard.expedientes.digitalFile', ['id' => $patient->id])"
+                    :active="request()->routeIs('dashboard.expedientes.digitalFile')">
+                    Archivo digital (Anexos)
+                </x-nav-link>
             </nav>
 
             <section class="bg-[#F3FCFE] border border-t-0 ml-6 p-3">

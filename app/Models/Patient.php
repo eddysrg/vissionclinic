@@ -41,4 +41,9 @@ class Patient extends Model
     {
         return $this->hasOneThrough(User::class, Doctor::class, 'user_id', 'id', 'doctor_id', 'user_id');
     }
+
+    public function record()
+    {
+        return $this->hasOne(Record::class);
+    }
 }

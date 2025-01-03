@@ -2,25 +2,19 @@
 
 namespace Database\Seeders;
 
-use App\Models\Clinic;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
-class ClinicsSeeder extends Seeder
+class TypeRecordSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Clinic::create([
-            'name' => 'Clínica GDC Cala',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-
-        Clinic::create([
-            'name' => 'Clínica Dr Luis Flores García',
+        DB::table('type_record')->insert([
+            'name' => 'expediente medicina general',
             'created_at' => now(),
             'updated_at' => now(),
         ]);

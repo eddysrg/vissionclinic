@@ -281,7 +281,7 @@
     border: 1px solid red;
 }
 
-.toggle-button {
+.toggle-button, .toggle-button-options {
     background-color: #d2d2d2;
     width: 35px;
     height: 18px;
@@ -290,7 +290,7 @@
     position: relative;
 }
 
-.toggle-button::before {
+.toggle-button::before, .toggle-button-options::before {
     content: "";
     background-color: #174075;
     width: 15px;
@@ -301,15 +301,90 @@
     margin: 1.25px;
 }
 
-input[type="checkbox"]:checked + .toggle-button {
+input[type="checkbox"]:checked + .toggle-button,  input[type="radio"]:checked + .toggle-button-options{
     background-color: #41759d;
 }
 
-input[type="checkbox"]:checked + .toggle-button::before {
+input[type="checkbox"]:checked + .toggle-button::before, input[type="radio"]:checked + .toggle-button-options::before {
     background-color: white;
     transform: translateX(17.5px);
 }
 
-.togggle-input {
+.toggle-input, .toggle-input-options {
     display: none;
+}
+
+.checkbox-historyForm {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.customLabel {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-color: #d2d2d2;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.checkbox-historyForm:checked + .customLabel {
+    background-color: #174075;
+}
+
+/* Spinner styles */
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    position: relative;
+    margin: 100px auto;
+}
+
+.double-bounce1, .double-bounce2 {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: #174075;
+    opacity: 0.6;
+    position: absolute;
+    top: 0;
+    left: 0;
+    -webkit-animation: sk-bounce 2.0s infinite ease-in-out;
+    animation: sk-bounce 2.0s infinite ease-in-out;
+}
+
+.double-bounce2 {
+    -webkit-animation-delay: -1.0s;
+    animation-delay: -1.0s;
+}
+
+@-webkit-keyframes sk-bounce {
+    0%, 100% { -webkit-transform: scale(0.0) }
+    50% { -webkit-transform: scale(1.0) }
+}
+
+@keyframes sk-bounce {
+    0%, 100% { 
+        transform: scale(0.0);
+        -webkit-transform: scale(0.0);
+    } 50% { 
+        transform: scale(1.0);
+        -webkit-transform: scale(1.0);
+    }
+}
+
+.dod-table {
+    width: 100%;
+    background-color: white;
+    border-collapse: collapse;
+    border: 1px solid #a1a1aa;
+    border-radius: 50px;
+}
+
+.dod-table th, .dod-table td {
+    border: 1px solid #a1a1aa;
+    padding: 8px;
+    border-radius: 50px;
 }

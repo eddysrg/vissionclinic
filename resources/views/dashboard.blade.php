@@ -86,7 +86,6 @@ $currentUser->mother_lastname;
         <section class="w-1/3 p-8">
             <h2 class="bg-[#0E2F5E] text-white text-center py-2 uppercase">Notificaciones</h2>
             <div class="h-80 overflow-y-scroll border">
-
                 @forelse (auth()->user()->notifications as $notification)
                 <p class="bg-[#174075] text-white text-center py-2">{{$notification->data['mensaje']}}</p>
                 @empty

@@ -1,5 +1,7 @@
-@php
-use Carbon\Carbon;
+<p>Hola banda</p>
 
-echo Carbon::createFromFormat('H:i:s', '14:30:00')->format('H:i');
-@endphp
+{{-- <div class="mt-10">
+@foreach ($countries as $index => $country)
+    <p>code: {{$country['code']}} name: {{$country['name']}} - ({{$index + 1}})</p>
+@endforeach
+</div> --}}

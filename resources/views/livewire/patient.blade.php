@@ -1,8 +1,11 @@
 <?php
 
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Livewire\Volt\Component;
 use App\Models\Patient;
+use App\Models\Record;
+use App\Models\MedicalRecordSection;
 use App\Models\User;
 use App\Models\Doctor;
 use Illuminate\Validation\Rule;
@@ -41,7 +44,8 @@ new class extends Component {
             'curp' => ['required', 'min:18', Rule::unique('patients', 'curp')->ignore($this->patientId)],
         ]);
 
-        Patient::updateOrCreate(['curp' => $validated['curp']], $validated);
+        $this->createRecord($validated);
+
 
         $this->dispatch('show-notification', message: $this->isEditing ? 'Paciente actualizado con éxito' : 'Paciente creado con éxito');
         $this->dispatch('close-modal', 'patientModal');
@@ -92,6 +96,72 @@ new class extends Component {
         $this->birthplace = $patient->birthplace; 
         $this->phone_number = $patient->phone_number; 
         $this->curp = $patient->curp;
+    }
+
+    public function createRecord($validated)
+    {
+        DB::transaction(function () use ($validated) {
+            $patientCreated = Patient::updateOrCreate(['curp' => $validated['curp']], $validated);
+
+            $recordCreated = Record::create([
+                'patient_id' => $patientCreated->id,
+                'type_record_id' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            $sectionsCreated = DB::table('medical_record_sections')->insert([
+                [
+                    'record_id' => $recordCreated->id,
+                    'name' => 'summary',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
+                    'record_id' => $recordCreated->id,
+                    'name' => 'clinic_history',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
+                    'record_id' => $recordCreated->id,
+                    'name' => 'medical_consultation',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
+                    'record_id' => $recordCreated->id,
+                    'name' => 'laboratory',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
+                    'record_id' => $recordCreated->id,
+                    'name' => 'reference',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
+                    'record_id' => $recordCreated->id,
+                    'name' => 'prescriptions',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
+                    'record_id' => $recordCreated->id,
+                    'name' => 'pediatric_history',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
+                    'record_id' => $recordCreated->id,
+                    'name' => 'digital_file',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+            ]);
+        });
+
     }
 
     public function with()

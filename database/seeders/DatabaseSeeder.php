@@ -22,5 +22,16 @@ class DatabaseSeeder extends Seeder
         // $this->call(RouteNameSeeder::class);
 
         // \App\Models\Patient::factory(20)->create();
+
+        $this->call([
+            RouteNameSeeder::class,
+            ClinicsSeeder::class,
+            RolesSeeder::class,
+            UsersSeeder::class,
+            CountrySeeder::class,
+            LocalitiesSeeder::class,
+            TypeRecordSeeder::class,
+            DiagnosesSeeder::class,
+        ]);
     }
 }

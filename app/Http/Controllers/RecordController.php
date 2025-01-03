@@ -38,12 +38,13 @@ class RecordController extends Controller
         return view('record.medical-record', compact('patient'));
     }
 
-    public function identificationCard($id)
+    public function identificationForm($id)
     {
         $patient = Patient::findOrFail($id);
 
         $this->authorize('viewRecord', $patient);
-        return view('record.medical_record.identification-card', compact('patient'));
+
+        return view('record.medical_record.identification_form', compact('patient'));
     }
 
     public function familyMedicalHistory($id)
@@ -68,5 +69,59 @@ class RecordController extends Controller
 
         $this->authorize('viewRecord', $patient);
         return view('record.medical_record.no_pathological_history', compact('patient'));
+    }
+
+    public function physicalExamination($id)
+    {
+        $patient = Patient::findOrFail($id);
+
+        $this->authorize('viewRecord', $patient);
+
+        return view('record.medical_record.physical_examination', compact('patient'));
+    }
+
+    public function medicalConsultation($id)
+    {
+        $patient = Patient::findOrFail($id);
+
+        $this->authorize('viewRecord', $patient);
+
+        return view('record.medical_consultation', compact('patient'));
+    }
+
+    public function laboratory($id) 
+    {
+        $patient = Patient::findOrFail($id);
+
+        $this->authorize('viewRecord', $patient);
+
+        return view('record.laboratory', compact('patient')); 
+    }
+
+    public function reference($id) 
+    {
+        $patient = Patient::findOrFail($id);
+
+        $this->authorize('viewRecord', $patient);
+
+        return view('record.reference', compact('patient')); 
+    }
+
+    public function prescriptionRegister($id) 
+    {
+        $patient = Patient::findOrFail($id);
+
+        $this->authorize('viewRecord', $patient);
+
+        return view('record.prescription_register', compact('patient')); 
+    }
+
+    public function digitalFile($id) 
+    {
+        $patient = Patient::findOrFail($id);
+
+        $this->authorize('viewRecord', $patient);
+
+        return view('record.digital_file', compact('patient')); 
     }
 }

@@ -84,4 +84,54 @@ class PageController extends Controller
 
         return view('pages.contacto');
     }
+
+    // public function pruebas()
+    // {
+
+    //     $jsonPath = storage_path('app/public/countries.json');
+
+    //     $countries = json_decode(file_get_contents($jsonPath), true);
+
+    //     return view('pages.pruebas', ['countries' => $countries['countries']]);
+    // }
+
+    // public function pruebas()
+    // {
+
+    //     $csvPath = storage_path('app/aguascalientes.csv');
+
+    //     $file = fopen($csvPath, 'r');
+    //     $header = fgetcsv($file);
+
+    //     while(($row = fgetcsv($file)) !== false) {
+    //         echo "<pre>";
+    //         var_dump($row);
+    //         echo "</pre>";
+            
+    //     }
+
+    //     fclose($file);
+
+    //     return view('pages.pruebas');
+    // }
+
+    public function pruebas()
+    {
+
+        $csvPath = storage_path('app/colima.csv');
+
+        $file = fopen($csvPath, 'r');
+        $header = fgetcsv($file);
+
+        while(($row = fgetcsv($file)) !== false) {
+            echo "<pre>";
+            var_dump($row[0]);
+            echo "</pre>";
+            
+        }
+
+        fclose($file);
+
+        return view('pages.pruebas');
+    }
 }

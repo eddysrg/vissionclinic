@@ -25,6 +25,8 @@ use App\Http\Controllers\DashboardController;
 
 Route::view('/', 'pages.home')->name('home');
 
+Route::get('/pruebas', [PageController::class, 'pruebas']);
+
 Route::controller(PageController::class)->group(function () {
     Route::get('/lyrium', 'lyrium')->name('lyrium');
     Route::get('/ece/{nivel}', 'ece')->name('ece');
@@ -52,26 +54,44 @@ Route::prefix('dashboard/expedientes/{id}')
     ->group(function () {
 
         Route::get('resumen', [RecordController::class, 'summary'])
-            ->name('summary');
+        ->name('summary');
 
         Route::prefix('medical-record')
-            ->name('medical-record.')
-            ->group(function () {
-                Route::get('identification-card', [RecordController::class, 'identificationCard'])
-                    ->name('identification-card');
+        ->name('medical-record.')
+        ->group(function () {
+            Route::get('identification-form', [RecordController::class, 'identificationForm'])
+                ->name('identification-form');
 
-                Route::get('family-medical-history', [RecordController::class, 'familyMedicalHistory'])
-                    ->name('family-medical-history');
+            Route::get('family-medical-history', [RecordController::class, 'familyMedicalHistory'])
+                ->name('family-medical-history');
 
-                Route::get('pathological-history', [RecordController::class, 'pathologicalHistory'])
-                    ->name('pathological-history');
+            Route::get('pathological-history', [RecordController::class, 'pathologicalHistory'])
+                ->name('pathological-history');
 
-                Route::get('no-pathological-history', [RecordController::class, 'noPathologicalHistory'])
-                    ->name('no-pathological-history');
-            });
+            Route::get('no-pathological-history', [RecordController::class, 'noPathologicalHistory'])
+                ->name('no-pathological-history');
+
+            Route::get('physical_examination', [RecordController::class, 'physicalExamination'])
+                ->name('physical-examination');
+        });
+
+        Route::get('medical-consultation', [RecordController::class, 'medicalConsultation'])
+        ->name('medicalConsultation');
+
+        Route::get('laboratory', [RecordController::class, 'laboratory'])
+        ->name('laboratory');
+
+        Route::get('reference', [RecordController::class, 'reference'])
+        ->name('reference');
+
+        Route::get('prescription-register', [RecordController::class, 'prescriptionRegister'])
+        ->name('prescriptionRegister');
+
+        Route::get('digital-file', [RecordController::class, 'digitalFile'])
+        ->name('digitalFile');
 
         Route::get('medical-record', [RecordController::class, 'medicalRecord'])
-            ->name('medicalRecord');
+        ->name('medicalRecord');
     });
 
 /* Route::get('dashboard/expedientes/{id}/medical-record', [RecordController::class, 'medicalRecord'])
