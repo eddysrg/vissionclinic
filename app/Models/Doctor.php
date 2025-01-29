@@ -13,9 +13,13 @@ class Doctor extends Model
         'user_id'
     ];
 
+    protected $primaryKey = 'user_id';
+
+    public $incrementing = false;
+
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function patients()

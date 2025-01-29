@@ -19,10 +19,10 @@ return new class extends Migration
             $table->string('name');
             $table->string('father_last_name');
             $table->string('mother_last_name');
-            $table->enum('gender', ['male', 'female']);
+            $table->enum('gender', ['H', 'M']);
             $table->date('birthdate');
             $table->string('birthplace', 100);
-            $table->string('phone_number', 10);
+            $table->string('phone_number');
             $table->string('curp', 18);
             $table->timestamps();
         });

@@ -374,17 +374,3 @@ input[type="checkbox"]:checked + .toggle-button::before, input[type="radio"]:che
         -webkit-transform: scale(1.0);
     }
 }
-
-.dod-table {
-    width: 100%;
-    background-color: white;
-    border-collapse: collapse;
-    border: 1px solid #a1a1aa;
-    border-radius: 50px;
-}
-
-.dod-table th, .dod-table td {
-    border: 1px solid #a1a1aa;
-    padding: 8px;
-    border-radius: 50px;
-}

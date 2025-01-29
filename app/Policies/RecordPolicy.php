@@ -9,6 +9,6 @@ class RecordPolicy
 {
     public function viewRecord(User $user, Patient $patient)
     {
-        return $patient->doctor_id === $user->id;
+        return $patient->clinic_id === $user->clinic_id;
     }
 }
