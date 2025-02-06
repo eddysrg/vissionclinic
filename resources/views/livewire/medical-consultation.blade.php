@@ -16,8 +16,8 @@ new class extends Component {
 
     public function save()
     {
-        if(empty($this->form->diseases) || empty($this->form->procedures)) {
-            $this->dispatch('diagnosis-alert', message: "Debes seleccionar un diagnóstico de enfermedad y/o procedimiento médico del catálogo");
+        if(empty($this->form->diseases)) {
+            $this->dispatch('diagnosis-alert', message: "Debes seleccionar un diagnóstico de enfermedad");
             return;
         }
         
@@ -205,12 +205,12 @@ new class extends Component {
         <div class="flex items-center justify-end mt-8">
             <div class="flex gap-3">
                 <button type="submit" class="px-8 py-1 bg-[#174075] text-white rounded-full flex items-center gap-2">
-                    Guardar
-                </button>
-
-                <button wire:click.prevent='finish'  class="px-8 py-1 bg-[#174075] text-white rounded-full flex items-center gap-2">
                     Finalizar consulta
                 </button>
+
+                {{-- <button wire:click.prevent='finish'  class="px-8 py-1 bg-[#174075] text-white rounded-full flex items-center gap-2">
+                    Finalizar consulta
+                </button> --}}
             </div>
         </div>
 
