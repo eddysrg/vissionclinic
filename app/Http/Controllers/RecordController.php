@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Appointment;
 use App\Models\Patient;
 use Illuminate\Http\Request;
 
@@ -25,9 +26,25 @@ class RecordController extends Controller
     {
         $patient = Patient::findOrFail($id);
 
+        // $medicalConsultation = Patient::with(['record.medicalRecordSections' => function ($query) {
+        //     $query->where('name', 'medical_consultation');
+        // }])->findOrFail($patient->id)->record->medicalRecordSections->first()->id;
+
+        $medicalConsultation = Patient::with(['record.medicalRecordSections' => function ($query) {
+            $query->where('name', 'medical_consultation');
+        }, 'record.medicalRecordSections.medicalConsultation'
+        ])
+        ->findOrFail($patient->id) // Use the patient's ID dynamically
+        ->record
+        ->medicalRecordSections
+        ->first()
+        ->medicalConsultation ?? [];
+
+        $appointments = Appointment::find($id)->appointment ?? [];
+
         $this->authorize('viewRecord', $patient);
 
-        return view('record.summary', compact('patient'));
+        return view('record.summary', ['patient' => $patient, 'medicalConsultation' => $medicalConsultation, 'appointments' => $appointments]);
     }
 
     public function medicalRecord($id)

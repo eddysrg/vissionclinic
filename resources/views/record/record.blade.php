@@ -46,30 +46,31 @@
             <section class="mt-3 border">
                 <div class="flex items-center justify-between bg-[#174075] text-white p-2">
                     <h2 class="uppercase">Signos vitales</h2>
-                    <i class="fa-solid fa-plus text-sm text-[#174075] bg-white aspect-square px-1 rounded-full"></i>
+                    {{-- <i class="fa-solid fa-plus text-sm text-[#174075] bg-white aspect-square px-1 rounded-full"></i> --}}
                 </div>
 
-                <x-vital-sign vitalSign='Estatura' icon='height.png' value='1.78' unit='mts' color='text-[#03BCF6]' />
-                <x-vital-sign vitalSign='Peso' icon='weight.png' value='74' unit='Kg' color='text-[#B755E5]' />
-                <x-vital-sign vitalSign='BMI' icon='bmi.png' value='23.4' unit='BMI' color='text-[#A6D61D]' />
-                <x-vital-sign vitalSign='Temperatura' icon='temperature.png' value='36.5' unit='°C'
+                <x-vital-sign vitalSign='Estatura' icon='height.png' value='{{$medicalConsultation->first()->weight ?? 0}}' unit='m' color='text-[#03BCF6]' />
+                <x-vital-sign vitalSign='Peso' icon='weight.png' value='{{$medicalConsultation->first()->height ?? 0}}' unit='Kg' color='text-[#B755E5]' />
+                <x-vital-sign vitalSign='IMC' icon='bmi.png' value='{{$medicalConsultation->first()->imc ?? 0}}' unit='IMC' color='text-[#A6D61D]' />
+                <x-vital-sign vitalSign='Temperatura' icon='temperature.png' value='{{$medicalConsultation->first()->temperature ?? 0}}' unit='°C'
                     color='text-[#E11010]' />
-                <x-vital-sign vitalSign='Frec. Respiratoria' icon='respiratory.png' value='17' unit='r/m'
+                <x-vital-sign vitalSign='Frec. Respiratoria' icon='respiratory.png' value='{{$medicalConsultation->first()->respiratoryRate ?? 0}}' unit='rpm'
                     color='text-[#1DC724]' />
-                <x-vital-sign vitalSign='Presión Arterial' icon='bloodpressure.png' value='120/80' unit='mm/Hg'
+                <x-vital-sign vitalSign='Presión Arterial' icon='bloodpressure.png' value='{{$medicalConsultation->first()->blood_pressure ?? 0}}' unit='mmHg'
                     color='text-[#23CECE]' />
-                <x-vital-sign vitalSign='Frec. Cardiaca' icon='heart_rate.png' value='62' unit='Fc'
+                <x-vital-sign vitalSign='Frec. Cardiaca' icon='heart_rate.png' value='{{$medicalConsultation->first()->heart_rate ?? 0}}' unit='lpm'
                     color='text-[#CC17AF]' border='' />
             </section>
+
+            {{-- Files --}}
 
             <section class="mt-3 border">
                 <div class="flex items-center justify-between bg-[#174075] text-white p-2">
                     <h2 class="uppercase">Archivos</h2>
-                    <i class="fa-solid fa-plus text-sm text-[#174075] bg-white aspect-square px-1 rounded-full"></i>
                 </div>
 
                 <div class="bg-[#F3FCFE] px-3 py-5 space-y-8">
-                    <div class="flex justify-between items-center border-b">
+                    {{-- <div class="flex justify-between items-center border-b">
                         <div class="flex items-center gap-2">
                             <div class="w-5 h-5">
                                 <img class="object-cover" src="{{asset('images/pdf.png')}}" alt="pdf icon">
@@ -93,7 +94,9 @@
                         <div>
                             <p class="text-gray-500 text-xs">10KB | Abril 30, 2020</p>
                         </div>
-                    </div>
+                    </div> --}}
+
+                    <p class="text-center">Sin archivos</p>
 
                     <div class="flex justify-center">
                         <button class="bg-[#41759D] text-white flex items-center gap-3 px-3 py-1 rounded">

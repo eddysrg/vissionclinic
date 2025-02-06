@@ -14,14 +14,9 @@ return new class extends Migration
         Schema::create('identification_form', function (Blueprint $table) {
             $table->id();
             $table->foreignId('medical_record_sections_id')->constrained()->onDelete('cascade');
-            $table->string('name');
-            $table->string('paternal_surname');
-            $table->string('maternal_surname');
             $table->enum('gender', ['male', 'female']);
             $table->string('gender_identity');
             $table->integer('age');
-            $table->date('birthdate');
-            $table->string('birthplace');
             $table->string('country');
             $table->string('state');
             $table->string('zip_code');

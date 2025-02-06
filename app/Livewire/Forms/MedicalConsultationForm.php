@@ -5,12 +5,15 @@ namespace App\Livewire\Forms;
 use Carbon\Carbon;
 use Livewire\Form;
 use App\Models\Diagnosis;
+use App\Models\Consultation;
 use Livewire\Attributes\Validate;
 
 class MedicalConsultationForm extends Form
 {
 
     public $diseases = [];
+    public $procedures = [];
+    public $medicalRecordSectionId;
     
     #[Validate('required|date')]
     public $date;
@@ -33,8 +36,8 @@ class MedicalConsultationForm extends Form
     #[Validate('required|string')]
     public $currentCondition;
 
-    #[Validate('required')]
-    public $patientFasting = true;
+    #[Validate('required|boolean')]
+    public $patientFasting = false;
 
     #[Validate('required|numeric')]
     public $weight;
@@ -45,25 +48,25 @@ class MedicalConsultationForm extends Form
     #[Validate('required|numeric')]
     public $imc;
 
-    #[Validate('required|string')]
+    #[Validate('required|numeric')]
     public $icc;
 
-    #[Validate('required|string')]
+    #[Validate('required|numeric')]
     public $heartRate;
 
-    #[Validate('required|string')]
+    #[Validate('required|numeric')]
     public $respiratoryRate;
 
-    #[Validate('required|string')]
+    #[Validate('required|numeric')]
     public $temperature;
 
-    #[Validate('required|string')]
+    #[Validate('required|numeric')]
     public $glycemia;
 
     #[Validate('required|string')]
     public $bloodPressure;
 
-    #[Validate('required|string')]
+    #[Validate('required|numeric')]
     public $oxygenSaturation;
 
     #[Validate('required|string')]
@@ -81,13 +84,40 @@ class MedicalConsultationForm extends Form
     #[Validate('required|string')]
     public $forecast;
 
-    #[Validate('required|string')]
-    public $prueba;
-
 
     public function store()
     {
-        $this->validate();
+        $validated = $this->validate();
+
+        Consultation::create([
+            'medical_record_sections_id' => $this->medicalRecordSectionId,
+            'date' => $validated['date'],
+            'time' => $validated['time'],
+            'consultation_type' => $validated['consultationType'],
+            'medical_chart' => $validated['medicalChart'],
+            'respiratory_symptom' => $validated['respiratorySymptom'],
+            'nutritional_status' => $validated['nutritionalStatus'],
+            'current_condition' => $validated['currentCondition'],
+            'patient_fasting' => $validated['patientFasting'],
+            'weight' => $validated['weight'],
+            'height' => $validated['height'],
+            'imc' => $validated['imc'],
+            'icc' => $validated['icc'],
+            'heart_rate' => $validated['heartRate'],
+            'respiratory_rate' => $validated['respiratoryRate'],
+            'temperature' => $validated['temperature'],
+            'glycemia' => $validated['glycemia'],
+            'blood_pressure' => $validated['bloodPressure'],
+            'oxygen_saturation' => $validated['oxygenSaturation'],
+            'physical_examination' => $validated['physicalExamination'],
+            'management_plan' => $validated['managementPlan'],
+            'analysis' => $validated['analysis'],
+            'diagnostic_impression' => $validated['diagnosticImpression'],
+            'forecast' => $validated['forecast'],
+            'diseases' => $this->diseases,
+            'procedures' => $this->procedures
+        ]);
+
     }
 
     public function setMedicalData()

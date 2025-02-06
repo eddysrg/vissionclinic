@@ -3,6 +3,7 @@
 use Livewire\Volt\Component;
 use App\Models\Patient;
 use Livewire\WithPagination;
+use Livewire\Attributes\Computed;
 
 
 new class extends Component {
@@ -12,26 +13,32 @@ new class extends Component {
 
     public $search = '';
 
+    #[Computed]
     public function searchPatient()
     {
-        
-        if(empty($this->search)) {
-            // $this->chosenPatient = '';
-            return Patient::where('clinic_id', auth()->user()->clinic_id)->paginate(5);
-        }
-
         $terms = explode(' ' ,$this->search);
 
-        return $patients = Patient::where('clinic_id', auth()->user()->clinic_id)
+        return Patient::where('clinic_id', auth()->user()->clinic_id)
         ->where(function($query) use ($terms) {
             foreach ($terms as $term) {
                 $query->where(function($query) use ($term) {
                     $query->where('name', 'LIKE', "%{$term}%")
                     ->orWhere('father_last_name', 'LIKE', "%{$term}%")
-                    ->orWhere('mother_last_name', 'LIKE', "%{$term}%");
+                    ->orWhere('mother_last_name', 'LIKE', "%{$term}%")
+                    ->orWhere('id', 'LIKE', "%{$term}%");
                 });
             }
-        })->get();
+        })->paginate(5);
+    }
+
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+
+    public function eliminatePatient($id)
+    {
+        Patient::findOrFail($id)->delete();
     }
 
     public function clearSearch()
@@ -39,24 +46,17 @@ new class extends Component {
         $this->search = '';
     }
 
-    public function with()
-    {
-        return [
-            'patients' => $this->searchPatient()
-        ];
-    }
-
 }; ?>
 
 <div class="p-8">
-    <form wire:submit='searchPatient'>
-        <div class="flex gap-5">
-            <input wire:model='search' id="search" type="text"
-                placeholder="Nombre | Apellido Materno | Apellido Paterno"
-                class="w-full rounded-full border border-zinc-300">
-            <button class="px-6 py-3 bg-[#41759D] text-white rounded" type="submit">Buscar</button>
-        </div>
-    </form>
+    <div class="flex gap-5">
+        <input 
+        wire:model.live='search' 
+        id="search" 
+        type="text"
+        placeholder="Nombre | Apellido Materno | Apellido Paterno | N° de expediente"
+        class="w-full rounded-full border border-zinc-300">
+    </div>
 
     <main class="grid grid-cols-[1fr_.4fr] gap-x-8 mt-10">
         <section>
@@ -71,7 +71,7 @@ new class extends Component {
                 </thead>
 
                 <tbody>
-                    @forelse ($patients as $patient)
+                    @forelse ($this->searchPatient as $patient)
                     <tr class="text-center bg-cyan-50">
                         <td class="py-3">
                             {{$patient->id}}
@@ -94,10 +94,16 @@ new class extends Component {
                         </td>
 
                         <td class="py-3">
-                            <button wire:click='$dispatch("setPatientInfo", {id: {{$patient->id}}})'
-                                @click='$dispatch("open-modal", "patientModal")'>
-                                <i class="fa-solid fa-pen-to-square text-[#32ADE6]"></i>
-                            </button>
+                            <div class="flex items-center gap-4">
+                                <button wire:click='$dispatch("setPatientInfo", {id: {{$patient->id}}})'
+                                    @click='$dispatch("open-modal", "patientModal")'>
+                                    <i class="fa-solid fa-pen-to-square text-[#32ADE6]"></i>
+                                </button>
+
+                                <button wire:click="eliminatePatient({{$patient->id}})" wire:confirm='¿Está seguro de eliminar a este paciente?'>
+                                    <i class="fa-solid fa-trash text-red-500"></i>
+                                </button>
+                            </div>
                         </td>
                     </tr>
                     @empty
@@ -109,7 +115,7 @@ new class extends Component {
                 </tbody>
             </table>
             @unless ($search)
-            {{$patients->links()}}
+            {{$this->searchPatient->links()}}
             @endunless
         </section>
 
@@ -138,8 +144,4 @@ new class extends Component {
             </div>
         </section>
     </main>
-
-
-
-
 </div>

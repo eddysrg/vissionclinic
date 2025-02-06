@@ -25,6 +25,8 @@ use App\Http\Controllers\DashboardController;
 
 Route::view('/', 'pages.home')->name('home');
 
+Route::get('/generate-pdf', [PageController::class, 'generatePdf']);
+
 Route::get('/pruebas', [PageController::class, 'pruebas']);
 
 Route::controller(PageController::class)->group(function () {

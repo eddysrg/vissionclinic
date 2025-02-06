@@ -11,8 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('states', function (Blueprint $table) {
-            $table->string('state_code')->after('name')->nullable();
+        Schema::create('procedures', function (Blueprint $table) {
+            $table->id();
+            $table->string('catalog_key');
+            $table->string('name');
+            $table->timestamps();
         });
     }
 
@@ -21,8 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('states', function (Blueprint $table) {
-            $table->dropColumn('state_code');
-        });
+        Schema::dropIfExists('procedures');
     }
 };

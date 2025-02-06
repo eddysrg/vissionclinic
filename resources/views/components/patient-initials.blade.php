@@ -5,7 +5,7 @@
 ])
 
 @php
-if($patient->gender === 'male') {
+if($patient->gender === 'H') {
 $classes.= ' bg-[#174075] text-white';
 } else {
 $classes.= ' bg-[#41759D40] text-[#41759D]';

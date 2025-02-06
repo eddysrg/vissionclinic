@@ -52,12 +52,12 @@
                                 <a href="{{route('profile')}}">Mi perfil</a>
                             </li>
 
-                            @if (auth()->user()->role_id === 1 )
+                            {{-- @if (auth()->user()->role_id === 1 )
                             <li
                                 class="text-white p-3 hover:bg-slate-300 hover:rounded-md hover:duration-300 hover:text-[#41759D]">
                                 <a href="{{route('manageUsers')}}">Administrar usuarios</a>
                             </li>
-                            @endif
+                            @endif --}}
 
                         </ul>
                     </div>

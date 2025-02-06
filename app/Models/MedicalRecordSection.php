@@ -23,4 +23,9 @@ class MedicalRecordSection extends Model
     {
         return $this->hasOne(IdentificationForm::class, 'medical_record_sections_id');
     }
+
+    public function medicalConsultation()
+    {
+        return $this->hasMany(Consultation::class, 'medical_record_sections_id');
+    }
 }

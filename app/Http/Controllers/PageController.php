@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\RouteName;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class PageController extends Controller
@@ -85,53 +86,24 @@ class PageController extends Controller
         return view('pages.contacto');
     }
 
-    // public function pruebas()
-    // {
+    public function generatePdf()
+    {
+        $data = [
+            'name' => 'John Doe',
+        ];
 
-    //     $jsonPath = storage_path('app/public/countries.json');
+        $pdf = Pdf::loadView('pdf.custom', $data);
 
-    //     $countries = json_decode(file_get_contents($jsonPath), true);
-
-    //     return view('pages.pruebas', ['countries' => $countries['countries']]);
-    // }
-
-    // public function pruebas()
-    // {
-
-    //     $csvPath = storage_path('app/aguascalientes.csv');
-
-    //     $file = fopen($csvPath, 'r');
-    //     $header = fgetcsv($file);
-
-    //     while(($row = fgetcsv($file)) !== false) {
-    //         echo "<pre>";
-    //         var_dump($row);
-    //         echo "</pre>";
-            
-    //     }
-
-    //     fclose($file);
-
-    //     return view('pages.pruebas');
-    // }
+        return $pdf->stream('custom.pdf');
+    }
 
     public function pruebas()
     {
 
-        $csvPath = storage_path('app/colima.csv');
+        $data = [
+            'name' => 'John Doe',
+        ];
 
-        $file = fopen($csvPath, 'r');
-        $header = fgetcsv($file);
-
-        while(($row = fgetcsv($file)) !== false) {
-            echo "<pre>";
-            var_dump($row[0]);
-            echo "</pre>";
-            
-        }
-
-        fclose($file);
-
-        return view('pages.pruebas');
+        return view('pages.pruebas', $data);
     }
 }

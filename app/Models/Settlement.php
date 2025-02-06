@@ -28,6 +28,7 @@ class Settlement extends Model
 
     public function state()
     {
-        return $this->belongsTo(State::class);
+        return $this->belongsTo(State::class, 'states_id');
     }
+
 }

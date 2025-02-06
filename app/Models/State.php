@@ -20,4 +20,9 @@ class State extends Model
     {
         return $this->hasMany(Municipality::class);
     }
+
+    public function settlements()
+    {
+        return $this->hasMany(Settlement::class);
+    }
 }

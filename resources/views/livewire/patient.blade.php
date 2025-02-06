@@ -88,7 +88,6 @@ new class extends Component {
         $this->clearForm();
     }
 
-
     public function clearForm()
     {
         $this->isEditing = false;

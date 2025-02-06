@@ -83,9 +83,9 @@ new class extends Component {
 
     <x-modal :show="false" clean="cleanSearch()" name="addDiagnosis" maxWidth="3xl">
         <section>
-            <label for="procedureSearch" class="block font-semibold">Nombre del procedimiento o código CIE-10</label>
+            <label for="diagnosesSearch" class="block font-semibold">Nombre de la enfermedad o código CIE-10</label>
             <div class="flex items-center gap-3">
-                <input wire:model='searchInput' type="text" id="procedureSearch" class="border-none bg-zinc-200 rounded-md py-1 flex-1">
+                <input wire:model='searchInput' type="text" id="diagnosesSearch" class="border-none bg-zinc-200 rounded-md py-1 flex-1">
                 <button wire:click.prevent='search' class="bg-[#41759D] py-2 px-5 rounded text-white text-xs">Buscar diagnóstico</button>
             </div>
     
@@ -150,7 +150,7 @@ new class extends Component {
             </tr>
         </thead>
 
-        <tbody>
+        <tbody class="bg-zinc-200">
             @forelse ($diagnosisOfDiseases as $disease)
                 <tr>
                     <td class="p-2 text-sm text-center font-semibold">{{$disease['catalog_key']}}</td>

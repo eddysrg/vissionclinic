@@ -15,7 +15,7 @@ class CountrySeeder extends Seeder
      */
     public function run(): void
     {
-        $jsonPath = storage_path('app/public/countries.json');
+        $jsonPath = public_path('catalogs/countries.json');
 
         if(File::exists($jsonPath)) {
             $countries = json_decode(File::get($jsonPath), true);

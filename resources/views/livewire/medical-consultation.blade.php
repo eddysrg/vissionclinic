@@ -3,23 +3,27 @@
 use Livewire\Volt\Component;
 use Carbon\Carbon;
 use App\Livewire\Forms\MedicalConsultationForm;
+use App\Models\Patient;
+
 
 new class extends Component {
 
-    protected $listeners = ['setDiagnosisOfDiseases', 'removeDisease'];
+    protected $listeners = ['setDiagnosisOfDiseases', 'removeDisease', 'setMedicalProcedures', 'removeProcedure'];
    
     public MedicalConsultationForm $form;
 
+    public Patient $patient;
+
     public function save()
     {
-
-        if(empty($this->form->diseases)) {
-            $this->dispatch('diagnosis-alert', message: "Debes seleccionar un diagnóstico de enfermedad del catálogo");
+        if(empty($this->form->diseases) || empty($this->form->procedures)) {
+            $this->dispatch('diagnosis-alert', message: "Debes seleccionar un diagnóstico de enfermedad y/o procedimiento médico del catálogo");
             return;
         }
         
         $this->form->store();
 
+        $this->dispatch('show-notification', message: 'Consulta médica registrada con éxito');
     }
 
     public function setDiagnosisOfDiseases($diagnosisOfDiseases)
@@ -32,9 +36,23 @@ new class extends Component {
         $this->form->diseases = collect($this->form->diseases)->reject(fn($item) => $item['id'] === $id)->toArray();
     }
 
+    public function setMedicalProcedures($medicalProcedures)
+    {
+        $this->form->procedures = $medicalProcedures;
+    }
+
+    public function removeProcedure($id)
+    {
+        $this->form->procedures = collect($this->form->procedures)->reject(fn($item) => $item['id'] === $id)->toArray();
+    }
+
     public function mount()
     {
         $this->form->setMedicalData();
+
+        $this->form->medicalRecordSectionId = Patient::with(['record.medicalRecordSections' => function ($query) {
+            $query->where('name', 'medical_consultation');
+        }])->findOrFail($this->patient->id)->record->medicalRecordSections->first()->id;
     }
 }; ?>
 
@@ -160,6 +178,7 @@ new class extends Component {
         </section>
 
         @livewire('diagnosis-of-diseases')
+        @livewire('medical-procedures')
 
         <section class="grid grid-cols-2 gap-4 mt-10">
             <fieldset>
@@ -200,39 +219,72 @@ new class extends Component {
 
 @script
 <script>
-    $wire.on('saved', (event) => {
-        console.log(event);
-    });
-
     document.addEventListener('livewire:initialized', function () {
-        const heightInput = document.getElementById('height');
-        const weightInput = document.getElementById('weight');
+        let heightInput = document.getElementById('height');
+        let weightInput = document.getElementById('weight');
+        let imc = document.getElementById('imc');
 
-        let heightWeight = [heightInput, weightInput];
+        heightInput.addEventListener('input', heightFormat);
+        weightInput.addEventListener('input', weightFormat);
+        heightInput.addEventListener('blur', calculateIMC);
+        weightInput.addEventListener('blur', calculateIMC);
 
-        calculateIMC();
+        function weightFormat(e) {
 
-        heightInput.addEventListener('input', (e) => {
-            const value = e.target.value;
+            let input = e.target;
+            let value = input.value;
 
-            if(!/^\d+(\.\d{0,2})?$/.test(value)) {
-                e.target.value = value.slice(0, -1);
+            // Remove any non-numeric characters
+            let numericValue = value.replace(/\D/g, '');
+
+            // Limit the numeric value to 3 digits
+            numericValue = numericValue.slice(0, 3);
+
+            // Update the input value
+            input.value = numericValue;
+        }
+
+        function heightFormat(e) {
+
+            let input = e.target;
+            let value = input.value;
+
+            // Remove any non-numeric characters except the decimal point
+            let cleanedValue = value.replace(/[^0-9.]/g, '');
+
+            // Ensure only one decimal point is allowed
+            let decimalParts = cleanedValue.split('.');
+            if (decimalParts.length > 2) {
+                // If more than one decimal point, keep only the first one
+                cleanedValue = decimalParts[0] + '.' + decimalParts.slice(1).join('');
             }
-        });
 
-        heightWeight.forEach(element => {
-            element.addEventListener('change', (e) => {
-                calculateIMC();
-            });
-        });
-
-        function calculateIMC(elements) {
-            if(heightInput.value && weightInput.value) {
-                const imc = weightInput.value / Math.pow(heightInput.value, 2);
-                $wire.imc = imc.toFixed(2);
+            // Limit the integer part to 1 digit and the decimal part to 2 digits
+            if (decimalParts.length > 1) {
+                cleanedValue = decimalParts[0].slice(0, 1) + '.' + decimalParts[1].slice(0, 2);
+            } else {
+                cleanedValue = decimalParts[0].slice(0, 1);
             }
 
-            return;
+            // Update the input value
+            input.value = cleanedValue;
+        }
+        
+
+        function calculateIMC() {
+
+            let height = parseFloat(heightInput.value);
+            let weight = parseFloat(weightInput.value); 
+
+            if(isNaN(weight) || weight <= 0 || isNaN(height) || height <= 0) {
+                return;
+            }
+
+            //Calculate BMI
+            let bmi = (weight / (height * height)).toFixed(2);
+
+            //Display the result
+            $wire.form.imc = bmi;
         }
     });
 </script>

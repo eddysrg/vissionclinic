@@ -30,8 +30,10 @@ class DatabaseSeeder extends Seeder
             UsersSeeder::class,
             CountrySeeder::class,
             LocalitiesSeeder::class,
+            StateCodesSeeder::class,
             TypeRecordSeeder::class,
             DiagnosesSeeder::class,
+            ProceduresSeeder::class
         ]);
     }
 }
