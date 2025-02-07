@@ -28,4 +28,9 @@ class MedicalRecordSection extends Model
     {
         return $this->hasMany(Consultation::class, 'medical_record_sections_id');
     }
+
+    public function laboratories()
+    {
+        return $this->hasMany(Laboratory::class, 'medical_record_sections_id');
+    }
 }
