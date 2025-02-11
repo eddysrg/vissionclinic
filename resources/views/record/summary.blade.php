@@ -102,7 +102,7 @@
         <h2 class="px-5 bg-[#174075] text-white">Referencias</h2>
         <div class="bg-white p-4">
             <div class="flex justify-end">
-                <button class="bg-[#174075] text-white px-5 py-1 rounded-full">Nueva referencia</button>
+                <a href="{{route('dashboard.expedientes.reference', ['id' => $patient->id])}}" class="bg-[#174075] text-white px-5 py-1 rounded-full">Nueva referencia</a>
             </div>
 
             <div class="mt-5">

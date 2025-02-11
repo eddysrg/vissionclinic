@@ -33,4 +33,9 @@ class MedicalRecordSection extends Model
     {
         return $this->hasMany(Laboratory::class, 'medical_record_sections_id');
     }
+
+    public function references()
+    {
+        return $this->hasMany(Reference::class, 'medical_record_sections_id');
+    }
 }
