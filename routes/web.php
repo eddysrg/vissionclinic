@@ -2,9 +2,7 @@
 
 use App\Models;
 use App\Models\Clinic;
-use Spatie\Sitemap\Sitemap;
-use Spatie\Sitemap\Tags\Url;
-use Illuminate\Support\Facades\DB;
+use Livewire\Volt\Volt;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\UserController;
@@ -23,19 +21,24 @@ use App\Http\Controllers\DashboardController;
 |
 */
 
-Route::view('/', 'pages.home')->name('home');
+Volt::route('/', 'pages.home.home')->name('home');
+Volt::route('/ece/nivel-uno', 'pages.home.ece-first')->name('ece-first');
+Volt::route('/ece/nivel-dos', 'pages.home.ece-second')->name('ece-second');
+Volt::route('/mvs', 'pages.home.mvs')->name('mvs');
+Volt::route('/lyrium', 'pages.home.lyrium')->name('lyrium');
+Volt::route('/productos', 'pages.home.products')->name('products');
+Volt::route('/productos/laboratorio', 'pages.home.products.laboratorio')->name('laboratorio');
+Volt::route('/productos/ingresos', 'pages.home.products.ingresos')->name('ingresos');
+Volt::route('/productos/medical-view-system', 'pages.home.products.mvs')->name('medicalViewSystem');
+Volt::route('/productos/odontologia', 'pages.home.products.odontologia')->name('odontologia');
+Volt::route('/productos/nutricion', 'pages.home.products.nutricion')->name('nutricion');
+Volt::route('/productos/ginecologia', 'pages.home.products.ginecologia')->name('ginecologia');
+Volt::route('/contacto', 'pages.home.contact')->name('contacto');
 
-Route::get('/generate-pdf', [PageController::class, 'generatePdf']);
-
-Route::get('/pruebas', [PageController::class, 'pruebas']);
 
 Route::controller(PageController::class)->group(function () {
-    Route::get('/lyrium', 'lyrium')->name('lyrium');
-    Route::get('/ece/{nivel}', 'ece')->name('ece');
-    Route::get('/mvs', 'mvs')->name('mvs');
-    Route::get('/productos', 'productos')->name('productos');
-    Route::get('/productos/{producto}', 'producto')->name('producto');
-    Route::get('/contacto', 'contacto')->name('contacto');
+    // Route::get('/productos', 'productos')->name('productos');
+    // Route::get('/productos/{producto}', 'producto')->name('producto');
 });
 
 Route::get('dashboard', [DashboardController::class, 'index'])
@@ -45,10 +48,6 @@ Route::get('dashboard', [DashboardController::class, 'index'])
 Route::view('dashboard/expedientes', 'record.records')
     ->middleware('auth')
     ->name('dashboard.expedientes');
-
-/* Route::get('dashboard/expedientes/{id}', [RecordController::class, 'show'])
-    ->middleware('auth')
-    ->name('dashboard.expedientes.show'); */
 
 Route::prefix('dashboard/expedientes/{id}')
     ->name('dashboard.expedientes.')

@@ -1,11 +1,36 @@
-<x-guest-layout>
+<?php
 
-    <x-slot name="meta">
-        <title>Ginecología | Vission Clinic ECE</title>
-        <meta name="description" content="Vission Clinic ECE para ginecólogos.">
-        <link rel="canonical" href="{{ url()->current() }}">
-        <meta name="robots" content="index,follow">
-    </x-slot>
+use Livewire\Volt\Component;
+use Livewire\Attributes\{Layout, Title};
+
+
+new 
+#[Layout('layouts.website')] 
+#[Title('Ginecología - VissionClinic')]
+class extends Component {
+    //
+}; ?>
+
+<x-slot:meta_description>
+    Vission Clinic ECE para ginecólogos.
+</x-slot>
+
+<x-slot:meta_keywords>
+    VissionClinic, Expediente clínico 
+</x-slot>
+
+<x-slot:meta_robots>
+    index,follow
+</x-slot>
+
+<x-slot:meta_canonical>
+    {{url()->current()}}
+</x-slot>
+
+<main>
+    <div class="bg-[#0144E8] py-8 xl:py-0 xl:h-80 flex flex-col justify-center items-center gap-3">
+        <h1 class="text-3xl xl:text-6xl text-white uppercase">Ginecología</h1>
+    </div>
 
     <div>
         <div class="grid grid-cols-1">
@@ -106,4 +131,4 @@
         </div>
 
     </div>
-</x-guest-layout>
+</main>

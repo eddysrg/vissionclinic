@@ -1,4 +1,37 @@
-<x-guest-layout>
+<?php
+
+use Livewire\Volt\Component;
+use Livewire\Attributes\{Layout, Title};
+
+
+new 
+#[Layout('layouts.website')] 
+#[Title('MVS - VissionClinic')]
+class extends Component {
+    //
+}; ?>
+
+<x-slot:meta_description>
+    Modulo MVS de Vission Clinic ECE.
+</x-slot>
+
+<x-slot:meta_keywords>
+    VissionClinic, Expediente clínico 
+</x-slot>
+
+<x-slot:meta_robots>
+    index,follow
+</x-slot>
+
+<x-slot:meta_canonical>
+    {{url()->current()}}
+</x-slot>
+
+<main>
+    <div class="bg-[#0144E8] py-8 xl:py-0 xl:h-80 flex flex-col justify-center items-center gap-3">
+        <h1 class="text-3xl xl:text-6xl text-white uppercase">Medical View System</h1>
+    </div>
+
     <div>
         <div class="grid grid-cols-1">
             <div class="w-full md:h-[25rem] bg-red-500 col-start-1 col-end-2 row-start-1 row-end-2">
@@ -65,4 +98,4 @@
         </div>
 
     </div>
-</x-guest-layout>
+</main>

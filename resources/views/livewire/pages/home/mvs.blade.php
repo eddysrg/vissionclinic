@@ -1,18 +1,38 @@
-@php
-$cardMvsClasses = 'bg-[#0A125E] text-white px-3 py-5 md:p-5 rounded-lg text-center flex justify-center items-center
-shadow-xl';
-$arrowStyle = 'fa-solid fa-arrow-right text-3xl md:text-5xl text-[#0A125E]';
-@endphp
+<?php
 
-<x-guest-layout>
+use Livewire\Volt\Component;
+use Livewire\Attributes\{Layout, Title};
 
-    <x-slot name="meta">
-        <title>Medical View System | Vission Clinic</title>
-        <meta name="description"
-            content="Medical View System es una colección de servicios inteligentes de software, basados en procesos de ETL.">
-        <link rel="canonical" href="{{ url()->current() }}">
-        <meta name="robots" content="index,follow">
-    </x-slot>
+new 
+#[Layout('layouts.website')] 
+#[Title('Medical View System - VissionClinic')]
+class extends Component {
+    public $cardMvsClasses = 'bg-[#0A125E] text-white px-3 py-5 md:p-5 rounded-lg text-center flex justify-center items-center
+    shadow-xl';
+    public $arrowStyle = 'fa-solid fa-arrow-right text-3xl md:text-5xl text-[#0A125E]';
+}; ?>
+
+<x-slot:meta_description>
+    Medical View System es una colección de servicios inteligentes de software, basados en procesos de ETL.
+</x-slot>
+
+<x-slot:meta_keywords>
+    VissionClinic, Expediente clínico 
+</x-slot>
+
+<x-slot:meta_robots>
+    index,follow
+</x-slot>
+
+<x-slot:meta_canonical>
+    {{url()->current()}}
+</x-slot>
+
+<main>
+    <div class="bg-[#0144E8] py-8 xl:py-0 xl:h-80 flex flex-col justify-center items-center gap-3">
+        <h1 class="text-3xl xl:text-6xl text-white uppercase">Medical View System</h1>
+        <p class="text-3xl xl:text-6xl text-white uppercase">MVS</p>
+    </div>
 
     <div class="md:w-2/3 px-8 md:px-0 md:grid md:grid-cols-[.5fr_.3fr_.5fr] md:grid-rows-[.2fr_1fr] py-8 mx-auto">
         <div class="col-start-1 col-end-3 row-start-1 row-end-3">
@@ -20,16 +40,16 @@ $arrowStyle = 'fa-solid fa-arrow-right text-3xl md:text-5xl text-[#0A125E]';
         </div>
 
         <div class="
-    bg-[#0144E8] 
-    text-slate-200 
-    p-8 col-start-2 
-    col-end-4 
-    row-start-2 
-    row-end-3 
-    text-lg 
-    flex
-    items-center 
-    justify-center">
+        bg-[#0144E8] 
+        text-slate-200 
+        p-8 col-start-2 
+        col-end-4 
+        row-start-2 
+        row-end-3 
+        text-lg 
+        flex
+        items-center 
+        justify-center">
             <p>
                 <span class="font-medium text-white">Medical View System</span> es una colección de servicios
                 inteligentes
@@ -170,8 +190,8 @@ $arrowStyle = 'fa-solid fa-arrow-right text-3xl md:text-5xl text-[#0A125E]';
                 </div>
             </div>
 
-            <a href="{{route('producto', ['producto' => 'medical-view-system'])}}"
-                class="text-white uppercase bg-[#0144E8] p-5 rounded-lg self-center md:self-end">Más información</a>
+            {{-- <a href="{{route('producto', ['producto' => 'medical-view-system'])}}"
+                class="text-white uppercase bg-[#0144E8] p-5 rounded-lg self-center md:self-end">Más información</a> --}}
         </div>
     </div>
-</x-guest-layout>
+</main>

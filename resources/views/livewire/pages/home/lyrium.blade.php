@@ -1,10 +1,36 @@
-<x-guest-layout>
-    <x-slot name="meta">
-        <title>Lyrium | Vission Clinic</title>
-        <meta name="description" content="Lyrium es el asistente de Inteligencia Avanzada ubicado en la nube.">
-        <link rel="canonical" href="{{ url()->current() }}">
-        <meta name="robots" content="index,follow">
-    </x-slot>
+<?php
+
+use Livewire\Volt\Component;
+use Livewire\Attributes\{Layout, Title};
+
+
+new 
+#[Layout('layouts.website')] 
+#[Title('Lyrium - VissionClinic')]
+class extends Component {
+    //
+}; ?>
+
+<x-slot:meta_description>
+    Lyrium es el asistente de Inteligencia Avanzada ubicado en la nube.
+</x-slot>
+
+<x-slot:meta_keywords>
+    VissionClinic, Expediente clínico 
+</x-slot>
+
+<x-slot:meta_robots>
+    index,follow
+</x-slot>
+
+<x-slot:meta_canonical>
+    {{url()->current()}}
+</x-slot>
+
+<main>
+    <div class="bg-[#0144E8] py-8 xl:py-0 xl:h-80 flex flex-col justify-center items-center gap-3">
+        <h1 class="text-3xl xl:text-6xl text-white uppercase">Lyrium</h1>
+    </div>
 
     <div class="w-full">
         <img class="w-full block" src="{{asset('images/lyrium_site.png')}}" alt="">
@@ -27,4 +53,4 @@
             </div>
         </div>
     </div>
-</x-guest-layout>
+</main>

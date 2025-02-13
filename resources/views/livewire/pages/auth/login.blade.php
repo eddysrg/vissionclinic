@@ -21,12 +21,24 @@ new #[Layout('layouts.guest')] class extends Component
 
         Session::regenerate();
 
+        $this->dispatch('load-spinner');
+
         $this->redirectIntended(default: RouteServiceProvider::HOME, navigate: true);
     }
 }; ?>
 
 <div
-    class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gradient-to-b from-[#ffffff] via-[#0e58c4] via-63% to-[#090a14] to-76%">
+    class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gradient-to-b from-[#ffffff] via-[#0e58c4] via-63% to-[#090a14] to-76% relative">
+
+    <div x-data="{showSpinner: false}" x-on:load-spinner.window="showSpinner = true; setTimeout(() => showSpinner = false, 2000);">
+        <span x-show="showSpinner" id="spinner" class="spinner bg-gray-600 absolute inset-0 opacity-85 flex justify-center items-center">
+            <div>
+                <i class="fa-solid fa-spinner fa-spin text-6xl text-[#0D418F]"></i>
+            </div>
+        </span>
+    </div>
+
+    
 
     <h1 class="text-5xl uppercase text-[#070C3D]">Expediente Clínico Electrónico</h1>
 
@@ -43,6 +55,7 @@ new #[Layout('layouts.guest')] class extends Component
             <x-auth-session-status class="mb-4" :status="session('status')" />
 
             <form wire:submit="login">
+            {{-- <form> --}}
                 <!-- Name -->
                 <div>
                     <x-input-label for="username" :value="__('Usuario')" class="text-white" />
@@ -62,7 +75,7 @@ new #[Layout('layouts.guest')] class extends Component
                 </div>
 
                 <div class="flex items-center justify-end mt-10">
-                    <x-login-button>
+                    <x-login-button id="quiubolas">
                         {{ __('Log in') }}
                     </x-login-button>
                 </div>

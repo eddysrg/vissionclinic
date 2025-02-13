@@ -74,12 +74,12 @@ new class extends Component {
                             <ul class="space-y-6 text-sm">
                                 <li class="hover:text-[#0A125E] duration-500">
                                     <i class="fa-solid fa-chevron-right mr-2"></i>
-                                    <a href="{{route('ece', ['nivel' => 'nivel-uno'])}}">Nivel 1</a>
+                                    <a href="{{route('ece-first')}}">Nivel 1</a>
                                 </li>
 
                                 <li class="hover:text-[#0A125E] duration-500">
                                     <i class="fa-solid fa-chevron-right mr-2"></i>
-                                    <a href="{{route('ece', ['nivel' => 'nivel-dos'])}}">Nivel 2</a>
+                                    <a href="{{route('ece-second')}}">Nivel 2</a>
                                 </li>
                             </ul>
                         </div>
@@ -108,38 +108,37 @@ new class extends Component {
 
                                 <li class="hover:text-[#0A125E] duration-500">
                                     <i class="fa-solid fa-chevron-right mr-2"></i>
-                                    <a href="{{route('productos')}}">Todos los productos</a>
+                                    <a href="{{route('products')}}">Todos los productos</a>
                                 </li>
 
                                 <li class="hover:text-[#0A125E] duration-500">
                                     <i class="fa-solid fa-chevron-right mr-2"></i>
-                                    <a href="{{route('producto', ['producto' => 'laboratorio'])}}">Laboratorio</a>
+                                    <a href="{{route('laboratorio')}}">Laboratorio</a>
                                 </li>
 
                                 <li class="hover:text-[#0A125E] duration-500">
                                     <i class="fa-solid fa-chevron-right mr-2"></i>
-                                    <a href="{{route('producto', ['producto' => 'ingresos'])}}">Ingresos</a>
+                                    <a href="{{route('ingresos')}}">Ingresos</a>
                                 </li>
 
                                 <li class="hover:text-[#0A125E] duration-500">
                                     <i class="fa-solid fa-chevron-right mr-2"></i>
-                                    <a href="{{route('producto', ['producto' => 'medical-view-system'])}}">Medical View
-                                        System</a>
+                                    <a href="{{route('medicalViewSystem')}}">Medical View System</a>
                                 </li>
 
                                 <li class="hover:text-[#0A125E] duration-500">
                                     <i class="fa-solid fa-chevron-right mr-2"></i>
-                                    <a href="{{route('producto', ['producto' => 'odontologia'])}}">Odontología</a>
+                                    <a href="{{route('odontologia')}}">Odontología</a>
                                 </li>
 
                                 <li class="hover:text-[#0A125E] duration-500">
                                     <i class="fa-solid fa-chevron-right mr-2"></i>
-                                    <a href="{{route('producto', ['producto' => 'nutricion'])}}">Nutrición</a>
+                                    <a href="{{route('nutricion')}}">Nutrición</a>
                                 </li>
-
+                                
                                 <li class="hover:text-[#0A125E] duration-500">
                                     <i class="fa-solid fa-chevron-right mr-2"></i>
-                                    <a href="{{route('producto', ['producto' => 'ginecologia'])}}">Ginecología</a>
+                                    <a href="{{route('ginecologia')}}">Ginecología</a>
                                 </li>
                             </ul>
                         </div>
@@ -187,11 +186,11 @@ new class extends Component {
                                 style="display: none">
                                 <ul class="space-y-6 text-xs pl-5 list-disc ml-2">
                                     <li>
-                                        <a href="{{route('ece', ['nivel' => 'nivel-uno'])}}">Nivel 1</a>
+                                        <a href="{{route('ece-first')}}">Nivel 1</a>
                                     </li>
 
                                     <li>
-                                        <a href="{{route('ece', ['nivel' => 'nivel-dos'])}}">Nivel 2</a>
+                                        <a href="{{route('ece-second')}}">Nivel 2</a>
                                     </li>
                                 </ul>
                             </div>
@@ -224,33 +223,31 @@ new class extends Component {
                                 <ul class="space-y-6 text-xs pl-5 list-disc ml-2">
 
                                     <li>
-                                        <a href="{{route('productos')}}">Todos los productos</a>
+                                        <a href="{{route('products')}}">Todos los productos</a>
                                     </li>
 
                                     <li>
-                                        <a href="{{route('producto', ['producto' => 'laboratorio'])}}">Laboratorio</a>
+                                        <a href="{{route('laboratorio')}}">Laboratorio</a>
                                     </li>
 
                                     <li>
-                                        <a href="{{route('producto', ['producto' => 'ingresos'])}}">Ingresos</a>
+                                        <a href="{{route('ingresos')}}">Ingresos</a>
                                     </li>
 
                                     <li>
-                                        <a href="{{route('producto', ['producto' => 'medical-view-system'])}}">Medical
-                                            View
-                                            System</a>
+                                        <a href="{{route('medicalViewSystem')}}">Medical View System</a>
                                     </li>
 
                                     <li>
-                                        <a href="{{route('producto', ['producto' => 'odontologia'])}}">Odontología</a>
+                                        <a href="{{route('odontologia')}}">Odontología</a>
                                     </li>
 
                                     <li>
-                                        <a href="{{route('producto', ['producto' => 'nutricion'])}}">Nutrición</a>
+                                        <a href="{{route('nutricion')}}">Nutrición</a>
                                     </li>
 
                                     <li>
-                                        <a href="{{route('producto', ['producto' => 'ginecologia'])}}">Ginecología</a>
+                                        <a href="{{route('ginecologia')}}">Ginecología</a>
                                     </li>
                                 </ul>
                             </div>
@@ -260,10 +257,6 @@ new class extends Component {
                     </ul>
                 </div>
             </div>
-
-
-
-
 
             <div class="flex items-center gap-4">
                 <div class="flex gap-2">
@@ -292,12 +285,5 @@ new class extends Component {
                 </a>
             </div>
         </nav>
-
-        @unless(request()->routeIs('home'))
-        <div class="py-8 xl:py-0 xl:h-80 flex flex-col justify-center items-center gap-3">
-            <h1 class="text-3xl xl:text-6xl text-white uppercase">{{session('title')}}</h1>
-            <p class="text-3xl xl:text-6xl text-white uppercase">{{session('subtitle')}}</p>
-        </div>
-        @endunless
     </header>
 </div>
