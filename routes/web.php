@@ -21,6 +21,7 @@ use App\Http\Controllers\DashboardController;
 |
 */
 
+// Website routes
 Volt::route('/', 'pages.home.home')->name('home');
 Volt::route('/ece/nivel-uno', 'pages.home.ece-first')->name('ece-first');
 Volt::route('/ece/nivel-dos', 'pages.home.ece-second')->name('ece-second');
@@ -33,75 +34,34 @@ Volt::route('/productos/medical-view-system', 'pages.home.products.mvs')->name('
 Volt::route('/productos/odontologia', 'pages.home.products.odontologia')->name('odontologia');
 Volt::route('/productos/nutricion', 'pages.home.products.nutricion')->name('nutricion');
 Volt::route('/productos/ginecologia', 'pages.home.products.ginecologia')->name('ginecologia');
-Volt::route('/contacto', 'pages.home.contact')->name('contacto');
+Volt::route('/contacto', 'pages.home.contact')->name('contacto');   
 
+// Dashboard routes
+Volt::route('dashboard', 'pages.record.dashboard')->middleware(['auth', 'verified'])->name('dashboard');
+Volt::route('dashboard/expedientes', 'pages.record.records')->middleware('auth')->name('dashboard.expedientes');
+Volt::route('dashboard/agenda', 'pages.record.agenda')->middleware('auth')->name('dashboard.agenda');
 
-Route::controller(PageController::class)->group(function () {
-    // Route::get('/productos', 'productos')->name('productos');
-    // Route::get('/productos/{producto}', 'producto')->name('producto');
-});
-
-Route::get('dashboard', [DashboardController::class, 'index'])
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
-
-Route::view('dashboard/expedientes', 'record.records')
-    ->middleware('auth')
-    ->name('dashboard.expedientes');
-
+// Dashboard [record] routes
 Route::prefix('dashboard/expedientes/{id}')
-    ->name('dashboard.expedientes.')
+    ->name('dashboard.record.')
     ->middleware('auth')
     ->group(function () {
 
-        Route::get('resumen', [RecordController::class, 'summary'])
-        ->name('summary');
+        Volt::route('resumen', 'pages.record.medical-record.summary')->name('summary');
+        Volt::route('consulta-medica', 'pages.record.medical-record.medical-consultation')->name('medical-consultation');
+        Volt::route('laboratorio', 'pages.record.medical-record.laboratory')->name('laboratory');
+        Volt::route('referencia', 'pages.record.medical-record.reference')->name('reference');
+        Volt::route('recetario', 'pages.record.medical-record.prescription')->name('prescription');
+        Volt::route('archivo-digital', 'pages.record.medical-record.digital-file')->name('digital-file');
 
-        Route::prefix('medical-record')
-        ->name('medical-record.')
-        ->group(function () {
-            Route::get('identification-form', [RecordController::class, 'identificationForm'])
-                ->name('identification-form');
 
-            Route::get('family-medical-history', [RecordController::class, 'familyMedicalHistory'])
-                ->name('family-medical-history');
-
-            Route::get('pathological-history', [RecordController::class, 'pathologicalHistory'])
-                ->name('pathological-history');
-
-            Route::get('no-pathological-history', [RecordController::class, 'noPathologicalHistory'])
-                ->name('no-pathological-history');
-
-            Route::get('physical_examination', [RecordController::class, 'physicalExamination'])
-                ->name('physical-examination');
-        });
-
-        Route::get('medical-consultation', [RecordController::class, 'medicalConsultation'])
-        ->name('medicalConsultation');
-
-        Route::get('laboratory', [RecordController::class, 'laboratory'])
-        ->name('laboratory');
-
-        Route::get('reference', [RecordController::class, 'reference'])
-        ->name('reference');
-
-        Route::get('prescription-register', [RecordController::class, 'prescriptionRegister'])
-        ->name('prescriptionRegister');
-
-        Route::get('digital-file', [RecordController::class, 'digitalFile'])
-        ->name('digitalFile');
-
-        Route::get('medical-record', [RecordController::class, 'medicalRecord'])
-        ->name('medicalRecord');
+        // clinical history routes
+        Volt::route('ficha-identificacion', 'pages.record.medical-record.identification-form')->name('identification-form');
+        Volt::route('antecedentes-heredofamiliares', 'pages.record.medical-record.hereditary-family-history')->name('hereditary-family-history');
+        Volt::route('antecedentes-patologicos', 'pages.record.medical-record.pathological-history')->name('pathological-history');
+        Volt::route('antecedentes-no-patologicos', 'pages.record.medical-record.non-pathological-history')->name('non-pathological-history');
+        Volt::route('exploracion-fisica', 'pages.record.medical-record.physical-examination')->name('physical-examination');
     });
-
-/* Route::get('dashboard/expedientes/{id}/medical-record', [RecordController::class, 'medicalRecord'])
-    ->middleware('auth')
-    ->name('dashboard.expedientes.medicalRecord'); */
-
-Route::view('dashboard/agenda', 'record.schedule')
-    ->middleware('auth')
-    ->name('dashboard.agenda');
 
 Route::get('manage-users', [UserController::class, 'manageUsers'])
     ->middleware('auth')
@@ -114,5 +74,10 @@ Route::view('profile', 'profile')
 Route::post('/update-photo', [ProfileController::class, 'updatePhoto'])
     ->middleware(['auth'])
     ->name('photo.update');
+
+// Test route
+Route::get('/test', function () {
+    return view('layouts.pdf.print-prescription');
+});
 
 require __DIR__ . '/auth.php';

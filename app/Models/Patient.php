@@ -22,6 +22,14 @@ class Patient extends Model
         'curp'
     ];
 
+    public function scopeMedicalSections($query, $patientId)
+    {
+        return $query->with('record.medicalRecordSections')
+            ->find($patientId)
+            ->record
+            ->medicalRecordSections;
+    }
+
     public function appointment()
     {
         return $this->hasMany(Appointment::class);

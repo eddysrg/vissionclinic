@@ -38,4 +38,14 @@ class MedicalRecordSection extends Model
     {
         return $this->hasMany(Reference::class, 'medical_record_sections_id');
     }
+
+    public function prescriptions()
+    {
+        return $this->hasMany(Prescription::class, 'medical_record_sections_id');
+    }
+
+    public function digitalFiles()
+    {
+        return $this->hasMany(DigitalFile::class, 'medical_record_sections_id');
+    }
 }

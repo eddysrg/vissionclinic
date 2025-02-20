@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    {{$meta ?? ''}}
+    <title>{{ $title ?? 'Page Title' }}</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -19,11 +19,10 @@
     @if (request()->is('profile'))
     @vite('resources/js/profile.js')
     @endif
-
 </head>
 
 <body class="font-sans antialiased h-screen flex">
-    <livewire:layout.navigation />
+    @livewire('components.dashboard-nav')
 
     <section class="w-full h-full relative">
         <header class="bg-[#41759D] px-8 py-2 fixed z-10 top-0 right-0 w-full">
@@ -65,11 +64,11 @@
             </div>
         </header>
 
-        <main class="ml-52 mt-10">
+        <section class="xl:ml-52 mt-10">
             {{$slot}}
-        </main>
+        </section>
 
-        <div class="bg-[#174075] w-fit px-5 py-1 text-white fixed right-0 bottom-0 z-50">
+        <div class="bg-[#174075] w-fit px-5 py-1 text-white fixed right-0 bottom-0 z-50 hidden xl:block">
             <p class="text-sm">NOM-004-SSA3-2012 EXPEDIENTE CLÍNICO</p>
         </div>
     </section>
