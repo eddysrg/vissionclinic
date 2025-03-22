@@ -4,17 +4,16 @@ use Livewire\Volt\Component;
 use Livewire\Attributes\{Layout, Title};
 use Livewire\WithFileUploads;
 use App\Models\{Patient, DigitalFile};
+use Illuminate\View\View;
+
 
 
 new
-#[Layout('layouts.record')] 
 #[Title('Archivo Digital - Vission Clinic ECE')]
 class extends Component {
     use WithFileUploads;
 
     public $patient;
-    public $id;
-    public $medicalRecordSectionId;
 
     public $files = []; // Array para almacenar múltiples archivos
     public $fileInfos = []; // Array para almacenar información de los archivos
@@ -49,7 +48,7 @@ class extends Component {
         // Guardar cada archivo en el sistema de archivos
         foreach ($this->files as $file) {
             $path = $file->store('uploads');
-            
+
             DigitalFile::create([
                 'medical_record_sections_id' => $this->medicalRecordSectionId,
                 'name' => $file->getClientOriginalName(),
@@ -77,31 +76,24 @@ class extends Component {
     public function mount($id)
     {
         $this->patient = Patient::find($id);
-        $this->authorize('viewRecord', $this->patient);
-        $this->id = $id;
 
-        // Setting medical record section
-        $sections = Patient::MedicalSections($this->patient->id) ?? [];
+    }
 
-        $this->medicalRecordSectionId = $sections
-        ->where('name', 'digital_file')
-        ->first()?->id;
-
-        if($this->medicalRecordSectionId) {
-            $this->savedFiles = DigitalFile::where('medical_record_sections_id', $this->medicalRecordSectionId)
-            ->get();
-        }
-
+    public function rendering(View $view)
+    {
+        $view
+            ->layout('components.layout.record', [
+                'patient' => $this->patient,
+                'hasAppointment' => !$this->patient->appointments->isEmpty(),
+            ]);
     }
 }; ?>
 
 <div
     x-on:medicine-alert.window="alert($event.detail.message)" >
-    <x-slot:id>
-        {{$id}}
-    </x-slot>
 
-    <x-notification/>
+
+    <x-record-notification/>
 
     {{-- Start of component --}}
 
@@ -121,7 +113,7 @@ class extends Component {
         </div>
     @endif
 
-    
+
 
     <section class="grid grid-cols-2 gap-3 mt-5">
 
@@ -134,7 +126,7 @@ class extends Component {
                         <th class="p-2">Acción</th>
                     </tr>
                 </thead>
-    
+
                 <tbody>
                     @forelse ($savedFiles as $file)
                         <tr>
@@ -172,7 +164,7 @@ class extends Component {
                             <i class="fa-solid fa-file"></i>
                             {{$info['name']}}
                         </p>
-        
+
                         <p class="text-sm font-semibold">{{$info['size']}}</p>
                     </div>
                 @endforeach

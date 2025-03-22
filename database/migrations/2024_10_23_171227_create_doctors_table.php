@@ -12,8 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('doctors', function (Blueprint $table) {
+            $table->id();
+            $table->string('license_number');
+            $table->string('specialty');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->unique('user_id');
             $table->timestamps();
         });
     }

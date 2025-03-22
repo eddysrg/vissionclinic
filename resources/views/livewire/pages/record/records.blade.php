@@ -21,17 +21,19 @@ class extends Component {
     {
         $terms = explode(' ' ,$this->search);
 
-        return Patient::where('clinic_id', auth()->user()->clinic_id)
-        ->where(function($query) use ($terms) {
-            foreach ($terms as $term) {
-                $query->where(function($query) use ($term) {
-                    $query->where('name', 'LIKE', "%{$term}%")
-                    ->orWhere('father_last_name', 'LIKE', "%{$term}%")
-                    ->orWhere('mother_last_name', 'LIKE', "%{$term}%")
-                    ->orWhere('id', 'LIKE', "%{$term}%");
-                });
-            }
-        })->paginate(5);
+        return Patient::where('medical_unit_id', auth()->user()->medical_unit_id)
+        ->latest()
+        ->when($this->search, function ($query) {   
+            $terms = explode(' ' ,$this->search);
+
+            $query->where(function ($q) use ($terms) {
+                foreach ($terms as $term) {
+                    $q->orWhere('name', 'like', "{$term}%")
+                    ->orWhere('last_name', 'like', "{$term}%");
+                }
+            });
+        })
+        ->paginate(5);
     }
 
     public function updatingSearch()
@@ -48,6 +50,7 @@ class extends Component {
     {
         $this->search = '';
     }
+
 }; ?>
 
 <main class="p-8">
@@ -55,7 +58,14 @@ class extends Component {
     @livewire('components.appointment')
     <x-notification />
 
-    <x-patient-search />
+    <div class="flex gap-5">
+        <input 
+        wire:model.live='search' 
+        id="search-patient" 
+        type="text"
+        placeholder="Nombre | Apellido Materno | Apellido Paterno | N° de expediente"
+        class="w-full rounded-full border border-zinc-300">
+    </div>
 
     <div class="grid grid-cols-[1fr_.4fr] gap-x-8 mt-10">
         <section>
@@ -71,51 +81,50 @@ class extends Component {
 
                 <tbody>
                     @forelse ($this->searchPatient as $patient)
-                    <tr class="text-center bg-cyan-50">
-                        <td class="py-3">
-                            {{$patient->id}}
-                        </td>
+                        <tr class="text-center bg-cyan-50">
+                            <td class="py-3">
+                                {{$patient->id}}
+                            </td>
 
-                        <td class="py-3">
-                            <div class="flex justify-center items-center gap-5">
-                                <x-patient-initials :patient="$patient" />
+                            <td class="py-3">
+                                <div class="flex justify-center items-center gap-5">
+                                    <x-patient-initials :patient="$patient" size="8" fontSize="text-base" />
 
-                                <a href="{{route('dashboard.record.summary', $patient->id)}}"
-                                    class="text-[#32ADE6] underline uppercase">
-                                    {{$patient->name . ' ' . $patient->father_last_name . ' ' .
-                                    $patient->mother_last_name}}
-                                </a>
-                            </div>
-                        </td>
+                                    <a href="{{route('dashboard.record.summary', $patient->id)}}"
+                                        class="text-[#32ADE6] underline uppercase">
+                                        {{$patient->full_name}}
+                                    </a>
+                                </div>
+                            </td>
 
-                        <td class="py-3">
-                            {{$patient->phone_number}}
-                        </td>
+                            <td class="py-3">
+                                {{$patient->phone_number}}
+                            </td>
 
-                        <td class="py-3">
-                            <div class="flex items-center gap-4">
-                                <button wire:click='$dispatch("setPatientInfo", {id: {{$patient->id}}})'
-                                    @click='$dispatch("open-modal", "patientModal")'>
-                                    <i class="fa-solid fa-pen-to-square text-[#32ADE6]"></i>
-                                </button>
+                            <td class="py-3">
+                                <div class="flex items-center gap-4">
+                                    <button wire:click='$dispatch("setPatientInfo", {id: {{$patient->id}}})'
+                                        @click='$dispatch("open-modal", "patientModal")'>
+                                        <i class="fa-solid fa-pen-to-square text-[#32ADE6]"></i>
+                                    </button>
 
-                                <button wire:click="eliminatePatient({{$patient->id}})" wire:confirm='¿Está seguro de eliminar a este paciente?'>
-                                    <i class="fa-solid fa-trash text-red-500"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
+                                    <button wire:click="eliminatePatient({{$patient->id}})" wire:confirm='¿Está seguro de eliminar a este paciente?'>
+                                        <i class="fa-solid fa-trash text-red-500"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
                     @empty
-                    @unless (!$search)
-                    <p class="mt-10 bg-red-300 border border-red-600 text-center text-red-700">No se encuentran
-                        registros</p>
-                    @endunless
+                        @if ($search)
+                            <p class="mt-10 bg-red-300 border border-red-600 text-center text-red-700">
+                                No se encuentran registros
+                            </p>
+                        @endif
                     @endforelse
                 </tbody>
             </table>
-            @unless ($search)
+
             {{$this->searchPatient->links()}}
-            @endunless
         </section>
 
         <section>

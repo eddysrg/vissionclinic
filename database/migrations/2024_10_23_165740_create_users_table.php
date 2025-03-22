@@ -13,12 +13,9 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('clinic_id')->constrained()->onDelete('cascade');
-            $table->foreignId('role_id')->constrained()->onDelete('cascade');
-            $table->string('degree');
+            $table->string('degree')->nullable();
             $table->string('name');
-            $table->string('father_lastname');
-            $table->string('mother_lastname');
+            $table->string('last_name');
             $table->enum('gender', ['male', 'female']);
             $table->date('birthdate');
             $table->string('phone_number', 10);
@@ -30,6 +27,8 @@ return new class extends Migration
             $table->string('password');
             $table->string('profile_photo')->nullable();
             $table->rememberToken();
+            $table->foreignId('medical_unit_id')->constrained()->onDelete('cascade');
+            $table->foreignId('role_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

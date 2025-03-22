@@ -11,7 +11,6 @@ class Record extends Model
 
     protected $fillable = [
         'patient_id',
-        'type_record_id',
     ];
 
     public function patient()
@@ -19,8 +18,9 @@ class Record extends Model
         return $this->belongsTo(Patient::class);
     }
 
-    public function medicalRecordSections()
+    public function medicalRecord()
     {
-        return $this->hasMany(MedicalRecordSection::class);
+        return $this->hasOne(MedicalRecord::class);
     }
+
 }

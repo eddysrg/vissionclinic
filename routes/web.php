@@ -34,34 +34,37 @@ Volt::route('/productos/medical-view-system', 'pages.home.products.mvs')->name('
 Volt::route('/productos/odontologia', 'pages.home.products.odontologia')->name('odontologia');
 Volt::route('/productos/nutricion', 'pages.home.products.nutricion')->name('nutricion');
 Volt::route('/productos/ginecologia', 'pages.home.products.ginecologia')->name('ginecologia');
-Volt::route('/contacto', 'pages.home.contact')->name('contacto');   
+Volt::route('/contacto', 'pages.home.contact')->name('contacto');
 
 // Dashboard routes
 Volt::route('dashboard', 'pages.record.dashboard')->middleware(['auth', 'verified'])->name('dashboard');
 Volt::route('dashboard/expedientes', 'pages.record.records')->middleware('auth')->name('dashboard.expedientes');
 Volt::route('dashboard/agenda', 'pages.record.agenda')->middleware('auth')->name('dashboard.agenda');
+Volt::route('dashboard/mvs', 'pages.record.mvs')->middleware('auth')->name('dashboard.mvs');
 
 // Dashboard [record] routes
 Route::prefix('dashboard/expedientes/{id}')
     ->name('dashboard.record.')
-    ->middleware('auth')
+    ->middleware(['auth', 'clinic.owner'])
     ->group(function () {
 
-        Volt::route('resumen', 'pages.record.medical-record.summary')->name('summary');
-        Volt::route('consulta-medica', 'pages.record.medical-record.medical-consultation')->name('medical-consultation');
-        Volt::route('laboratorio', 'pages.record.medical-record.laboratory')->name('laboratory');
-        Volt::route('referencia', 'pages.record.medical-record.reference')->name('reference');
-        Volt::route('recetario', 'pages.record.medical-record.prescription')->name('prescription');
-        Volt::route('archivo-digital', 'pages.record.medical-record.digital-file')->name('digital-file');
+    Volt::route('prueba-layout', 'pages.record.medical-record.prueba-layout')->name('prueba-layout');
+
+    Volt::route('resumen', 'pages.record.medical-record.summary')->name('summary');
+    Volt::route('consulta-medica', 'pages.record.medical-record.medical-consultation')->name('medical-consultation');
+    Volt::route('laboratorio', 'pages.record.medical-record.laboratory')->name('laboratory');
+    Volt::route('referencia', 'pages.record.medical-record.reference')->name('reference');
+    Volt::route('recetario', 'pages.record.medical-record.prescription')->name('prescription');
+    Volt::route('archivo-digital', 'pages.record.medical-record.digital-file')->name('digital-file');
 
 
-        // clinical history routes
-        Volt::route('ficha-identificacion', 'pages.record.medical-record.identification-form')->name('identification-form');
-        Volt::route('antecedentes-heredofamiliares', 'pages.record.medical-record.hereditary-family-history')->name('hereditary-family-history');
-        Volt::route('antecedentes-patologicos', 'pages.record.medical-record.pathological-history')->name('pathological-history');
-        Volt::route('antecedentes-no-patologicos', 'pages.record.medical-record.non-pathological-history')->name('non-pathological-history');
-        Volt::route('exploracion-fisica', 'pages.record.medical-record.physical-examination')->name('physical-examination');
-    });
+    // clinical history routes
+    Volt::route('ficha-identificacion', 'pages.record.medical-record.identification-form')->name('identification-form');
+    Volt::route('antecedentes-heredofamiliares', 'pages.record.medical-record.family-history')->name('family-history');
+    Volt::route('antecedentes-patologicos', 'pages.record.medical-record.pathological-history')->name('pathological-history');
+    Volt::route('antecedentes-no-patologicos', 'pages.record.medical-record.non-pathological-history')->name('non-pathological-history');
+    Volt::route('exploracion-fisica', 'pages.record.medical-record.physical-examination')->name('physical-examination');
+});
 
 Route::get('manage-users', [UserController::class, 'manageUsers'])
     ->middleware('auth')
@@ -79,5 +82,7 @@ Route::post('/update-photo', [ProfileController::class, 'updatePhoto'])
 Route::get('/test', function () {
     return view('layouts.pdf.print-prescription');
 });
+
+Volt::route('pruebas', 'pruebas');
 
 require __DIR__ . '/auth.php';

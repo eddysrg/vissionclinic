@@ -10,12 +10,10 @@ class Doctor extends Model
     use HasFactory;
 
     protected $fillable = [
+        'license_number',
+        'specialty',
         'user_id'
     ];
-
-    protected $primaryKey = 'user_id';
-
-    public $incrementing = false;
 
     public function user()
     {

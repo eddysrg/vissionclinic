@@ -2,37 +2,22 @@
 
 namespace App\Livewire\Forms;
 
+use App\Models\MedicalRecord;
 use Livewire\Form;
 use App\Models\State;
 use App\Models\Country;
+use App\Models\IdentificationForm;
 use Livewire\Attributes\Validate;
 use Illuminate\Support\Facades\DB;
 
 class IdentificationCardForm extends Form
 {
-    #[Validate('required|string|max:255')]
-    public $name;
-
-    #[Validate('required|string|max:255')]
-    public $paternal_surname;
-
-    #[Validate('required|string|max:255')]
-    public $maternal_surname;
-
-    #[Validate('required|in:H,M')]
-    public $gender;
 
     #[Validate('required')]
     public $gender_identity;
 
     #[Validate('required|integer')]
     public $age;
-
-    #[Validate('required|date|before:today')]
-    public $birthdate;
-
-    #[Validate('required|string|max:255')]
-    public $birthplace;
 
     #[Validate('required|string|max:255')]
     public $country;
@@ -64,12 +49,6 @@ class IdentificationCardForm extends Form
     #[Validate('required|string|max:255')]
     public $marital_status;
 
-    #[Validate('required|string')]
-    public $landline;
-
-    #[Validate('required|string')]
-    public $cellphone;
-
     #[Validate('required|email|max:255')]
     public $email;
 
@@ -77,7 +56,7 @@ class IdentificationCardForm extends Form
     public $parent;
 
     #[Validate('required|string')]
-    public $parent_phone;
+    public $parents_phone;
 
     #[Validate('required|string|max:100')]
     public $relationship;
@@ -85,44 +64,47 @@ class IdentificationCardForm extends Form
     #[Validate('required|string|max:255')]
     public $interrogation;
 
-    public $sectionId;
+    public $medicalRecordId;
 
     public function store()
     {
         $validated = $this->validate();
-        
+        $validated['medical_record_id'] = $this->medicalRecordId;
 
-        // dd($validated);
-
-        DB::table('identification_form')->updateOrInsert(
-            [
-                'email' => $validated['email']
-            ],
-            [
-                'medical_record_sections_id' => $this->sectionId,
-                'gender_identity' => $validated['gender_identity'],
-                'age' => $validated['age'],
-                'country' => $validated['country'],
-                'state' => $validated['state'],
-                'zip_code' => $validated['zip_code'],
-                'neighborhood' => $validated['neighborhood'],
-                'street' => strtoupper($validated['street']),
-                'number' => $validated['number'],
-                'religion' => $validated['religion'],
-                'schooling' => $validated['schooling'],
-                'occupation' => $validated['occupation'],
-                'marital_status' => $validated['marital_status'],
-                'landline' => $validated['landline'],
-                'cellphone' => $validated['cellphone'],
-                'email' => $validated['email'],
-                'parent' => strtoupper($validated['parent']),
-                'parent_phone' => $validated['parent_phone'],
-                'relationship' => $validated['relationship'],
-                'interrogation' => $validated['interrogation'],
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]
+        IdentificationForm::updateOrCreate(
+            ['medical_record_id' => $validated['medical_record_id']],
+            $validated
         );
+    }
 
+    public function setIdentificationFormData()
+    {
+        $identificationFormData = MedicalRecord::find($this->medicalRecordId)->identificationForm;
+
+        if($this->medicalRecordId && $identificationFormData) {
+
+            $this->fill(
+                $identificationFormData->only(
+                    'gender_identity',
+                    'age',
+                    'country',
+                    'state',
+                    'zip_code',
+                    'neighborhood',
+                    'street',
+                    'number',
+                    'religion',
+                    'schooling',
+                    'occupation',
+                    'marital_status',
+                    'email',
+                    'parent',
+                    'parents_phone',
+                    'relationship',
+                    'interrogation',
+                    'medical_record_id',
+                )
+            );
+        }
     }
 }

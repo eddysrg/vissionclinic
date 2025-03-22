@@ -9,12 +9,21 @@ class PathologicalHistory extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['medical_record_sections_id', 'exanthematic_diseases', 'chronic_degenerative_diseases', 'other_diseases'];
+    protected $fillable = ['medical_record_id'];
 
-
-    public function medicalRecordSection()
-    {
-        return $this->belongsTo(MedicalRecordSection::class);
+    public function medicalRecord() {
+        return $this->belongsTo(MedicalRecord::class);
     }
-    
+
+    public function exanthematics() {
+        return $this->hasMany(Exanthematic::class);
+    }
+
+    public function chronicDegenerativeDiseases() {
+        return $this->hasMany(ChronicDegenerativeDisease::class);
+    }
+
+    public function otherHistories() {
+        return $this->hasMany(OtherHistory::class);
+    }
 }

@@ -11,38 +11,45 @@ class extends Component {
 
     public $patient;
     public $id;
-
     public $observations;
     public $sectionId;
 
-    public $paternalFamilyData = [
-        ['relative' => 'Abuela Paterna', 'deceased' => false, 'hta' => false, 'dm' => false, 'neoplasms' => false, 'cardiopathies' => false, 'ophthalmological' => false, 'psychiatric' => false, 'neurological' => false, 'other' => false],
-        ['relative' => 'Abuelo Paterno', 'deceased' => false, 'hta' => false, 'dm' => false, 'neoplasms' => false, 'cardiopathies' => false, 'ophthalmological' => false, 'psychiatric' => false, 'neurological' => false, 'other' => false],
-        ['relative' => 'Padre', 'deceased' => false, 'hta' => false, 'dm' => false, 'neoplasms' => false, 'cardiopathies' => false, 'ophthalmological' => false, 'psychiatric' => false, 'neurological' => false, 'other' => false],
-        ['relative' => 'Otro Paterno', 'deceased' => false, 'hta' => false, 'dm' => false, 'neoplasms' => false, 'cardiopathies' => false, 'ophthalmological' => false, 'psychiatric' => false, 'neurological' => false, 'other' => false]
-    ];
+    public $paternalFamilyData = [];
+    public $maternalFamilyData = [];
 
-    public $maternalFamilyData = [
-        ['relative' => 'Abuela Materna', 'deceased' => false, 'hta' => false, 'dm' => false, 'neoplasms' => false, 'cardiopathies' => false, 'ophthalmological' => false, 'psychiatric' => false, 'neurological' => false, 'other' => false],
-        ['relative' => 'Abuelo Materna', 'deceased' => false, 'hta' => false, 'dm' => false, 'neoplasms' => false, 'cardiopathies' => false, 'ophthalmological' => false, 'psychiatric' => false, 'neurological' => false, 'other' => false],
-        ['relative' => 'Madre', 'deceased' => false, 'hta' => false, 'dm' => false, 'neoplasms' => false, 'cardiopathies' => false, 'ophthalmological' => false, 'psychiatric' => false, 'neurological' => false, 'other' => false],
-        ['relative' => 'Otro Materna', 'deceased' => false, 'hta' => false, 'dm' => false, 'neoplasms' => false, 'cardiopathies' => false, 'ophthalmological' => false, 'psychiatric' => false, 'neurological' => false, 'other' => false]
-    ];
-
-
+    protected function initializeFamilyData($relativeType, $relatives)
+    {
+        return array_map(function ($relative) {
+            return [
+                'relative' => $relative,
+                'deceased' => false,
+                'hta' => false,
+                'dm' => false,
+                'neoplasms' => false,
+                'cardiopathies' => false,
+                'ophthalmological' => false,
+                'psychiatric' => false,
+                'neurological' => false,
+                'other' => false
+            ];
+        }, $relatives);
+    }
 
     public function mount($id)
     {
         $this->patient = Patient::findOrFail($id);
         $this->authorize('viewRecord', $this->patient);
         $this->id = $id;
-        $this->sectionId = Patient::find($this->patient['id'])->record->medicalRecordSections->where('name', 'clinic_history')->first()->id;
+        $this->sectionId = $this->patient->record->medicalRecordSections->where('name', 'clinic_history')->first()->id;
 
-        $hereditaryFamilyBackground = HereditaryFamilyBackground::where('medical_record_sections_id', $this->sectionId)->first() ?? '';
+        $hereditaryFamilyBackground = HereditaryFamilyBackground::where('medical_record_sections_id', $this->sectionId)->first();
 
-        if($hereditaryFamilyBackground) {
-            $this->paternalFamilyData = json_decode($hereditaryFamilyBackground->paternal_family_data, true);
-            $this->maternalFamilyData = json_decode($hereditaryFamilyBackground->maternal_family_data, true);
+        $this->paternalFamilyData = $this->initializeFamilyData('paternal', ['Abuela Paterna', 'Abuelo Paterno', 'Padre', 'Otro Paterno']);
+        $this->maternalFamilyData = $this->initializeFamilyData('maternal', ['Abuela Materna', 'Abuelo Materno', 'Madre', 'Otro Materno']);
+
+        if ($hereditaryFamilyBackground) {
+            $this->paternalFamilyData = json_decode($hereditaryFamilyBackground->paternal_family_data, true) ?? $this->paternalFamilyData;
+            $this->maternalFamilyData = json_decode($hereditaryFamilyBackground->maternal_family_data, true) ?? $this->maternalFamilyData;
             $this->observations = $hereditaryFamilyBackground->observations;
         }
     }
@@ -58,111 +65,12 @@ class extends Component {
     <h2 class="text-3xl text-[#174075]">Antecedentes Heredofamiliares</h2>
 
     <form wire:submit='save'>
-        <div>
-            <table class="w-full">
-                <thead>
-                    <tr>
-                        <th class="uppercase font-normal text-sm py-8">Maternos</th>
-                        <th class="uppercase font-normal text-sm py-8">Finado</th>
-                        <th class="uppercase font-normal text-sm py-8">HTA</th>
-                        <th class="uppercase font-normal text-sm py-8">DM</th>
-                        <th class="uppercase font-normal text-sm py-8">Neoplasias</th>
-                        <th class="uppercase font-normal text-sm py-8">Cardiopatías</th>
-                        <th class="uppercase font-normal text-sm py-8">Oftalmológicas</th>
-                        <th class="uppercase font-normal text-sm py-8">Psiquiátricas</th>
-                        <th class="uppercase font-normal text-sm py-8">Neurológicas</th>
-                        <th class="uppercase font-normal text-sm py-8">Otro</th>
-                    </tr>
-                </thead>
-    
-                <tbody class="text-center">
-                    @foreach ($maternalFamilyData as $index => $row)
-                    <tr>
-                        <td class="uppercase font-normal">{{explode(' ', $row['relative'])[0]}}</td>
-                        <td>
-                            <div class="checkbox-container">
-                                <input class="checkbox-historyForm" id="check-deceased-{{$index}}" type="checkbox"
-                                    wire:model='maternalFamilyData.{{$index}}.deceased'>
-                                <label for="check-deceased-{{$index}}" class="customLabel"></label>
-                            </div>
-                        </td>
-    
-                        <td>
-                            <div class="checkbox-container">
-                                <input class="checkbox-historyForm" id="check-hta-{{$index}}" type="checkbox"
-                                    wire:model='maternalFamilyData.{{$index}}.hta'>
-                                <label for="check-hta-{{$index}}" class="customLabel"></label>
-                            </div>
-                        </td>
-    
-                        <td>
-                            <div class="checkbox-container">
-                                <input class="checkbox-historyForm" id="check-dm-{{$index}}" type="checkbox"
-                                    wire:model='maternalFamilyData.{{$index}}.dm'>
-                                <label for="check-dm-{{$index}}" class="customLabel"></label>
-                            </div>
-                        </td>
-    
-                        <td>
-                            <div class="checkbox-container">
-                                <input class="checkbox-historyForm" id="check-neoplasms-{{$index}}" type="checkbox"
-                                    wire:model='maternalFamilyData.{{$index}}.neoplasms'>
-                                <label for="check-neoplasms-{{$index}}" class="customLabel"></label>
-                            </div>
-                        </td>
-    
-                        <td>
-                            <div class="checkbox-container">
-                                <input class="checkbox-historyForm" id="check-cardiopathies-{{$index}}" type="checkbox"
-                                    wire:model='maternalFamilyData.{{$index}}.cardiopathies'>
-                                <label for="check-cardiopathies-{{$index}}" class="customLabel"></label>
-                            </div>
-                        </td>
-    
-                        <td>
-                            <div class="checkbox-container">
-                                <input class="checkbox-historyForm" id="check-ophthalmological-{{$index}}" type="checkbox"
-                                    wire:model='maternalFamilyData.{{$index}}.ophthalmological'>
-                                <label for="check-ophthalmological-{{$index}}" class="customLabel"></label>
-                            </div>
-                        </td>
-    
-                        <td>
-                            <div class="checkbox-container">
-                                <input class="checkbox-historyForm" id="check-psychiatric-{{$index}}" type="checkbox"
-                                    wire:model='maternalFamilyData.{{$index}}.psychiatric'>
-                                <label for="check-psychiatric-{{$index}}" class="customLabel"></label>
-                            </div>
-                        </td>
-    
-                        <td>
-                            <div class="checkbox-container">
-                                <input class="checkbox-historyForm" id="check-neurological-{{$index}}" type="checkbox"
-                                    wire:model='maternalFamilyData.{{$index}}.neurological'>
-                                <label for="check-neurological-{{$index}}" class="customLabel"></label>
-                            </div>
-                        </td>
-    
-                        <td>
-                            <div class="checkbox-container">
-                                <input class="checkbox-historyForm" id="check-other-{{$index}}" type="checkbox"
-                                    wire:model='maternalFamilyData.{{$index}}.other'>
-                                <label for="check-other-{{$index}}" class="customLabel"></label>
-                            </div>
-                        </td>
-    
-                    </tr>
-                    @endforeach
-                </tbody>
-    
-            </table>
-        </div>
-    
+        @foreach (['maternal' => $maternalFamilyData, 'paternal' => $paternalFamilyData] as $type => $familyData)
         <div class="mt-5">
             <table class="w-full">
                 <thead>
                     <tr>
-                        <th class="uppercase font-normal text-sm py-8">Paternos</th>
+                        <th class="uppercase font-normal text-sm py-8">{{ ucfirst($type) }}es</th>
                         <th class="uppercase font-normal text-sm py-8">Finado</th>
                         <th class="uppercase font-normal text-sm py-8">HTA</th>
                         <th class="uppercase font-normal text-sm py-8">DM</th>
@@ -176,86 +84,24 @@ class extends Component {
                 </thead>
     
                 <tbody class="text-center">
-                    @foreach ($paternalFamilyData as $index => $row)
+                    @foreach ($familyData as $index => $row)
                     <tr>
-                        <td class="uppercase font-normal">{{explode(' ', $row['relative'])[0]}}</td>
+                        <td class="uppercase font-normal">{{ explode(' ', $row['relative'])[0] }}</td>
+                        @foreach (['deceased', 'hta', 'dm', 'neoplasms', 'cardiopathies', 'ophthalmological', 'psychiatric', 'neurological', 'other'] as $field)
                         <td>
                             <div class="checkbox-container">
-                                <input class="checkbox-historyForm" id="check-deceased-{{$index}}-{{$index}}"
-                                    type="checkbox" wire:model='paternalFamilyData.{{$index}}.deceased'>
-                                <label for="check-deceased-{{$index}}-{{$index}}" class="customLabel"></label>
+                                <input class="checkbox-historyForm" id="check-{{ $field }}-{{ $type }}-{{ $index }}" type="checkbox"
+                                    wire:model='{{ $type }}FamilyData.{{ $index }}.{{ $field }}'>
+                                <label for="check-{{ $field }}-{{ $type }}-{{ $index }}" class="customLabel"></label>
                             </div>
                         </td>
-    
-                        <td>
-                            <div class="checkbox-container">
-                                <input class="checkbox-historyForm" id="check-hta-{{$index}}-{{$index}}" type="checkbox"
-                                    wire:model='paternalFamilyData.{{$index}}.hta'>
-                                <label for="check-hta-{{$index}}-{{$index}}" class="customLabel"></label>
-                            </div>
-                        </td>
-    
-                        <td>
-                            <div class="checkbox-container">
-                                <input class="checkbox-historyForm" id="check-dm-{{$index}}-{{$index}}" type="checkbox"
-                                    wire:model='paternalFamilyData.{{$index}}.dm'>
-                                <label for="check-dm-{{$index}}-{{$index}}" class="customLabel"></label>
-                            </div>
-                        </td>
-    
-                        <td>
-                            <div class="checkbox-container">
-                                <input class="checkbox-historyForm" id="check-neoplasms-{{$index}}-{{$index}}"
-                                    type="checkbox" wire:model='paternalFamilyData.{{$index}}.neoplasms'>
-                                <label for="check-neoplasms-{{$index}}-{{$index}}" class="customLabel"></label>
-                            </div>
-                        </td>
-    
-                        <td>
-                            <div class="checkbox-container">
-                                <input class="checkbox-historyForm" id="check-cardiopathies-{{$index}}-{{$index}}"
-                                    type="checkbox" wire:model='paternalFamilyData.{{$index}}.cardiopathies'>
-                                <label for="check-cardiopathies-{{$index}}-{{$index}}" class="customLabel"></label>
-                            </div>
-                        </td>
-    
-                        <td>
-                            <div class="checkbox-container">
-                                <input class="checkbox-historyForm" id="check-ophthalmological-{{$index}}-{{$index}}"
-                                    type="checkbox" wire:model='paternalFamilyData.{{$index}}.ophthalmological'>
-                                <label for="check-ophthalmological-{{$index}}-{{$index}}" class="customLabel"></label>
-                            </div>
-                        </td>
-    
-                        <td>
-                            <div class="checkbox-container">
-                                <input class="checkbox-historyForm" id="check-psychiatric-{{$index}}-{{$index}}"
-                                    type="checkbox" wire:model='paternalFamilyData.{{$index}}.psychiatric'>
-                                <label for="check-psychiatric-{{$index}}-{{$index}}" class="customLabel"></label>
-                            </div>
-                        </td>
-    
-                        <td>
-                            <div class="checkbox-container">
-                                <input class="checkbox-historyForm" id="check-neurological-{{$index}}-{{$index}}"
-                                    type="checkbox" wire:model='paternalFamilyData.{{$index}}.neurological'>
-                                <label for="check-neurological-{{$index}}-{{$index}}" class="customLabel"></label>
-                            </div>
-                        </td>
-    
-                        <td>
-                            <div class="checkbox-container">
-                                <input class="checkbox-historyForm" id="check-other-{{$index}}-{{$index}}" type="checkbox"
-                                    wire:model='paternalFamilyData.{{$index}}.other'>
-                                <label for="check-other-{{$index}}-{{$index}}" class="customLabel"></label>
-                            </div>
-                        </td>
+                        @endforeach
                     </tr>
                     @endforeach
                 </tbody>
-    
             </table>
         </div>
+        @endforeach
     
         <div class="flex justify-between gap-5 items-end">
             <div class="flex flex-col mt-5">

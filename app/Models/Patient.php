@@ -10,17 +10,20 @@ class Patient extends Model
     use HasFactory;
 
     protected $fillable = [
-        'clinic_id',
-        'doctor_id',
         'name',
-        'father_last_name',
-        'mother_last_name',
+        'last_name',
         'gender',
         'birthdate',
         'birthplace',
         'phone_number',
-        'curp'
+        'curp',
+        'medical_unit_id',
     ];
+
+    public function getFullNameAttribute()
+    {
+        return $this->name . ' ' . $this->last_name;
+    }
 
     public function scopeMedicalSections($query, $patientId)
     {
@@ -30,7 +33,12 @@ class Patient extends Model
             ->medicalRecordSections;
     }
 
-    public function appointment()
+    public function medicalUnit()
+    {
+        return $this->belongsTo(MedicalUnit::class);
+    }
+
+    public function appointments()
     {
         return $this->hasMany(Appointment::class);
     }

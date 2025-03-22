@@ -31,7 +31,7 @@ public function run(): void
         while (($data = fgetcsv($file, 1000, ',')) !== false) {
             // Crear o buscar estado
             $state = State::firstOrCreate([
-                'countries_id' => 123,
+                'countries_id' => 122,
                 'name' => $data[4],
             ]);
 

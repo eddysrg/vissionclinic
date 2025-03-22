@@ -20,20 +20,24 @@ new class extends Component {
     public function loadEvents()
     {
         $appointments = Appointment::whereHas('patient', function($query) {
-            $query->where('clinic_id', auth()->user()->clinic_id);
+            $query->where('medical_unit_id', auth()->user()->medical_unit_id);
         })->get();
 
         return $appointments->map(function ($appointment) {
 
-            $fullName = $appointment->patient->name . ' ' . $appointment->patient->father_last_name . ' ' .$appointment->patient->mother_last_name;
+            // dd(Appointment::find(1)->date->format('Y-m-d'));
+        // dd(Appointment::find(1)->time->format('H:i:s'));
 
-            $formattedTime = Carbon::createFromFormat('H:i:s', $appointment->time)->format('g:i A');
+            $title = $appointment->patient->full_name;
+
+            $start = $appointment->date->format('Y-m-d') . 'T' . $appointment->time->format('H:i:s');
+
+            $formattedTime = $appointment->time->format('g:i A');
 
             return [
                 'id' => $appointment->id,
-                'title' => $formattedTime . ' ' . $fullName,
-                'start' => $appointment->date,
-                'end' => Carbon::createFromFormat('Y-m-d', $appointment->date)->addDays(1)->format('Y-m-d'),
+                'title' => $title,
+                'start' => $start,
             ];
         })->toArray();
     }
@@ -49,10 +53,11 @@ new class extends Component {
         return [
             'appointmentEvents' => $this->loadEvents(),
             'appointments' => Appointment::whereDate('date', Carbon::now())->whereHas('patient', function($query) {
-                $query->where('clinic_id', auth()->user()->clinic_id);
+                $query->where('medical_unit_id', auth()->user()->medical_unit_id);
             })->get(),
         ];
     }
+    
 }; ?>
 
 <div>
@@ -60,23 +65,25 @@ new class extends Component {
 
     @livewire('components.appointment')
 
-    <main class="flex mt-10 gap-8">
-        <section class="w-2/3">
+    <main class="grid grid-cols-[1.8fr_.8fr] mt-10 gap-8">
+        <section>
             <div wire:ignore id="calendar"></div>
         </section>
 
-        <section class="border border-zinc-300 w-1/3 h-96 overflow-y-scroll">
-            <h4 class="p-3 border-b border-zinc-300">Detalles del día: <span
-                    class="font-semibold">{{Carbon::now()->isoFormat('D [de] MMMM
-                    YYYY')}}</span></h4>
+        <section class="border border-zinc-300 h-96 overflow-y-scroll">
+            <h4 class="p-3 border-b border-zinc-300">
+                Detalles del día: 
+                <span class="font-semibold">
+                    {{now()->isoFormat('D [de] MMMM YYYY')}}
+                </span>
+            </h4>
 
             @forelse ($appointments as $appointment)
 
             @php
-            $fullName = $appointment->patient->name . ' ' . $appointment->patient->father_last_name . ' '
-            .$appointment->patient->mother_last_name;
+            $fullName = $appointment->patient->full_name;
 
-            $formattedTime = Carbon::createFromFormat('H:i:s', $appointment->time)->format('g:i A');
+            $formattedTime = $appointment->time->format('g:i A');
             @endphp
 
             <div class="bg-[#174075] p-3 text-white border-b">
@@ -95,10 +102,10 @@ new class extends Component {
                 <p>Observaciones: {{$appointment->comments}}</p>
 
                 <div class="flex items-center justify-end mt-5">
-                    <p @class([ 'px-5' , 'py-2' , 'bg-green-500'=> $appointment->confirmed,
-                        'bg-red-500' => !$appointment->confirmed,
+                    <p @class([ 'px-5' , 'py-2' , 'bg-green-500'=> $appointment->status === 'confirm',
+                        'bg-red-500' => $appointment->status === 'unconfirm',
                         'rounded',
-                        ])>{{$appointment->confirmed ? 'Confirmado' : 'Sin confirmar'}}</p>
+                        ])>{{$appointment->status === 'confirm' ? 'Confirmado' : 'Sin confirmar'}}</p>
                 </div>
             </div>
             @empty
@@ -124,7 +131,7 @@ new class extends Component {
                 },
                 timeZone: 'CST',
                 initialView: 'dayGridMonth',
-                height: 'auto',
+                contentHeight: 'auto',
                 headerToolbar: {
                     left: "prev,next today",
                     center: 'title',
@@ -148,8 +155,17 @@ new class extends Component {
                     $wire.onDateClick(info);
                 },
                 events: @json($appointmentEvents),
+                eventTimeFormat: {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: true
+                },
+                eventColor: 'white',
+                eventDisplay: 'block',
+                eventTextColor: 'black',
                 eventClick: function(info) {
                     @this.dispatch('setAppointmentData', { id: info.event.id });
+                    // console.log(info);
                 },
                 eventMouseEnter: function(info) {
                     info.el.style.cursor = 'pointer';

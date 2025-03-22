@@ -2,6 +2,268 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+    --primary-color: #174075;
+    --secondary-color: #15c5ec;
+    --tertiary-color: #f0f8ff;
+    --quaternary-color: #d7d7d7;
+    --quinary-color: #d2d2d2;
+    --senary-color: #41759d;
+}
+
+.btn {
+    background-color: var(--senary-color);
+    padding: 12px 20px;
+    border-radius: 6px;
+    color: white;
+}
+
+/* Principal Dashboard Styles  */
+
+.db-body {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    height: 100dvh;
+    grid-template-columns: 5rem 1fr;
+    grid-template-rows: 3rem 1fr;
+    grid-template-areas: 
+        "aside header"
+        "aside main"
+        "aside main";
+    overflow: hidden;
+    transition: grid-template-columns 0.5s;
+}
+
+.db-header {
+    background-color: var(--senary-color);
+    grid-area: header;
+}
+
+.db-header__photo-container {
+    width: 30px;
+    height: 30px;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    background-color: white;
+    margin-right: 1rem;
+}
+
+.db-header__menu {
+    height: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0 2rem;
+}
+
+.db-header__menu-title {
+    color: white;
+    display: flex;
+    align-items: center;
+}
+
+.db-header__menu-icon {
+    font-size: 1.5rem;
+}
+
+.db-aside {
+    background-color: var(--primary-color);
+    grid-area: aside;
+    position: relative;
+    padding: 1rem;
+}
+
+.db-aside__btn {
+    margin-inline: auto;
+    margin-bottom: .5rem;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    top: 30px;
+    right: -12px;
+    color: white;
+    cursor: pointer;
+}
+
+.db-aside__logo-container {
+    margin-inline: auto;
+}
+
+.db-aside__photo-container {
+    width: 50px;
+    height: 50px;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    background-color: white;
+    margin-inline: auto;
+    margin-block: 2rem;
+    transition: width 0.5s, height 0.5s;
+}
+
+.db-aside__list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.db-aside__link {
+    color: white;
+    font-size: 14px;
+}
+
+.db-aside__link-icon {
+    font-size: 18px;
+}
+
+.db-aside__link-text {
+    display: none;
+    text-transform: uppercase;
+}
+
+.db-main {
+    background-color: rgb(239, 239, 239);
+    grid-area: main;
+    overflow: scroll;
+}
+
+.sb-extender {
+    grid-template-columns: 14rem 1fr;
+}
+
+.sb-extender .db-aside__photo-container {
+    width: 90px;
+    height: 90px;
+}
+
+.sb-extender .db-aside__list {
+    align-items: flex-start;
+}
+
+.sb-extender .db-aside__link {
+    display: flex;;
+    align-items: center;
+    gap: .5rem;
+}
+
+.sb-extender .db-aside__link-text {
+    display: block;
+}
+
+/* Home Dashboard Styles */
+
+.dbc-main {
+    width: 100%;
+    height: 100%;
+    padding: 2rem;
+}
+
+.dbc-main__grid-container {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    grid-template-rows: 1.3fr 1fr;
+    min-block-size: 100%;
+    gap: 2rem;
+}
+
+.dbc-main__section:nth-child(1) {
+    background-color: #CEDCE7;
+    padding: 3rem;
+}
+
+.dbc-main__section:nth-child(2) {
+    border: 1px solid rgb(190, 190, 190);
+}
+
+.dbc-main__section:nth-child(3) {
+    border: 1px solid rgb(190, 190, 190);
+    padding: 1rem;
+}
+
+.dbc-main__section-title {
+    font-size: 40px;
+}
+
+.dbc-main__section-title--notifications {
+    font-size: 20px;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 12px 0;
+    text-align: center;
+}
+
+.dbc-main__section-title--appointments {
+    font-weight: bold;
+}
+
+.dbc-main__btns-container {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.dbc-main__appointments-grid-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    height: 90%;
+}
+
+.dbc-main__appointment {
+    border: 1px solid rgb(190, 190, 190);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.dbc-main__appointment-initials {
+    background-color: red;
+    width: 40px;
+    height: 40px;
+    aspect-ratio: 1/1;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.dbc-main__appointment-name {
+    font-size: 14px;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.dbc-main__appointment-time {
+    font-size: 12px;
+}
+
+.dbc-main__appointment-status {
+    font-size: 12px;
+    background-color: red;
+    color: white;
+    padding: 8px 20px;
+    border-radius: 6px;
+    margin-top: 10px;
+}
+
+/* .childchido:nth-child(1) {
+    background-color: red;
+}
+
+.childchido:nth-child(2) {
+    background-color: green;
+}
+
+.childchido:nth-child(3) {
+    background-color: yellow;
+}
+ */
 .carousel-container {
     width: 100%;
     height: 500px;

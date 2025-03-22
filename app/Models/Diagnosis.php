@@ -8,6 +8,4 @@ use Illuminate\Database\Eloquent\Model;
 class Diagnosis extends Model
 {
     use HasFactory;
-
-    protected $fillable = ['catalog_key', 'name'];
 }

@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Procedure;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class ProceduresSeeder extends Seeder
 {
@@ -17,7 +18,7 @@ class ProceduresSeeder extends Seeder
         $header = fgetcsv($file);
 
         while(($data = fgetcsv($file, 1000, ',')) !== false) {
-            Procedure::create([
+            DB::table('procedures')->insert([
                 'catalog_key' => $data[0],
                 'name' => $data[1],
             ]);

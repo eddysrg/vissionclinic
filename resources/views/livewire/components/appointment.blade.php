@@ -1,101 +1,108 @@
 <?php
 
 use Livewire\Volt\Component;
-use App\Models\Patient;
-use App\Models\User;
-use App\Models\Appointment;
-use Livewire\Attributes\On; 
+use App\Models\{Patient, User, Appointment, MedicalUnit};
+use Livewire\Attributes\On;
 use Carbon\Carbon;
+use App\Livewire\Forms\AppointmentForm;
+use App\Services\AppointmentService;
 
 
 new class extends Component {
-    public $search;
 
-    public $chosenPatient = '';
     public $doctor;
-
-    public $date = '';
-    public $time = '';
-    public $type = '';
-    public $comments = '';
-    public $confirmed = '';
 
     public $isEditing = false;
 
-    public function createAppointment()
+    // -------------------------------------
+
+    public User $user;
+    public $patients = [];
+    public $doctors = [];
+    public $search = '';
+    public $chosenPatient = '';
+    public AppointmentForm $form;
+
+
+    public function updatedSearch()
     {
-        if(!$this->chosenPatient){
-            return;
-        }
+        $terms = explode(' ', $this->search);
 
-        $validated = $this->validate([
-            'date' => ['required', 'date'],
-            'time' => ['required', 'date_format:H:i'],
-            'type' => ['required', 'in:1,2,3,4,5,6,7'],
-            'comments' => ['required', 'string'],
-            'confirmed' => ['required', 'in:0,1'],
-        ]);
-
-        $validated['patient_id'] = $this->chosenPatient->id;
-
-        if ($this->isEditing) {
-            $appointment = Appointment::find($this->search);
-            $appointment->update($validated);
-            $message = 'Cita actualizada con éxito';
-        } else {
-            Appointment::create($validated);
-            $message = 'Cita creada con éxito';
-        }
-
-        $this->clearForm();
-        $this->dispatch('close-modal', 'appointmentModal');
-        $this->dispatch('show-notification', message: $message);
-    }
-
-    public function searchPatient()
-    {
-        
-        if(empty($this->search)) {
-            $this->chosenPatient = '';
-            return collect();
-        }
-
-        $terms = explode(' ' ,$this->search);
-
-        return $patients = Patient::where('clinic_id', auth()->user()->clinic_id)
-        ->where(function($query) use ($terms) {
+        $this->patients = Patient::where('medical_unit_id', auth()->user()->medical_unit_id)
+        ->where(function ($query) use ($terms) {
             foreach ($terms as $term) {
-            $query->where(function($query) use ($term) {
-                $query->where('name', 'LIKE', "%{$term}%")
-                ->orWhere('father_last_name', 'LIKE', "%{$term}%")
-                ->orWhere('mother_last_name', 'LIKE', "%{$term}%")
-                ->orWhere('id', 'LIKE', "%{$term}%");
-            });
+                $query->orWhere('name', 'like', "{$term}%")
+                ->orWhere('last_name', 'like', "{$term}%");
             }
         })->get();
     }
 
-    public function setPatientData($id)
+    public function getAppointmentServiceProperty()
     {
-        $this->chosenPatient = Patient::find($id);
-        $this->doctor = User::find($this->chosenPatient->doctor_id)->name;
+        return app(AppointmentService::class);
+    }
+
+    public function createAppointment()
+    {
+        $validated = $this->form->validate();
+
+        $this->appointmentService->createAppointment($validated);
+
+        $this->clearForm();
+        $this->dispatch('close-modal', 'appointmentModal');
+        $this->dispatch('show-notification', message: 'Cita creada con éxito');
+    }
+
+    public function updateAppointment()
+    {
+        $validated = $this->form->validate();
+
+        $this->appointmentService->updateAppointment($this->form->appointmentId, $validated);
+
+        $this->clearForm();
+        $this->dispatch('close-modal', 'appointmentModal');
+        $this->dispatch('show-notification', message: 'Cita actualizada con éxito');
+
     }
 
     public function clearForm()
     {
         $this->search = '';
         $this->chosenPatient = '';
-        $this->doctor = '';
-        $this->date = '';
-        $this->time = '';
-        $this->type = '';
-        $this->comments = '';
-        $this->confirmed = '';
+        $this->isEditing = false;
 
-        $this->resetErrorBag();
+        $this->form->date = '';
+        $this->form->time = '';
+        $this->form->type = '';
+        $this->form->comments = '';
+        $this->form->status = '';
+        $this->form->doctor_id = '';
+        $this->form->patient_id = '';
+
+        $this->form->resetErrorBag();
     }
 
-    #[On('setDateValues')] 
+    public function getAllDoctors()
+    {
+        return MedicalUnit::with(['users' => function ($query) {
+            $query->where('role_id', 2);
+        }])
+        ->find($this->user)
+        ->first()
+        ->users;
+    }
+
+    // ------------
+
+    public function setPatientData($id)
+    {
+        $this->chosenPatient = Patient::find($id);
+        $this->form->patient_id = $this->chosenPatient->id;
+        $this->search = '';
+    }
+
+
+    #[On('setDateValues')]
     public function setDateValues($dateInfo)
     {
         $typeDate = $dateInfo['view']['type'];
@@ -104,129 +111,142 @@ new class extends Component {
 
         switch ($typeDate) {
             case 'dayGridMonth':
-                $this->date = $formattedDate;
+                $this->form->date = $formattedDate;
                 break;
 
             case 'timeGridWeek';
             case 'timeGridDay':
-                $this->time = $formattedTime;
-                $this->date = $formattedDate;
+                $this->form->time = $formattedTime;
+                $this->form->date = $formattedDate;
                 break;
             default:
                 break;
         }
     }
 
-    #[On('setAppointmentData')] 
+    #[On('setAppointmentData')]
     public function setAppointmentData($id)
     {
         $appointment = Appointment::find($id);
 
         $this->isEditing = true;
-        $this->search = $id;
-        $this->setPatientData($id);
-        $this->date = $appointment->date;
-        $this->time = $appointment->time;
-        $this->time = Carbon::parse($appointment->time)->format('H:i');
-        $this->type = $appointment->type;
-        $this->comments = $appointment->comments;
-        $this->confirmed = $appointment->confirmed;
+        $this->form->appointmentId = $id;
+        $this->setPatientData($appointment->patient_id);
+        $this->form->date = $appointment->date->format('Y-m-d');
+        $this->form->time = $appointment->time->format('H:i');
+        $this->form->type = $appointment->type;
+        $this->form->comments = $appointment->comments;
+        $this->form->status = $appointment->status;
+        $this->form->doctor_id = $appointment->doctor_id;
 
         $this->dispatch('open-modal', 'appointmentModal');
     }
 
-    public function with()
+
+    public function mount()
     {
-        return [
-            'patients' => $this->searchPatient(),
-        ];
+        $this->user = auth()->user();
+        $this->doctors = $this->getAllDoctors();
     }
+
 }; ?>
 
 <div>
-    <x-appointment-modal name='appointmentModal' clean='clearForm'>
+    <x-appointment-modal name='appointmentModal' clean='clearForm' :show="false">
         <div>
-            <section class="p-8">
-                <h2 class="text-lg font-medium text-[#174075] mb-6">Buscar Paciente</h2>
 
-                <form wire:submit='searchPatient'>
+            @if(!$isEditing)
+                <section class="p-8">
+                    <h2 class="text-lg font-medium text-[#174075] mb-6">Buscar Paciente</h2>
+
                     <div class="flex gap-5">
-                        <input wire:model='search' id="search" type="text"
-                            placeholder="Nombre | Apellido Paterno | Apellido Materno"
-                            class="w-full rounded-full border border-zinc-300">
-                        <button class="px-6 py-3 bg-[#41759D] text-white rounded" type="submit">Buscar</button>
+                        <input wire:model.live='search' id="search" type="text" placeholder="Nombre | Apellido Paterno | Apellido Materno"
+                        class="w-full rounded-full border border-zinc-300">
                     </div>
-                </form>
 
-                <table class="w-full border mt-10">
-                    <thead>
-                        <tr>
-                            <th class="py-3">N° Expediente</th>
-                            <th class="py-3">Nombre Completo</th>
-                            <th class="py-3">Número de contacto</th>
-                            <th class="py-3">Agregar a la cita</th>
-                        </tr>
-                    </thead>
+                    <table class="w-full border mt-10">
+                        <thead>
+                            <tr>
+                                <th class="py-3">N° Expediente</th>
+                                <th class="py-3">Nombre Completo</th>
+                                <th class="py-3">Número de contacto</th>
+                                <th class="py-3">Agregar a la cita</th>
+                            </tr>
+                        </thead>
 
-                    <tbody>
-                        @forelse ($patients as $patient)
-                        <tr class="text-center bg-cyan-50">
-                            <td class="py-3">
-                                {{$patient->id}}
-                            </td>
+                        <tbody>
+                            @if ($search)
+                                @forelse ($patients as $patient)
+                                    <tr class="text-center bg-cyan-50">
+                                        <td class="py-3">
+                                            {{$patient->id}}
+                                        </td>
 
-                            <td class="py-3">
-                                {{$patient->name . ' ' . $patient->father_last_name . ' ' .
-                                $patient->mother_last_name}}
-                            </td>
+                                        <td class="py-3">
+                                            {{$patient->full_name}}
+                                        </td>
 
-                            <td class="py-3">
-                                {{$patient->phone_number}}
-                            </td>
+                                        <td class="py-3">
+                                            {{$patient->phone_number}}
+                                        </td>
 
-                            <td class="py-3">
-                                <button wire:click='setPatientData({{$patient->id}})'
-                                    class="py-2 px-4 aspect-square rounded bg-[#41759D] text-white text-xl">+</button>
-                            </td>
-                        </tr>
-                        @empty
-                        @unless (!$search)
-                        <p class="mt-10 bg-red-300 border border-red-600 text-center text-red-700">No se encuentran
-                            registros</p>
-                        @endunless
-                        @endforelse
-                    </tbody>
-                </table>
-            </section>
+                                        <td class="py-3">
+                                            <button wire:click='setPatientData({{$patient->id}})'class="py-2 px-4 aspect-square rounded bg-[#41759D] text-white text-xl">+</button>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <p class="mt-10 bg-red-300 border border-red-600 text-center text-red-700">
+                                        No se encuentran registros
+                                    </p>
+                                @endforelse
+                            @endif
+                        </tbody>
+                    </table>
+                </section>
+            @endif
+
 
             <section class=" p-8 bg-cyan-50">
                 <h2 class="text-lg font-medium text-[#174075] mb-6">Agendar Cita</h2>
 
-                @if($chosenPatient)
-                <div class="flex gap-10">
-                    <div>
-                        <h3 class="font-medium">Nombre del paciente</h3>
-                        <p>
-                            {{$chosenPatient->name . ' ' . $chosenPatient->father_last_name . ' ' .
-                            $chosenPatient->mother_last_name}}
-                        </p>
-                    </div>
-
-                    <div>
-                        <h3 class="font-medium">Nombre del Doctor</h3>
-                        <p>
-                            {{$doctor}}
-                        </p>
-                    </div>
-                </div>
-                @endif
-
                 <form wire:submit='createAppointment' class="mt-10">
                     <div class="grid grid-cols-4 gap-5">
+
+                        <div class="flex flex-col gap-3 col-span-2">
+                            <label class="text-[#386486] font-semibold" for="doctor_id">Médico(a)</label>
+                            <select class="border-0 bg-[#b5e6e9] rounded" wire:model='form.doctor_id' name="doctor_id"
+                                id="doctor_id">
+                                <option value="">Selecciona una opción</option>
+                                @foreach ($doctors as $doctor)
+                                    <option value="{{$doctor->id}}">{{$doctor->full_name}}</option>
+                                @endforeach
+                            </select>
+                            @error('form.doctor_id')
+                            <span class="text-red-600 mt-2">
+                                {{ $message }}
+                            </span>
+                            @enderror
+                        </div>
+
+                        <div class="flex flex-col gap-3 col-span-2">
+                            <label class="text-[#386486] font-semibold" for="patient_id">Nombre del paciente</label>
+                            <select class="border-0 bg-[#b5e6e9] rounded" wire:model='form.patient_id' name="patient_id"
+                                id="patient_id" disabled>
+                                @if($chosenPatient)
+                                    <option value="{{$chosenPatient->id}}">{{$chosenPatient->full_name}}</option>
+                                @endif
+                            </select>
+                            @error('form.patient_id')
+                            <span class="text-red-600 mt-2">
+                                {{ $message }}
+                            </span>
+                            @enderror
+                        </div>
+
                         <div class="flex flex-col gap-3">
                             <label class="text-[#386486] font-semibold" for="date">Fecha de la cita</label>
-                            <input class="border-0 bg-[#b5e6e9] rounded" wire:model='date' id="date" type="date">
-                            @error('date')
+                            <input class="border-0 bg-[#b5e6e9] rounded" wire:model='form.date' id="date" type="date">
+                            @error('form.date')
                             <span class="text-red-600 mt-2">
                                 {{ $message }}
                             </span>
@@ -235,42 +255,42 @@ new class extends Component {
 
                         <div class="flex flex-col gap-3">
                             <label class="text-[#386486] font-semibold" for="time">Hora de la cita</label>
-                            <input class="border-0 bg-[#b5e6e9] rounded" wire:model='time' id="time" type="time">
-                            @error('time')
+                            <input class="border-0 bg-[#b5e6e9] rounded" wire:model='form.time' id="time" type="time">
+                            @error('form.time')
                             <span class="text-red-600 mt-2">
                                 {{ $message }}
                             </span>
                             @enderror
                         </div>
 
-                        <div class="flex flex-col gap-3">
+                        <div class="flex flex-col gap-3 col-span-2">
                             <label class="text-[#386486] font-semibold" for="type">Tipo de consulta</label>
-                            <select class="border-0 bg-[#b5e6e9] rounded" wire:model='type' name="" id="type">
-                                <option value="">-- Selecciona una opción --</option>
-                                <option value="1">Crónicos</option>
-                                <option value="2">Sanos</option>
-                                <option value="3">Planificación</option>
-                                <option value="4">Enf. transmisibles</option>
-                                <option value="5">Otras enfermedades</option>
-                                <option value="6">Control de embarazo</option>
-                                <option value="7">Control nutricional</option>
+                            <select class="border-0 bg-[#b5e6e9] rounded" wire:model='form.type' name="" id="type">
+                                <option value="">Selecciona una opción</option>
+                                <option value="chronic">Crónicos</option>
+                                <option value="healthy">Sanos</option>
+                                <option value="planning">Planificación</option>
+                                <option value="sexually_transmitted_diseases">Enf. transmisibles</option>
+                                <option value="other_diseases">Otras enfermedades</option>
+                                <option value="pregnancy_control">Control de embarazo</option>
+                                <option value="nutritional_control">Control nutricional</option>
                             </select>
-                            @error('type')
+                            @error('form.type')
                             <span class="text-red-600 mt-2">
                                 {{ $message }}
                             </span>
                             @enderror
                         </div>
 
-                        <div class="flex flex-col gap-3">
-                            <label class="text-[#386486] font-semibold" for="confirmed">Estatus de la cita</label>
-                            <select class="border-0 bg-[#b5e6e9] rounded" wire:model='confirmed' name="confirmed"
-                                id="confirmed">
-                                <option value="">-- Selecciona una opción --</option>
-                                <option value="0">Sin confirmar</option>
-                                <option value="1">Confirmar</option>
+                        <div class="flex flex-col gap-3 col-span-2">
+                            <label class="text-[#386486] font-semibold" for="status">Estatus de la cita</label>
+                            <select class="border-0 bg-[#b5e6e9] rounded" wire:model='form.status' name="status"
+                                id="status">
+                                <option value="">Selecciona una opción</option>
+                                <option value="unconfirm">Sin confirmar</option>
+                                <option value="confirm">Confirmar</option>
                             </select>
-                            @error('confirmed')
+                            @error('form.status')
                             <span class="text-red-600 mt-2">
                                 {{ $message }}
                             </span>
@@ -279,9 +299,9 @@ new class extends Component {
 
                         <div class="flex flex-col gap-3 col-start-1 col-end-5">
                             <label class="text-[#386486] font-semibold" for="comments">Observaciones</label>
-                            <textarea class="border-0 bg-[#b5e6e9] rounded" wire:model='comments' name="" id="comments"
+                            <textarea class="border-0 bg-[#b5e6e9] rounded" wire:model='form.comments' id="comments"
                                 cols="30" rows="10"></textarea>
-                            @error('comments')
+                            @error('form.comments')
                             <span class="text-red-600 mt-2">
                                 {{ $message }}
                             </span>
@@ -290,16 +310,15 @@ new class extends Component {
                     </div>
 
                     <div class="flex justify-end">
-                        @if ($chosenPatient)
-                        <button class="mt-10 px-6 py-4 bg-amber-400 rounded font-semibold">
-                            {{$isEditing ? 'Editar' : 'Guardar'}} cita
-                        </button>
+                        @if ($isEditing)
+                            <button wire:click.prevent='updateAppointment' class="mt-10 px-6 py-4 bg-amber-400 rounded font-semibold">
+                                Editar Cita
+                            </button>
                         @else
-                        <button disabled
-                            class="cursor-not-allowed opacity-85 mt-10 px-6 py-4 bg-amber-300 text-opacity-75 rounded font-semibold">Guardar
-                            cita</button>
+                            <button type="submit" class="mt-10 px-6 py-4 bg-amber-400 rounded font-semibold">
+                                Guardar cita
+                            </button>
                         @endif
-
                     </div>
                 </form>
             </section>

@@ -16,53 +16,56 @@ new class extends Component
     }
 }; ?>
 
-<aside class="fixed bottom-0 w-full xl:top-0 left-0 z-20 xl:w-52 xl:h-full bg-[#174075] flex flex-col items-center gap-10 py-4">
-{{-- <aside class="fixed w-full bottom-0 left-0 z-20 bg-red-200"> --}}
+<aside class="db-aside">
+    <div class="db-aside__btn" id="aside-button">
+        <i class="ri-menu-2-line"></i>
+    </div>
 
-    <a href="{{route('dashboard')}}" class="mt-10 hidden xl:block">
+    <div class="db-aside__logo-container">
         <picture>
+            <source srcset="{{asset('images/ece_white_logo.avif')}}" type="image/avif">
             <source srcset="{{asset('images/ece_white_logo.webp')}}" type="image/webp">
-            <img src="{{asset('images/ece_white_logo.png')}}" alt="Logo ece blanco">
+            <img src="{{asset('images/ece_white_logo.png')}}" alt="Logo ECE">
         </picture>
-    </a>
+    </div>
 
-    @if(auth()->user()->profile_photo)
-        <div class="px-10 hidden xl:block">
-            <div class="aspect-square object-cover rounded-full overflow-hidden">
-                <img src="{{asset('storage/' . auth()->user()->profile_photo)}}" alt="Profile photo">
-            </div>
-
-            <x-user-name classes='text-white mt-3 text-sm text-center' />
-            <p class="mt-2 text-white text-center text-xs">600897456</p>
-        </div>
-    @else
-        <div class="w-24 hidden xl:block">
-            <img src="{{asset('images/imagen_perfil.svg')}}" alt="Profile photo">
-        </div>
-    @endif
+    <div class="db-aside__photo-container"></div>
 
     <nav>
-        <ul class="xl:space-y-3 uppercase text-base xl:text-xs flex items-center xl:block">
-            <li class="text-white">
-                <i class="fa-solid fa-house mr-3"></i>
-                <a href="{{route('dashboard')}}" class="hidden xl:inline-block">Inicio</a>
+        <ul class="db-aside__list">
+            <li>
+                <a href="{{route('dashboard')}}" class="db-aside__link">
+                    <i class="ri-home-3-fill db-aside__link-icon"></i>
+                    <span class="db-aside__link-text">Inicio</span>
+                </a>
             </li>
 
-            <li class="text-white">
-                <i class="fa-solid fa-user-group mr-3"></i>
-                <a href="{{route('dashboard.expedientes')}}" class="hidden xl:inline-block">Expedientes</a>
+            <li>
+                <a href="{{route('dashboard.expedientes')}}" class="db-aside__link">
+                    <i class="ri-group-fill db-aside__link-icon"></i>
+                    <span class="db-aside__link-text">Expedientes</span>
+                </a>
             </li>
 
-            <li class="text-white">
-                <i class="fa-solid fa-calendar-days mr-3"></i>
-                <a href="{{route('dashboard.agenda')}}" class="hidden xl:inline-block">Agenda</a>
+            <li>
+                <a href="{{route('dashboard.agenda')}}" class="db-aside__link">
+                    <i class="ri-calendar-schedule-fill db-aside__link-icon"></i>
+                    <span class="db-aside__link-text">Agenda</span>
+                </a>
             </li>
 
-            <li class=" text-white flex items-center">
-                <i class="fa-solid fa-right-from-bracket mr-3"></i>
-                <button wire:click='logout' class="uppercase hidden xl:inline-block">
-                    Cerrar Sesión
-                </button>
+            <li>
+                <a href="{{route('dashboard.mvs')}}" class="db-aside__link">
+                    <i class="ri-bar-chart-grouped-fill db-aside__link-icon"></i>
+                    <span class="db-aside__link-text">Medical View System</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="" class="db-aside__link">
+                    <i class="ri-logout-box-r-line db-aside__link-icon"></i>
+                    <span class="db-aside__link-text">Cerrar Sesión</span>
+                </a>
             </li>
         </ul>
     </nav>

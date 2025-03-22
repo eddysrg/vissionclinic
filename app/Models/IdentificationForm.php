@@ -9,10 +9,7 @@ class IdentificationForm extends Model
 {
     use HasFactory;
 
-    protected $table = 'identification_form';
-
     protected $fillable = [
-        'medical_record_sections_id',
         'gender_identity',
         'age',
         'country',
@@ -25,17 +22,16 @@ class IdentificationForm extends Model
         'schooling',
         'occupation',
         'marital_status',
-        'landline',
-        'cellphone',
         'email',
         'parent',
-        'parent_phone',
+        'parents_phone',
         'relationship',
         'interrogation',
+        'medical_record_id',
     ];
 
-    public function medicalRecordSection()
+    public function medicalRecord()
     {
-        return $this->belongsTo(MedicalRecordSection::class);
+        return $this->belongsTo(MedicalRecord::class);
     }
 }

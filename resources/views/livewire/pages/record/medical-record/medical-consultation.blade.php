@@ -1,21 +1,21 @@
 <?php
 
 use Livewire\Volt\Component;
-use Livewire\Attributes\{Layout, Title};
-use App\Models\{Patient};
+use Livewire\Attributes\{Layout, Title, On};
+use App\Models\{Patient, Appointment};
 use Carbon\Carbon;
 use App\Livewire\Forms\MedicalConsultationForm;
+use Illuminate\View\View;
+
 
 new
-#[Layout('layouts.record')] 
 #[Title('Consulta médica - Vission Clinic ECE')]
 class extends Component {
     public $patient;
-
-    public $id;
+    public $appointments;
 
     protected $listeners = ['setDiagnosisOfDiseases', 'removeDisease', 'setMedicalProcedures', 'removeProcedure'];
-   
+
     public MedicalConsultationForm $form;
 
     public function save()
@@ -24,10 +24,11 @@ class extends Component {
             $this->dispatch('diagnosis-alert', message: "Debes seleccionar un diagnóstico de enfermedad");
             return;
         }
-        
+
         $this->form->store();
 
-        $this->dispatch('show-notification', message: 'Consulta médica registrada con éxito');
+        $route = route('dashboard.record.medical-consultation', ['id' => $this->patient->id]);
+        $this->dispatch('show-noti', message: 'Consulta médica registrada con éxito', link: $route);
     }
 
     public function setDiagnosisOfDiseases($diagnosisOfDiseases)
@@ -50,95 +51,120 @@ class extends Component {
         $this->form->procedures = collect($this->form->procedures)->reject(fn($item) => $item['id'] === $id)->toArray();
     }
 
+    #[On('set-medical-data')]
+    public function setMedicalData()
+    {
+        $selectedAppointment = Appointment::find($this->form->appointmentId);
+        $this->form->date = $selectedAppointment->date->format('Y-m-d');
+        $this->form->time = $selectedAppointment->time->format('H:i');
+        $this->form->type_of_consultation = $selectedAppointment->type;
+    }
+
     public function mount($id)
     {
         $this->patient = Patient::findOrFail($id);
+        //$this->form->setMedicalData();
+        $this->appointments = $this->patient->appointments;
+    }
 
-        $this->authorize('viewRecord', $this->patient);
-
-        $this->id = $id;
-
-        $this->form->setMedicalData();
-
-        $this->form->medicalRecordSectionId = Patient::with(['record.medicalRecordSections' => function ($query) {
-            $query->where('name', 'medical_consultation');
-        }])->findOrFail($this->patient->id)->record->medicalRecordSections->first()->id;
-
+    public function rendering(View $view)
+    {
+        $view
+            ->layout('components.layout.record', [
+                'patient' => $this->patient,
+                'hasAppointment' => !$this->patient->appointments->isEmpty(),
+            ]);
     }
 
 }; ?>
 
-<div 
-    x-on:diagnosis-alert.window="alert($event.detail.message)" 
-    x-on:diagnosis-failed.window="alert($event.detail.message)">
-    <x-slot:id>
-        {{$id}}
-    </x-slot>
+<x-slot:patientID>
+    {{$this->patient->id}}
+</x-slot>
 
-    <x-notification/>
+<div
+    x-on:diagnosis-alert.window="alert($event.detail.message)"
+    x-on:diagnosis-failed.window="alert($event.detail.message)">
+
+    <x-record-notification/>
 
     <h2 class="text-3xl text-[#174075]">Consulta Médica</h2>
 
     <form wire:submit='save'>
         <fieldset class="grid grid-cols-3 gap-5 my-8">
+
+            <div class="col-span-3 flex flex-col">
+                <label for="" class="text-xs">Cita de la consulta</label>
+                <select class="text-sm rounded border-zinc-400" wire:model="form.appointmentId" @change="$dispatch('set-medical-data')">
+                    <option value="">Selecciona la cita de esta consulta</option>
+                    @foreach($appointments as $appointment)
+                        <option value="{{$appointment->id}}">
+                            Cita del {{$appointment->date->format('d/m/Y')}} a las {{$appointment->time->format('H:s')}}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
             <div class="flex flex-col">
                 <label class="text-xs" for="date" class="uppercase">Fecha</label>
-                <input wire:model='form.date' type="date" id="date" class="text-sm rounded border-zinc-400">
-                @error('form.date') 
+                <input wire:model='form.date' type="date" id="date" class="text-sm rounded border-zinc-400 disabled:bg-gray-200" disabled>
+                @error('form.date')
                     <span class="text-red-500 text-sm">{{ $message }}</span>
                 @enderror
             </div>
 
             <div class="flex flex-col">
                 <label class="text-xs" for="time" class="uppercase">Hora</label>
-                <input wire:model='form.time' type="time" id="time" class="text-sm rounded border-zinc-400">
-                @error('form.time') 
+                <input wire:model='form.time' type="time" id="time" class="text-sm rounded border-zinc-400 disabled:bg-gray-200" disabled>
+                @error('form.time')
                     <span class="text-red-500 text-sm">{{ $message }}</span>
                 @enderror
             </div>
 
             <div class="flex flex-col">
                 <label class="text-xs" for="consultationType" class="uppercase">Tipo de consulta</label>
-                <select wire:model='form.consultationType' id="consultationType" class="text-sm rounded border-zinc-400">
+                <select wire:model='form.type_of_consultation' id="consultationType" class="text-sm rounded border-zinc-400 disabled:bg-gray-200" disabled>
                     <option value="">Selecciona una opción</option>
                     <option value="chronic">Crónicos</option>
                     <option value="healthy">Sanos</option>
                     <option value="planning">Planificación</option>
                     <option value="sexually_transmitted_diseases">Enf. transmisibles</option>
                     <option value="other_diseases">Otras enfermedades</option>
+                    <option value="pregnancy_control">Control de embarazo</option>
+                    <option value="nutritional_control">Control nutricional</option>
                 </select>
-                @error('form.consultationType') 
+                @error('form.type_of_consultation')
                     <span class="text-red-500 text-sm">{{ $message }}</span>
                 @enderror
             </div>
 
             <div class="flex flex-col">
                 <label class="text-xs" for="medicalChart" class="uppercase">Presenta cartilla</label>
-                <select wire:model='form.medicalChart' id="medicalChart" class="text-sm rounded border-zinc-400">
+                <select wire:model='form.medical_card' id="medicalChart" class="text-sm rounded border-zinc-400">
                     <option value="">Selecciona una opción</option>
                     <option value="yes">Si</option>
                     <option value="no">No</option>
                 </select>
-                @error('form.medicalChart') 
+                @error('form.medical_card')
                     <span class="text-red-500 text-sm">{{ $message }}</span>
                 @enderror
             </div>
 
             <div class="flex flex-col">
                 <label class="text-xs" for="respiratorySymptom" class="uppercase">Sint. Respiratorio TB</label>
-                <select wire:model='form.respiratorySymptom' id="respiratorySymptom" class="text-sm rounded border-zinc-400">
+                <select wire:model='form.respiratory_symptoms' id="respiratorySymptom" class="text-sm rounded border-zinc-400">
                     <option value="">Selecciona una opción</option>
                     <option value="yes">Si</option>
                     <option value="no">No</option>
                 </select>
-                @error('form.respiratorySymptom') 
+                @error('form.respiratory_symptoms')
                     <span class="text-red-500 text-sm">{{ $message }}</span>
                 @enderror
             </div>
 
             <div class="flex flex-col">
                 <label class="text-xs" for="nutritionalStatus" class="uppercase">Estado nutricional</label>
-                <select wire:model='form.nutritionalStatus' id="nutritionalStatus" class="text-sm rounded border-zinc-400">
+                <select wire:model='form.nutritional_status' id="nutritionalStatus" class="text-sm rounded border-zinc-400">
                     <option value="">Selecciona una opción</option>
                     <option value="underweight">Bajo Peso (Por debajo de 18,5)</option>
                     <option value="normal_weight">Peso normal (18,5,-24,9)</option>
@@ -147,7 +173,7 @@ class extends Component {
                     <option value="obesity_two">Obesidad clase II (35,0-39,9)</option>
                     <option value="obesity_three">Obesidad clase III (Por encima de 40)</option>
                 </select>
-                @error('form.nutritionalStatus') 
+                @error('form.nutritional_status')
                     <span class="text-red-500 text-sm">{{ $message }}</span>
                 @enderror
             </div>
@@ -157,20 +183,20 @@ class extends Component {
             <legend class="text-[#174075] text-xl mb-3">Padecimiento Actual (Motivo de consulta)</legend>
 
             <div class="flex flex-col">
-                <textarea wire:model='form.currentCondition' id="currentCondition" class="rounded border-zinc-400" rows="4"></textarea>
-                @error('form.currentCondition') 
+                <textarea wire:model='form.reason_for_consultation' id="currentCondition" class="rounded border-zinc-400" rows="4"></textarea>
+                @error('form.reason_for_consultation')
                     <span class="text-red-500 text-sm">{{ $message }}</span>
                 @enderror
             </div>
         </fieldset>
 
-        <x-vital-signs />
+        <x-vital-signs-consultation />
 
         <fieldset class="my-4">
             <legend class="text-[#174075] text-xl mb-4">Exploración Física</legend>
             <div class="flex flex-col">
-                <textarea wire:model='form.physicalExamination' id="physicalExamination" class="rounded border-zinc-400"></textarea>
-                @error('form.physicalExamination') 
+                <textarea wire:model='form.physical_examination' id="physicalExamination" class="rounded border-zinc-400"></textarea>
+                @error('form.physical_examination')
                     <span class="text-red-500 text-sm">{{ $message }}</span>
                 @enderror
             </div>
@@ -180,8 +206,8 @@ class extends Component {
             <fieldset>
                 <legend class="text-[#174075] text-xl mb-4">Plan de manejo</legend>
                 <div class="flex flex-col">
-                    <textarea wire:model='form.managementPlan' id="managementPlan" class="rounded border-zinc-400"></textarea>
-                    @error('form.managementPlan') 
+                    <textarea wire:model='form.management_plan' id="managementPlan" class="rounded border-zinc-400"></textarea>
+                    @error('form.management_plan')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
                 </div>
@@ -191,7 +217,7 @@ class extends Component {
                 <legend class="text-[#174075] text-xl mb-4">Análisis</legend>
                 <div class="flex flex-col">
                     <textarea wire:model='form.analysis' id="analysis"  class="rounded border-zinc-400"></textarea>
-                    @error('form.analysis') 
+                    @error('form.analysis')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
                 </div>
@@ -205,18 +231,18 @@ class extends Component {
             <fieldset>
                 <legend class="text-[#174075] text-xl mb-4">Impresión diagnóstica</legend>
                 <div class="flex flex-col">
-                    <textarea wire:model='form.diagnosticImpression' id="diagnosticImpression" class="rounded border-zinc-400"></textarea>
-                    @error('form.diagnosticImpression') 
+                    <textarea wire:model='form.diagnostic_impression' id="diagnosticImpression" class="rounded border-zinc-400"></textarea>
+                    @error('form.diagnostic_impression')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
                 </div>
             </fieldset>
-    
+
             <fieldset>
                 <legend class="text-[#174075] text-xl mb-4">Pronóstico</legend>
                 <div class="flex flex-col">
-                    <textarea wire:model='form.forecast' id="forecast" class="rounded border-zinc-400"></textarea>
-                    @error('form.forecast') 
+                    <textarea wire:model='form.prognosis' id="forecast" class="rounded border-zinc-400"></textarea>
+                    @error('form.prognosis')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
                 </div>
@@ -289,12 +315,12 @@ class extends Component {
             // Update the input value
             input.value = cleanedValue;
         }
-        
+
 
         function calculateIMC() {
 
             let height = parseFloat(heightInput.value);
-            let weight = parseFloat(weightInput.value); 
+            let weight = parseFloat(weightInput.value);
 
             if(isNaN(weight) || weight <= 0 || isNaN(height) || height <= 0) {
                 return;

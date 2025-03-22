@@ -5,13 +5,13 @@ use Carbon\Carbon;
 use Livewire\Attributes\{Layout, Title};
 use App\Livewire\Forms\LaboratoryForm;
 use App\Models\Patient;
+use Illuminate\View\View;
 
-new 
-#[Layout('layouts.record')] 
+
+new
 #[Title('Laboratorio - Vission Clinic ECE')]
 class extends Component {
     public $patient;
-    public $id;
     public LaboratoryForm $form;
 
     public function save()
@@ -23,32 +23,29 @@ class extends Component {
 
     public function medicalConsultation()
     {
-        redirect()->route('dashboard.expedientes.medicalConsultation', ['id' => $this->patient->id]);
+        redirect()->route('dashboard.record.medical-consultation', ['id' => $this->patient->id]);
     }
 
     public function mount($id)
     {
         $this->patient = Patient::findOrFail($id);
-
-        $this->authorize('viewRecord', $this->patient);
-
-        $this->id = $id;
-
         $this->form->date = Carbon::now()->format('Y-m-d');
         $this->form->time = Carbon::now()->format('H:i');
+    }
 
-        $this->form->medicalRecordSectionId = Patient::with(['record.medicalRecordSections' => function ($query) {
-            $query->where('name', 'laboratory');
-        }])->findOrFail($this->patient->id)->record->medicalRecordSections->first()->id;
+    public function rendering(View $view)
+    {
+        $view
+            ->layout('components.layout.record', [
+                'patient' => $this->patient,
+                'hasAppointment' => !$this->patient->appointments->isEmpty(),
+            ]);
     }
 }; ?>
 
 <div>
-    <x-slot:id>
-        {{$id}}
-    </x-slot>
 
-    <x-notification/>
+    <x-record-notification/>
 
     <h2 class="text-3xl text-[#174075]">Laboratorio</h2>
 
@@ -135,8 +132,8 @@ class extends Component {
                         <h4>1. Hematología</h4>
                         <span>(Selecciona)</span>
                     </div>
-        
-                    <section 
+
+                    <section
                     x-show="open"
                     x-transition:enter="transition ease-out duration-300"
                     x-transition:enter-start="opacity-0 transform translate-y-[-10px]"
@@ -149,47 +146,47 @@ class extends Component {
                             <input type="checkbox" wire:model='form.hematology' id="biometria_hematica_froja" value="biometriaHematicaFroja" class="rounded-full bg-gray-300 border-none cursor-pointer">
                             <label for="biometria_hematica_froja" class="uppercase text-sm cursor-pointer">Biometria Hematica - F.roja</label>
                         </div>
-                        
+
                         <div>
                             <input type="checkbox" wire:model='form.hematology' id="gota_gruesa" value="gotaGruesa" class="rounded-full bg-gray-300 border-none cursor-pointer">
                             <label for="gota_gruesa" class="uppercase text-sm cursor-pointer">Gota gruesa</label>
                         </div>
-                        
+
                         <div>
                             <input type="checkbox" wire:model='form.hematology' id="celulas_le" value="celulasLE" class="rounded-full bg-gray-300 border-none cursor-pointer">
                             <label for="celulas_le" class="uppercase text-sm cursor-pointer">Celulas LE</label>
                         </div>
-                        
+
                         <div>
                             <input type="checkbox" wire:model='form.hematology' id="biometria_hematica_fblanca" value="biometriaHematicaFblanca" class="rounded-full bg-gray-300 border-none cursor-pointer">
                             <label for="biometria_hematica_fblanca" class="uppercase text-sm cursor-pointer">Biometria Hematica - F.blanca</label>
                         </div>
-                        
+
                         <div>
                             <input type="checkbox" wire:model='form.hematology' id="recuento_plaquetas" value="recuentoPlaquetas" class="rounded-full bg-gray-300 border-none cursor-pointer">
                             <label for="recuento_plaquetas" class="uppercase text-sm cursor-pointer">Recuento de plaquetas</label>
                         </div>
-                        
+
                         <div>
                             <input type="checkbox" wire:model='form.hematology' id="eosinotilos_moco_nasal" value="eosinotilosMocoNasal" class="rounded-full bg-gray-300 border-none cursor-pointer">
                             <label for="eosinotilos_moco_nasal" class="uppercase text-sm cursor-pointer">Eosinotilos en moco nasal</label>
                         </div>
-                        
+
                         <div>
                             <input type="checkbox" wire:model='form.hematology' id="busqueda_plasmodio" value="busquedaPlasmodio" class="rounded-full bg-gray-300 border-none cursor-pointer">
                             <label for="busqueda_plasmodio" class="uppercase text-sm cursor-pointer">Busqueda de plasmodio</label>
                         </div>
-                        
+
                         <div>
                             <input type="checkbox" wire:model='form.hematology' id="reticulocitos" value="reticulocitos" class="rounded-full bg-gray-300 border-none cursor-pointer">
                             <label for="reticulocitos" class="uppercase text-sm cursor-pointer">Reticulocitos</label>
                         </div>
-                        
+
                         <div>
                             <input type="checkbox" wire:model='form.hematology' id="grupo_sanguineo_factor_rh" value="grupoSanguineoFactorRH" class="rounded-full bg-gray-300 border-none cursor-pointer">
                             <label for="grupo_sanguineo_factor_rh" class="uppercase text-sm cursor-pointer">Grupo sanguineo y factor RH</label>
                         </div>
-                        
+
                         <div>
                             <input type="checkbox" wire:model='form.hematology' id="vsg" value="vsg" class="rounded-full bg-gray-300 border-none cursor-pointer">
                             <label for="vsg" class="uppercase text-sm cursor-pointer">VSG</label>
@@ -202,8 +199,8 @@ class extends Component {
                         <h4>2. Coagulación</h4>
                         <span>(Selecciona)</span>
                     </div>
-        
-                    <section 
+
+                    <section
                     x-show="open"
                     x-transition:enter="transition ease-out duration-300"
                     x-transition:enter-start="opacity-0 transform translate-y-[-10px]"
@@ -216,7 +213,7 @@ class extends Component {
                             <input type="checkbox" wire:model='form.coagulation' id="tiempo_de_protrombina" value="tiempoDeProtrombina" class="rounded-full bg-gray-300 border-none cursor-pointer">
                             <label for="tiempo_de_protrombina" class="uppercase text-sm cursor-pointer">Tiempo de protrombina</label>
                         </div>
-                        
+
                         <div>
                             <input type="checkbox" wire:model='form.coagulation' id="tiempo_de_tromboplastina" value="tiempoDeTromboplastina" class="rounded-full bg-gray-300 border-none cursor-pointer">
                             <label for="tiempo_de_tromboplastina" class="uppercase text-sm cursor-pointer">Tiempo de tromboplastina</label>
@@ -229,8 +226,8 @@ class extends Component {
                         <h4>3. Química Clínica</h4>
                         <span>(Selecciona)</span>
                     </div>
-        
-                    <section 
+
+                    <section
                     x-show="open"
                     x-transition:enter="transition ease-out duration-300"
                     x-transition:enter-start="opacity-0 transform translate-y-[-10px]"
@@ -293,8 +290,8 @@ class extends Component {
                         <h4>4. Inmunología</h4>
                         <span>(Selecciona)</span>
                     </div>
-        
-                    <section 
+
+                    <section
                     x-show="open"
                     x-transition:enter="transition ease-out duration-300"
                     x-transition:enter-start="opacity-0 transform translate-y-[-10px]"
@@ -307,47 +304,47 @@ class extends Component {
                             <input type="checkbox" wire:model='form.immunology' id="antiestreptolisinas" value="antiestreptolisinas" class="rounded-full bg-gray-300 border-none cursor-pointer">
                             <label for="antiestreptolisinas" class="uppercase text-sm cursor-pointer">Antiestreptolisinas</label>
                         </div>
-                        
+
                         <div>
                             <input type="checkbox" wire:model='form.immunology' id="antigeno_prostatico" value="antigenoProstatico" class="rounded-full bg-gray-300 border-none cursor-pointer">
                             <label for="antigeno_prostatico" class="uppercase text-sm cursor-pointer">Antígeno Prostático</label>
                         </div>
-                        
+
                         <div>
                             <input type="checkbox" wire:model='form.immunology' id="proteina_c_reactiva" value="proteina_c_reactiva" class="rounded-full bg-gray-300 border-none cursor-pointer">
                             <label for="proteina_c_reactiva" class="uppercase text-sm cursor-pointer">Proteina C Reactiva</label>
                         </div>
-                        
+
                         <div>
                             <input type="checkbox" wire:model='form.immunology' id="coombs_directo" value="coombs_directo" class="rounded-full bg-gray-300 border-none cursor-pointer">
                             <label for="coombs_directo" class="uppercase text-sm cursor-pointer">Coombs directo</label>
                         </div>
-                        
+
                         <div>
                             <input type="checkbox" wire:model='form.immunology' id="coombs_indirecto" value="coombs_indirecto" class="rounded-full bg-gray-300 border-none cursor-pointer">
                             <label for="coombs_indirecto" class="uppercase text-sm cursor-pointer">Coombs indirecto</label>
                         </div>
-                        
+
                         <div>
                             <input type="checkbox" wire:model='form.immunology' id="factor_reumatoide" value="factor_reumatoide" class="rounded-full bg-gray-300 border-none cursor-pointer">
                             <label for="factor_reumatoide" class="uppercase text-sm cursor-pointer">Factor reumatoide</label>
                         </div>
-                        
+
                         <div>
                             <input type="checkbox" wire:model='form.immunology' id="pie_suero" value="pie_suero" class="rounded-full bg-gray-300 border-none cursor-pointer">
                             <label for="pie_suero" class="uppercase text-sm cursor-pointer">P.I.E Suero</label>
                         </div>
-                        
+
                         <div>
                             <input type="checkbox" wire:model='form.immunology' id="pie_orina" value="pie_orina" class="rounded-full bg-gray-300 border-none cursor-pointer">
                             <label for="pie_orina" class="uppercase text-sm cursor-pointer">P.I.E Orina</label>
                         </div>
-                        
+
                         <div>
                             <input type="checkbox" wire:model='form.immunology' id="pruebas_cruzadas" value="pruebas_cruzadas" class="rounded-full bg-gray-300 border-none cursor-pointer">
                             <label for="pruebas_cruzadas" class="uppercase text-sm cursor-pointer">Pruebas cruzadas</label>
                         </div>
-                        
+
                         <div>
                             <input type="checkbox" wire:model='form.immunology' id="reacciones_febriles" value="reacciones_febriles" class="rounded-full bg-gray-300 border-none cursor-pointer">
                             <label for="reacciones_febriles" class="uppercase text-sm cursor-pointer">Reacciones febriles</label>
@@ -375,8 +372,8 @@ class extends Component {
                         <h4>5. Citología</h4>
                         <span>(Selecciona)</span>
                     </div>
-        
-                    <section 
+
+                    <section
                     x-show="open"
                     x-transition:enter="transition ease-out duration-300"
                     x-transition:enter-start="opacity-0 transform translate-y-[-10px]"
@@ -389,7 +386,7 @@ class extends Component {
                             <input type="checkbox" wire:model='form.cytology' id="espermatobioscopia" value="espermatobioscopia" class="rounded-full bg-gray-300 border-none cursor-pointer">
                             <label for="espermatobioscopia" class="uppercase text-sm cursor-pointer">Espermatobioscopía</label>
                         </div>
-                        
+
                         <div>
                             <input type="checkbox" wire:model='form.cytology' id="citoquimica_de" value="citoquimica_de" class="rounded-full bg-gray-300 border-none cursor-pointer">
                             <label for="citoquimica_de" class="uppercase text-sm cursor-pointer">Citoquímica de:</label>
@@ -402,8 +399,8 @@ class extends Component {
                         <h4>6. Urología y Coprología</h4>
                         <span>(Selecciona)</span>
                     </div>
-        
-                    <section 
+
+                    <section
                     x-show="open"
                     x-transition:enter="transition ease-out duration-300"
                     x-transition:enter-start="opacity-0 transform translate-y-[-10px]"
@@ -416,7 +413,7 @@ class extends Component {
                             <input type="checkbox" wire:model='form.urologyAndCoprology' id="examen_general_de_orina" value="examen_general_de_orina" class="rounded-full bg-gray-300 border-none cursor-pointer">
                             <label for="examen_general_de_orina" class="uppercase text-sm cursor-pointer">Examén General de orina</label>
                         </div>
-                        
+
                         <div>
                             <input type="checkbox" wire:model='form.urologyAndCoprology' id="depuración_de_creatinina_en_orina" value="depuración_de_creatinina_en_orina" class="rounded-full bg-gray-300 border-none cursor-pointer">
                             <label for="depuración_de_creatinina_en_orina" class="uppercase text-sm cursor-pointer">Depuración de creatinina en orina de 24 hrs</label>
@@ -469,8 +466,8 @@ class extends Component {
                         <h4>7. Microbiología</h4>
                         <span>(Selecciona)</span>
                     </div>
-        
-                    <section 
+
+                    <section
                     x-show="open"
                     x-transition:enter="transition ease-out duration-300"
                     x-transition:enter-start="opacity-0 transform translate-y-[-10px]"
@@ -483,7 +480,7 @@ class extends Component {
                             <input type="checkbox" wire:model='form.microbiology' id="exudado_vaginal" value="exudado_vaginal" class="rounded-full bg-gray-300 border-none cursor-pointer">
                             <label for="exudado_vaginal" class="uppercase text-sm cursor-pointer">Exudado vaginal</label>
                         </div>
-                        
+
                         <div>
                             <input type="checkbox" wire:model='form.microbiology' id="exudado_uretral" value="exudado_uretral" class="rounded-full bg-gray-300 border-none cursor-pointer">
                             <label for="exudado_uretral" class="uppercase text-sm cursor-pointer">Exudado Uretral</label>
@@ -526,7 +523,7 @@ class extends Component {
                     </section>
                 </li>
             </ul>
-            
+
         </fieldset>
 
         <fieldset class="mt-8">
@@ -547,13 +544,10 @@ class extends Component {
 
         <div class="flex items-center justify-end mt-8">
             <div class="flex gap-3">
-                <button type="button" wire:click='medicalConsultation' class="px-8 py-1 bg-[#174075] text-white rounded-full flex items-center gap-2">
-                    Consulta médica
-                </button>
 
-                {{-- <button type="button" wire:click='finish'  class="px-8 py-1 bg-[#41759D] text-white rounded-full flex items-center gap-2">
+                 <button type="button" wire:click='finish'  class="px-8 py-1 bg-[#41759D] text-white rounded-full flex items-center gap-2">
                     Imprimir
-                </button> --}}
+                </button>
 
                 <button type="submit" class="px-8 py-1 bg-[#174075] text-white rounded-full flex items-center gap-2">
                     Guardar
@@ -565,5 +559,5 @@ class extends Component {
             </div>
         </div>
     </form>
-    
+
 </div>

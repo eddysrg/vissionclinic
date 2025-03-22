@@ -5,10 +5,10 @@ use Livewire\Attributes\{Layout, Title, Computed, On};
 use App\Livewire\Forms\ReferenceForm;
 use Carbon\Carbon;
 use App\Models\{Patient, HealthUnit, Consultation, Record};
+use Illuminate\View\View;
 
 
-new 
-#[Layout('layouts.record')] 
+new
 #[Title('Referencia - Vission Clinic ECE')]
 class extends Component {
 
@@ -72,51 +72,24 @@ class extends Component {
     {
         $this->patient = Patient::findOrFail($id);
 
-        $this->authorize('viewRecord', $this->patient);
-
-        $this->id = $id;
-
-        //Set medical record section
-        $referenceSectionInfo = Patient::with(['record.medicalRecordSections' => function ($query) {
-            $query->where('name', 'reference');
-        }])->findOrFail($this->patient->id)->record->medicalRecordSections->first();
-        
-        //Set medical record section ID
-        $this->form->medicalRecordSectionId = $referenceSectionInfo->id;
-
         //Set current date and time
         $this->form->date = Carbon::now()->format('Y-m-d');
         $this->form->time = Carbon::now()->format('H:i');
+    }
 
-        // Vital signs from medical consultation
-        $medicalConsultation = Record::with(['medicalRecordSections' => function ($query) {
-            $query->where('name', 'medical_consultation');
-        },
-        'medicalRecordSections.medicalConsultation'
-        ])->find($referenceSectionInfo->record_id)?->medicalRecordSections->first()?->medicalConsultation->first();
-
-        if($medicalConsultation) {
-            $this->form->thereIsConsultation = true;
-            $this->form->weight = $medicalConsultation->weight;
-            $this->form->height = $medicalConsultation->height;
-            $this->form->imc = $medicalConsultation->imc;
-            $this->form->icc = $medicalConsultation->icc;
-            $this->form->heartRate = $medicalConsultation->heart_rate;
-            $this->form->respiratoryRate = $medicalConsultation->respiratory_rate;
-            $this->form->temperature = $medicalConsultation->temperature;
-            $this->form->glycemia = $medicalConsultation->glycemia;
-            $this->form->bloodPressure = $medicalConsultation->blood_pressure;
-            $this->form->oxygenSaturation = $medicalConsultation->oxygen_saturation;
-        }
+    public function rendering(View $view)
+    {
+        $view
+            ->layout('components.layout.record', [
+                'patient' => $this->patient,
+                'hasAppointment' => !$this->patient->appointments->isEmpty(),
+            ]);
     }
 }; ?>
 
 <div>
-    <x-slot:id>
-        {{$id}}
-    </x-slot>
 
-    <x-notification/>
+    <x-record-notification/>
 
     <h2 class="text-3xl text-[#174075]">Referencia</h2>
 
@@ -125,15 +98,15 @@ class extends Component {
             <div class="flex flex-col">
                 <label class="text-xs" for="date" class="uppercase">Fecha</label>
                 <input wire:model='form.date' type="date" id="date" class="text-sm rounded border-zinc-400">
-                @error('form.date') 
+                @error('form.date')
                     <span class="text-red-500 text-sm">{{ $message }}</span>
                 @enderror
             </div>
-        
+
             <div class="flex flex-col">
                 <label class="text-xs" for="time" class="uppercase">Hora</label>
                 <input wire:model='form.time' type="time" id="time" class="text-sm rounded border-zinc-400">
-                @error('form.time') 
+                @error('form.time')
                     <span class="text-red-500 text-sm">{{ $message }}</span>
                 @enderror
             </div>
@@ -145,7 +118,7 @@ class extends Component {
                     <option value="si">Si</option>
                     <option value="no">No</option>
                 </select>
-                @error('form.isUrgent') 
+                @error('form.isUrgent')
                     <span class="text-red-500 text-sm">{{ $message }}</span>
                 @enderror
             </div>
@@ -168,7 +141,7 @@ class extends Component {
             <div class="flex flex-col">
                 <label class="text-xs" for="clues" class="uppercase">Clues seleccionado</label>
                 <input type="text" wire:model.live='form.clues' id="clues" class="text-sm rounded border-zinc-400 disabled:bg-gray-100" disabled>
-                @error('form.clues') 
+                @error('form.clues')
                     <span class="text-red-500 text-sm">{{ $message }}</span>
                 @enderror
             </div>
@@ -195,7 +168,7 @@ class extends Component {
                     <option value="oncologia">Oncología</option>
                 </select>
 
-                @error('form.reference_unit') 
+                @error('form.reference_unit')
                     <span class="text-red-500 text-sm">{{ $message }}</span>
                 @enderror
             </div>
@@ -213,7 +186,7 @@ class extends Component {
                     <option value="servicios_de_salud_mental">Servicios de salud mental</option>
                     <option value="atencion_materno_infantil">Atención Materno-infantil</option>
                 </select>
-                @error('form.reference_by') 
+                @error('form.reference_by')
                     <span class="text-red-500 text-sm">{{ $message }}</span>
                 @enderror
             </div>
@@ -226,39 +199,39 @@ class extends Component {
                 <div class="flex flex-col col-span-3">
                     <label class="text-xs" for="entity" class="uppercase">Entidad</label>
                     <input type="text" wire:model='form.entity' id="entity" class="text-sm rounded border-zinc-400 disabled:bg-gray-100" disabled>
-                    @error('form.entity') 
+                    @error('form.entity')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
                 </div>
-    
+
                 <div class="flex flex-col col-span-3">
                     <label class="text-xs" for="health_institution" class="uppercase">Institución de salud</label>
                     <input type="text" wire:model='form.health_institution' id="health_institution" class="text-sm rounded border-zinc-400 disabled:bg-gray-100" disabled>
-                    @error('form.health_institution') 
+                    @error('form.health_institution')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
                 </div>
-    
+
                 <div class="flex flex-col col-span-3">
                     <label class="text-xs" for="destination_unit" class="uppercase">Unidad destino</label>
                     <input type="text" wire:model='form.destination_unit' id="destination_unit" class="text-sm rounded border-zinc-400 disabled:bg-gray-100" disabled>
-                    @error('form.destination_unit') 
+                    @error('form.destination_unit')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
                 </div>
-    
+
                 <div class="flex flex-col col-span-3">
                     <label class="text-xs" for="address" class="uppercase">Domicilio</label>
                     <input type="text" wire:model='form.address' id="address" class="text-sm rounded border-zinc-400 disabled:bg-gray-100" disabled autocomplete="address-level1">
-                    @error('form.address') 
+                    @error('form.address')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
                 </div>
-    
+
                 <div class="flex flex-col col-span-2">
                     <label class="text-xs" for="service" class="uppercase">Servicio</label>
                     <input type="text" wire:model='form.service' id="service" class="text-sm rounded border-zinc-400">
-                    @error('form.service') 
+                    @error('form.service')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
                 </div>
@@ -271,7 +244,7 @@ class extends Component {
                 <div class="flex items-center gap-1">
                     <label for="patient_on_fast" class="text-sm">Paciente en ayuno</label>
                     <input type="checkbox" wire:model='form.patient_on_fast' id="patient_on_fast" class="bg-gray-300 border-none rounded-full">
-                    @error('form.patient_on_fast') 
+                    @error('form.patient_on_fast')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                      @enderror
                 </div>
@@ -288,15 +261,15 @@ class extends Component {
                     <div class="flex flex-col flex-1">
                         <label class="text-xs" for="reason_for_reference" class="uppercase">Motivo de la referencia</label>
                         <textarea wire:model='form.reason_for_reference' id="reason_for_reference" class="text-sm rounded border-zinc-400 h-full"></textarea>
-                        @error('form.reason_for_reference') 
+                        @error('form.reason_for_reference')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
                     </div>
-    
+
                     <div class="flex flex-col mt-8 flex-1">
                         <label class="text-xs" for="diagnostic_impression" class="uppercase">Impresión diagnóstica</label>
                         <textarea wire:model='form.diagnostic_impression' id="diagnostic_impression" class="text-sm rounded border-zinc-400 h-full"></textarea>
-                        @error('form.diagnostic_impression') 
+                        @error('form.diagnostic_impression')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
                     </div>
@@ -309,108 +282,108 @@ class extends Component {
                             <input class="text-sm rounded border-zinc-400 w-full disabled:bg-gray-100" wire:model='form.weight' type="text" id="weight" placeholder="Ej: 70" disabled>
                             <span class="absolute border-zinc-400 border-l top-0 right-0 h-full flex items-center px-2 rounded-tr rounded-br text-sm">Kg</span>
                         </div>
-                        @error('form.weight') 
+                        @error('form.weight')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
                     </div>
-                
+
                     <div>
                         <label for="height" class="uppercase text-xs">Talla</label>
                         <div class="relative">
                             <input class="text-sm rounded border-zinc-400 w-full disabled:bg-gray-100" wire:model='form.height' type="text" id="height" placeholder="Ej: 1.80" disabled>
                             <span class="absolute border-zinc-400 border-l top-0 right-0 h-full flex items-center px-2 rounded-tr rounded-br text-sm">m</span>
                         </div>
-                        @error('form.height') 
+                        @error('form.height')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
                     </div>
-                
+
                     <div>
                         <label for="imc" class="uppercase text-xs">IMC</label>
                         <div class="relative">
                             <input class="text-sm rounded border-zinc-400 w-full disabled:bg-gray-100" disabled wire:model='form.imc' type="text" id="imc" placeholder="Ingrese peso y talla">
                             <span class="absolute border-zinc-400 border-l top-0 right-0 h-full flex items-center px-2 rounded-tr rounded-br text-sm">kg/m²</span>
                         </div>
-                        @error('form.imc') 
+                        @error('form.imc')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
                     </div>
-                
+
                     <div>
                         <label for="icc" class="uppercase text-xs">ICC</label>
                         <input class="text-sm rounded border-zinc-400 w-full disabled:bg-gray-100" wire:model='form.icc' type="text" id="icc" disabled>
-                        @error('form.icc') 
+                        @error('form.icc')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
                     </div>
-                
+
                     <div>
                         <label for="heartRate" class="uppercase text-xs">Frec. Cardíaca</label>
                         <div class="relative">
                             <input class="text-sm rounded border-zinc-400 w-full disabled:bg-gray-100" wire:model='form.heartRate' type="text" id="heartRate" disabled>
                             <span class="absolute border-zinc-400 border-l top-0 right-0 h-full flex items-center px-2 rounded-tr rounded-br text-sm">lpm</span>
                         </div>
-                        @error('form.heartRate') 
+                        @error('form.heartRate')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
                     </div>
-                
+
                     <div>
                         <label for="respiratoryRate" class="uppercase text-xs">Frec. Respiratoria</label>
                         <div class="relative">
                             <input class="text-sm rounded border-zinc-400 w-full disabled:bg-gray-100" wire:model='form.respiratoryRate' type="text" id="respiratoryRate" disabled>
                             <span class="absolute border-zinc-400 border-l top-0 right-0 h-full flex items-center px-2 rounded-tr rounded-br text-sm">rpm</span>
-            
+
                         </div>
-                        @error('form.respiratoryRate') 
+                        @error('form.respiratoryRate')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
                     </div>
-                
+
                     <div>
                         <label for="temperature" class="uppercase text-xs">Temperatura</label>
                         <div class="relative">
                             <input class="text-sm rounded border-zinc-400 w-full disabled:bg-gray-100" wire:model='form.temperature' type="text" id="temperature" disabled>
                             <span class="absolute border-zinc-400 border-l top-0 right-0 h-full flex items-center px-2 rounded-tr rounded-br text-sm">°C</span>
-            
+
                         </div>
-                        @error('form.temperature') 
+                        @error('form.temperature')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
                     </div>
-                
+
                     <div>
                         <label for="glycemia" class="uppercase text-xs">Glucemia</label>
                         <div class="relative">
                             <input class="text-sm rounded border-zinc-400 w-full disabled:bg-gray-100" wire:model='form.glycemia' type="text" id="glycemia" disabled>
                             <span class="absolute border-zinc-400 border-l top-0 right-0 h-full flex items-center px-2 rounded-tr rounded-br text-sm">mg/dL</span>
-            
+
                         </div>
-                        @error('form.glycemia') 
+                        @error('form.glycemia')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
                     </div>
-                
+
                     <div>
                         <label for="bloodPressure" class="uppercase text-xs">Tensión Arterial</label>
                         <div class="relative">
                             <input class="text-sm rounded border-zinc-400 w-full disabled:bg-gray-100" wire:model='form.bloodPressure' type="text" id="bloodPressure" disabled>
                             <span class="absolute border-zinc-400 border-l top-0 right-0 h-full flex items-center px-2 rounded-tr rounded-br text-sm">mmHg</span>
-            
+
                         </div>
-                        @error('form.bloodPressure') 
+                        @error('form.bloodPressure')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
                     </div>
-                
+
                     <div>
                         <label for="oxygenSaturation" class="uppercase text-xs">Saturación de oxígeno</label>
                         <div class="relative">
                             <input class="text-sm rounded border-zinc-400 w-full disabled:bg-gray-100" wire:model='form.oxygenSaturation' type="text" id="oxygenSaturation" disabled>
                             <span class="absolute border-zinc-400 border-l top-0 right-0 h-full flex items-center px-2 rounded-tr rounded-br text-sm">%</span>
-            
+
                         </div>
-                        @error('form.oxygenSaturation') 
+                        @error('form.oxygenSaturation')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
                     </div>
@@ -425,21 +398,21 @@ class extends Component {
                 <div class="flex flex-col mt-5">
                     <label class="text-xs" for="physicalFolio" class="uppercase">Folio físico</label>
                     <input wire:model='form.physicalFolio' type="text" id="physicalFolio" class="text-sm rounded border-zinc-400">
-                    @error('form.physicalFolio') 
+                    @error('form.physicalFolio')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
                 </div>
             </section>
         </fieldset>
 
-        
+
 
         <div class="flex items-center justify-end mt-8">
             <div class="flex gap-3">
                 <button wire:click.prevent='printReference' class="px-8 py-1 bg-[#41759D] text-white rounded-full flex items-center gap-2">
                     Imprimir
                 </button>
-                
+
                 <button type="submit" class="px-8 py-1 bg-[#174075] text-white rounded-full flex items-center gap-2">
                     Guardar
                 </button>
@@ -500,12 +473,12 @@ class extends Component {
             // Update the input value
             input.value = cleanedValue;
         }
-        
+
 
         function calculateIMC() {
 
             let height = parseFloat(heightInput.value);
-            let weight = parseFloat(weightInput.value); 
+            let weight = parseFloat(weightInput.value);
 
             if(isNaN(weight) || weight <= 0 || isNaN(height) || height <= 0) {
                 return;

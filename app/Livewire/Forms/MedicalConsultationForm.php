@@ -2,19 +2,20 @@
 
 namespace App\Livewire\Forms;
 
+use App\Models\MedicalConsultation;
 use Carbon\Carbon;
 use Livewire\Form;
 use App\Models\Diagnosis;
 use App\Models\Consultation;
-use Livewire\Attributes\Validate;
+use Livewire\Attributes\{Validate, On};
 
 class MedicalConsultationForm extends Form
 {
 
     public $diseases = [];
     public $procedures = [];
-    public $medicalRecordSectionId;
-    
+    public $appointmentId;
+
     #[Validate('required|date')]
     public $date;
 
@@ -22,22 +23,22 @@ class MedicalConsultationForm extends Form
     public $time;
 
     #[Validate('required|in:chronic,healthy,planning,sexually_transmitted_diseases,other_diseases')]
-    public $consultationType;
+    public $type_of_consultation;
 
     #[Validate('required|in:yes,no')]
-    public $medicalChart;
+    public $medical_card;
 
     #[Validate('required|in:yes,no')]
-    public $respiratorySymptom;
+    public $respiratory_symptoms;
 
     #[Validate('required|in:underweight,normal_weight,overweight,obesity_one,obesity_two,obesity_three')]
-    public $nutritionalStatus;
+    public $nutritional_status;
 
     #[Validate('required|string')]
-    public $currentCondition;
+    public $reason_for_consultation;
 
     #[Validate('required|boolean')]
-    public $patientFasting = false;
+    public $fasting_patient = false;
 
     #[Validate('required|numeric')]
     public $weight;
@@ -52,77 +53,47 @@ class MedicalConsultationForm extends Form
     public $icc;
 
     #[Validate('required|numeric')]
-    public $heartRate;
+    public $frecuencia_cardiaca;
 
     #[Validate('required|numeric')]
-    public $respiratoryRate;
+    public $frecuencia_respiratoria;
 
     #[Validate('required|numeric')]
-    public $temperature;
+    public $temperatura;
 
     #[Validate('required|numeric')]
-    public $glycemia;
+    public $glucemia;
 
     #[Validate('required|string')]
-    public $bloodPressure;
+    public $presion_arterial;
 
     #[Validate('required|numeric')]
-    public $oxygenSaturation;
+    public $saturacion_oxigeno;
 
     #[Validate('required|string')]
-    public $physicalExamination;
+    public $physical_examination;
 
     #[Validate('required|string')]
-    public $managementPlan;
+    public $management_plan;
 
     #[Validate('required|string')]
     public $analysis;
 
     #[Validate('required|string')]
-    public $diagnosticImpression;
+    public $diagnostic_impression;
 
     #[Validate('required|string')]
-    public $forecast;
+    public $prognosis;
 
 
     public function store()
     {
         $validated = $this->validate();
-
-        Consultation::create([
-            'medical_record_sections_id' => $this->medicalRecordSectionId,
-            'date' => $validated['date'],
-            'time' => $validated['time'],
-            'consultation_type' => $validated['consultationType'],
-            'medical_chart' => $validated['medicalChart'],
-            'respiratory_symptom' => $validated['respiratorySymptom'],
-            'nutritional_status' => $validated['nutritionalStatus'],
-            'current_condition' => $validated['currentCondition'],
-            'patient_fasting' => $validated['patientFasting'],
-            'weight' => $validated['weight'],
-            'height' => $validated['height'],
-            'imc' => $validated['imc'],
-            'icc' => $validated['icc'],
-            'heart_rate' => $validated['heartRate'],
-            'respiratory_rate' => $validated['respiratoryRate'],
-            'temperature' => $validated['temperature'],
-            'glycemia' => $validated['glycemia'],
-            'blood_pressure' => $validated['bloodPressure'],
-            'oxygen_saturation' => $validated['oxygenSaturation'],
-            'physical_examination' => $validated['physicalExamination'],
-            'management_plan' => $validated['managementPlan'],
-            'analysis' => $validated['analysis'],
-            'diagnostic_impression' => $validated['diagnosticImpression'],
-            'forecast' => $validated['forecast'],
-            'diseases' => $this->diseases,
-            'procedures' => $this->procedures
-        ]);
-
+        $validated['diseases'] = $this->diseases;
+        $validated['procedures'] = $this->procedures;
+        $validated['appointment_id'] = $this->appointmentId;
+        MedicalConsultation::create($validated);
     }
 
-    public function setMedicalData()
-    {
-        $this->date = Carbon::now()->format('Y-m-d');
-        $this->time = Carbon::now()->format('H:i');
-    }
+
 }

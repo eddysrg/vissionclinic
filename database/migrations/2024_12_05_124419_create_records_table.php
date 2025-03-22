@@ -14,8 +14,6 @@ return new class extends Migration
         Schema::create('records', function (Blueprint $table) {
             $table->id();
             $table->foreignId('patient_id')->constrained()->onDelete('cascade');
-            $table->unsignedBigInteger('type_record_id');
-            $table->foreign('type_record_id')->references('id')->on('type_record')->onDelete('cascade');
             $table->timestamps();
         });
     }

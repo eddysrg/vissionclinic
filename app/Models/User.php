@@ -18,12 +18,9 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'clinic_id',
-        'role_id',
         'degree',
         'name',
-        'father_lastname',
-        'mother_lastname',
+        'last_name',
         'gender',
         'birthdate',
         'phone_number',
@@ -32,6 +29,8 @@ class User extends Authenticatable
         'curp',
         'username',
         'password',
+        'medical_unit_id',
+        'role_id',
     ];
 
     /**
@@ -54,9 +53,18 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function clinic()
+    public function getFullNameAttribute()
     {
-        return $this->belongsTo(Clinic::class);
+        $name = ucwords(strtolower($this->name));
+        $last_name = ucwords(strtolower($this->last_name));
+        $degree = $this->degree ?? '';
+
+        return "{$degree} {$name} {$last_name}";
+    }
+
+    public function medicalUnit()
+    {
+        return $this->belongsTo(MedicalUnit::class);
     }
 
     public function role()
